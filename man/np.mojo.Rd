@@ -130,7 +130,7 @@ x.c$p.vals
 }
 }
 \references{
-McGonigle, E.T., Cho, H. (2023). Nonparametric change point analysis for multivariate time series. \emph{arXiv preprint} \href{https://arxiv.org/abs/2108.07550}{arXiv:2108.07550}.
+McGonigle, E.T., Cho, H. (2023). Nonparametric data segmentation in multivariate time series via joint characteristic functions
 
 Fan, Y., de Micheaux, P.L., Penev, S. and Salopek, D. (2017). Multivariate nonparametric test of independence. \emph{Journal of Multivariate Analysis},
 153, pp.189-210.

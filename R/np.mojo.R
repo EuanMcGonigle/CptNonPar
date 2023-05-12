@@ -69,7 +69,7 @@
 #'    \item{test.stat}{A vector containing the NP-MOSTAT detector statistics computed from the input data}
 #'    \item{cpts}{A vector containing the estimated change point locations}
 #'    \item{p.vals}{The corresponding p values of the change points, if the bootstrap method was used}
-#' @references McGonigle, E.T., Cho, H. (2023). Nonparametric change point analysis for multivariate time series. \emph{arXiv preprint} \href{https://arxiv.org/abs/2108.07550}{arXiv:2108.07550}.
+#' @references McGonigle, E.T., Cho, H. (2023). Nonparametric data segmentation in multivariate time series via joint characteristic functions
 #' @references Fan, Y., de Micheaux, P.L., Penev, S. and Salopek, D. (2017). Multivariate nonparametric test of independence. \emph{Journal of Multivariate Analysis},
 #' 153, pp.189-210.
 #'

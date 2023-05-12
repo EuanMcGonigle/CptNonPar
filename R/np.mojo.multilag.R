@@ -10,9 +10,12 @@
 #' \link{np.mojo} for further details.
 #' @param kernel.f String indicating which kernel function to use when calculating the NP-MOJO statistic; possible values are
 #'  \itemize{
-#'    \item{\code{"quad.exp"}}{: kernel \eqn{h_2} in McGonigle and Cho (2023), kernel 5 in Fan et al. (2017).}
-#'    \item{\code{"gauss"}}{: kernel \eqn{h_1} in McGonigle and Cho (2023), the standard Guassian kernel,}
-#'    \item{\code{"euclidean"}}{: kernel \eqn{h_3} in McGonigle and Cho (2023), the Euclidean distance-based kernel,}
+#'    \item{\code{"quad.exp"}}{: kernel \eqn{h_2} in McGonigle and Cho (2023), kernel 5 in Fan et al. (2017):
+#'    \deqn{h (x,y) = \prod_{i=1}^{2p} \frac{ (2a - (x_i - y_i)^2) \exp (-\frac{1}{4a} (x_i - y_i)^2 )}{2a} .}  }
+#'    \item{\code{"gauss"}}{: kernel \eqn{h_1} in McGonigle and Cho (2023), the standard Gaussian kernel:
+#'    \deqn{h (x,y) = \exp ( - \frac{a^2}{2} \Vert x - y  \Vert^2) .} }
+#'    \item{\code{"euclidean"}}{: kernel \eqn{h_3} in McGonigle and Cho (2023), the Euclidean distance-based kernel:
+#'    \deqn{h (x, y ) = \Vert x - y \Vert^a  .}}
 #'    \item{\code{"laplace"}}{: kernel 2 in Fan et al. (2017).}
 #'    \item{\code{"sine"}}{: kernel 4 in Fan et al. (2017).}
 #' }
@@ -74,7 +77,7 @@
 #'    \item{cpt.clusters}{: a \code{list} object of length given by the number of detected change points. Each field contains a matrix of all
 #'    change point estimators that are declared to be associated to the corresponding change point in the \code{cpts} field.}}
 #'    }
-#' @references McGonigle, E.T., Cho, H. (2023). Nonparametric change point analysis for multivariate time series. \emph{arXiv preprint} \href{https://arxiv.org/abs/2108.07550}{arXiv:2108.07550}.
+#' @references McGonigle, E.T., Cho, H. (2023). Nonparametric data segmentation in multivariate time series via joint characteristic functions
 #' @references Fan, Y., de Micheaux, P.L., Penev, S. and Salopek, D. (2017). Multivariate nonparametric test of independence. \emph{Journal of Multivariate Analysis},
 #' 153, pp.189-210.
 #' @references Messer M., Kirchner M., Schiemann J., Roeper J., Neininger R., Schneider G. (2014). A Multiple Filter Test for
