@@ -1,0 +1,15 @@
+Package: CptNonPar
+Type: Package
+Title: Nonparametric Change Point Detection for Dependent Multivariate Time Series
+Version: 0.1.0
+Date: 2023-05-01
+Depends: R (>= 4.1.0)
+Author: Euan T. McGonigle
+Maintainer: Euan T. McGonigle <euan.mcgonigle@bristol.ac.uk>
+Description: Implements methods for nonparametric change point detection of multivariate time series exhibiting serial dependence.
+License: GPL (>= 3)
+Encoding: UTF-8
+LazyData: true
+LinkingTo: Rcpp, RcppArmadillo
+Imports: Rcpp, doParallel, parallel, foreach, Rfast, iterators, stats
+RoxygenNote: 7.1.2
