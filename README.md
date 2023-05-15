@@ -2,7 +2,7 @@
 Nonparametric change point detection for multivariate time series. Implements the NP-MOJO methdology proposed in
 
 > McGonigle, E. T., Cho, H. (2023). Nonparametric data segmentation in multivariate time series via joint characteristic functions. 
-> *arXiv preprint*, [(link to paper here)](https://arxiv.org/abs/2305.07581).
+> [(link to paper here)](https://arxiv.org/abs/2305.07581).
 
 ## Installation
 
