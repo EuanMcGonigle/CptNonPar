@@ -141,7 +141,7 @@ x.c$merged.cpts
 
 }
 \references{
-McGonigle, E.T., Cho, H. (2023). Nonparametric data segmentation in multivariate time series via joint characteristic functions
+McGonigle, E.T., Cho, H. (2023). Nonparametric data segmentation in multivariate time series via joint characteristic functions. \emph{arXiv preprint \href{https://doi.org/10.48550/arXiv.2305.07581}{arXiv:2305.07581}.}
 
 Fan, Y., de Micheaux, P.L., Penev, S. and Salopek, D. (2017). Multivariate nonparametric test of independence. \emph{Journal of Multivariate Analysis},
 153, pp.189-210.

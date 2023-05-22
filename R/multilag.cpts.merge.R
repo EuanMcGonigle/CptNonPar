@@ -18,6 +18,7 @@
 #' \item{cpts}{A matrix with rows corresponding to final change point estimators, with associate lag and p-value given in columns}
 #'    \item{cpt.clusters}{A \code{list} object of length given by the number of detected change points. Each field contains a matrix of all
 #'    change point estimators that are declared to be associated to the corresponding change point in the \code{cpts} field.}
+#' @references McGonigle, E.T., Cho, H. (2023). Nonparametric data segmentation in multivariate time series via joint characteristic functions. \emph{arXiv preprint \href{https://doi.org/10.48550/arXiv.2305.07581}{arXiv:2305.07581}.}
 #' @export
 #'
 #' @examples

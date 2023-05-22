@@ -52,6 +52,9 @@ x.c <- multilag.cpts.merge(list(x.c0,x.c1,x.c2))
 x.c
 }
 }
+\references{
+McGonigle, E.T., Cho, H. (2023). Nonparametric data segmentation in multivariate time series via joint characteristic functions. \emph{arXiv preprint \href{https://doi.org/10.48550/arXiv.2305.07581}{arXiv:2305.07581}.}
+}
 \seealso{
 \link{np.mojo}, \link{np.mojo.multilag}
 }
