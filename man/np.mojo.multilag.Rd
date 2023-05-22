@@ -83,8 +83,7 @@ if \code{FALSE} no parallelisation is performed.}
 exceeds the threshold is a change point; possible values are
  \itemize{
    \item{\code{"epsilon"}}{\code{k} is the maximum of its local exceeding environment, which has at least size \code{epsilon*G}}
-       \item{\code{"eta.and.ep"}}{there is no larger exceeding in an \code{eta*G} environment of \code{k},
-   and \code{epsilon}-criterion is satisfied}
+       \item{\code{"eta"}}{there is no larger exceeding in an \code{eta*G} environment of \code{k}.}
 }}
 
 \item{eta}{A positive numeric value for the minimal mutual distance of
