@@ -42,8 +42,10 @@ If \code{lag} \eqn{= \ell \neq 0}, then changes in the pairwise distribution of 
    \deqn{h (x,y) = \exp ( - \frac{a^2}{2} \Vert x - y  \Vert^2) .} }
    \item{\code{"euclidean"}}{: kernel \eqn{h_3} in McGonigle and Cho (2023), the Euclidean distance-based kernel:
    \deqn{h (x, y ) = \Vert x - y \Vert^a  .}}
-   \item{\code{"laplace"}}{: kernel 2 in Fan et al. (2017).}
-   \item{\code{"sine"}}{: kernel 4 in Fan et al. (2017).}
+   \item{\code{"laplace"}}{: kernel 2 in Fan et al. (2017), based on a Laplace weight function:
+     \deqn{h (x, y ) = \prod_{i=1}^{2p} \left( 1+ a^2 (x_i - y_i)^2  \right)^{-1}. }}
+   \item{\code{"sine"}}{: kernel 4 in Fan et al. (2017), based on a sinusoidal weight function:
+     \deqn{h (x, y ) = \prod_{i=1}^{2p} \frac{-2 | x_i - y_i |  + | x_i - y_i - 2a|  + | x_i - y_i +2a| }{4a} .}}
 }}
 
 \item{kern.par}{The tuning parameter that appears in the expression for the kernel function, which acts as a scaling parameter,
@@ -112,7 +114,7 @@ A \code{list} object that contains the following fields:
 \description{
 For a given lagged value of the time series, performs nonparametric change point detection of a possibly multivariate
 time series. If \code{lag = 0}, then only marginal changes are detected.
-If \code{lag} \eqn{= \ell \neq 0}, then changes in the pairwise distribution of \eqn{(X_t , X_{t+\ell})} are detected.
+If \code{lag} \eqn{\ell \neq 0}, then changes in the pairwise distribution of \eqn{(X_t , X_{t+\ell})} are detected.
 }
 \details{
 See McGonigle and Cho (2023) for further details.

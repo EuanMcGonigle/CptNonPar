@@ -16,8 +16,10 @@
 #'    \deqn{h (x,y) = \exp ( - \frac{a^2}{2} \Vert x - y  \Vert^2) .} }
 #'    \item{\code{"euclidean"}}{: kernel \eqn{h_3} in McGonigle and Cho (2023), the Euclidean distance-based kernel:
 #'    \deqn{h (x, y ) = \Vert x - y \Vert^a  .}}
-#'    \item{\code{"laplace"}}{: kernel 2 in Fan et al. (2017).}
-#'    \item{\code{"sine"}}{: kernel 4 in Fan et al. (2017).}
+#'    \item{\code{"laplace"}}{: kernel 2 in Fan et al. (2017), based on a Laplace weight function:
+#'      \deqn{h (x, y ) = \prod_{i=1}^{2p} \left( 1+ a^2 (x_i - y_i)^2  \right)^{-1}. }}
+#'    \item{\code{"sine"}}{: kernel 4 in Fan et al. (2017), based on a sinusoidal weight function:
+#'      \deqn{h (x, y ) = \prod_{i=1}^{2p} \frac{-2 | x_i - y_i |  + | x_i - y_i - 2a|  + | x_i - y_i +2a| }{4a} .}}
 #' }
 #' @param kern.par The tuning parameter that appears in the expression for the kernel function, which acts as a scaling parameter.
 #' @param data.driven.kern.par A \code{logical} variable, if set to \code{TRUE}, then the kernel tuning parameter is calculated
@@ -96,7 +98,7 @@
 #' }
 #'
 #' @seealso \link{np.mojo}, \link{multilag.cpts.merge}
-np.mojo.multilag = function(x, G, lags = c(0), kernel.f = c("quad.exp","gauss", "euclidean", "laplace","sine")[1],
+np.mojo.multilag <- function(x, G, lags = c(0), kernel.f = c("quad.exp","gauss", "euclidean", "laplace","sine")[1],
                              kern.par = 1, data.driven.kern.par = TRUE, threshold = c("bootstrap", "manual")[1], threshold.val = NULL,
                              alpha = 0.1,  reps = 199, boot.dep = 1.5*(dim(as.matrix(x))[1]^(1/3)), parallel = FALSE, boot.method = 1,
                               criterion = "eta", eta = 0.4, epsilon = 0.02, use.mean = FALSE, eta.merge = 1,

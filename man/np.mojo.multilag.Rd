@@ -44,8 +44,10 @@ or a \code{numeric} matrix with rows representing variables)}
    \deqn{h (x,y) = \exp ( - \frac{a^2}{2} \Vert x - y  \Vert^2) .} }
    \item{\code{"euclidean"}}{: kernel \eqn{h_3} in McGonigle and Cho (2023), the Euclidean distance-based kernel:
    \deqn{h (x, y ) = \Vert x - y \Vert^a  .}}
-   \item{\code{"laplace"}}{: kernel 2 in Fan et al. (2017).}
-   \item{\code{"sine"}}{: kernel 4 in Fan et al. (2017).}
+   \item{\code{"laplace"}}{: kernel 2 in Fan et al. (2017), based on a Laplace weight function:
+     \deqn{h (x, y ) = \prod_{i=1}^{2p} \left( 1+ a^2 (x_i - y_i)^2  \right)^{-1}. }}
+   \item{\code{"sine"}}{: kernel 4 in Fan et al. (2017), based on a sinusoidal weight function:
+     \deqn{h (x, y ) = \prod_{i=1}^{2p} \frac{-2 | x_i - y_i |  + | x_i - y_i - 2a|  + | x_i - y_i +2a| }{4a} .}}
 }}
 
 \item{kern.par}{The tuning parameter that appears in the expression for the kernel function, which acts as a scaling parameter.}
