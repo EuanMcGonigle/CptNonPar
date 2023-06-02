@@ -90,20 +90,19 @@
 #' \donttest{
 #' set.seed(123)
 #' n <- 1000
-#' noise <- c(rep(1,300),rep(0.4,700))*stats::arima.sim(model = list(ar =0.3), n = 1000)
-#' signal <- c(rep(0,700),rep(0.5,300))
+#' noise <- c(rep(1, 300), rep(0.4, 700)) * stats::arima.sim(model = list(ar = 0.3), n = 1000)
+#' signal <- c(rep(0, 700), rep(0.5, 300))
 #' x <- signal + noise
-#' x.c <- np.mojo.multilag(x, G = 166, lags = c(0,1,2))
+#' x.c <- np.mojo.multilag(x, G = 166, lags = c(0, 1, 2))
 #' x.c$merged.cpts
 #' }
 #'
 #' @seealso \link{np.mojo}, \link{multilag.cpts.merge}
-np.mojo.multilag <- function(x, G, lags = c(0, 1), kernel.f = c("quad.exp","gauss", "euclidean", "laplace","sine")[1],
+np.mojo.multilag <- function(x, G, lags = c(0, 1), kernel.f = c("quad.exp", "gauss", "euclidean", "laplace", "sine")[1],
                              kern.par = 1, data.driven.kern.par = TRUE, threshold = c("bootstrap", "manual")[1], threshold.val = NULL,
-                             alpha = 0.1,  reps = 199, boot.dep = 1.5*(dim(as.matrix(x))[1]^(1/3)), parallel = FALSE, boot.method = 1,
-                              criterion = "eta", eta = 0.4, epsilon = 0.02, use.mean = FALSE, eta.merge = 1,
-                             merge.type = c("sequential", "bottom-up")[1]){
-
+                             alpha = 0.1, reps = 199, boot.dep = 1.5 * (dim(as.matrix(x))[1]^(1 / 3)), parallel = FALSE, boot.method = 1,
+                             criterion = "eta", eta = 0.4, epsilon = 0.02, use.mean = FALSE, eta.merge = 1,
+                             merge.type = c("sequential", "bottom-up")[1]) {
   stopifnot(merge.type == "sequential" || merge.type == "bottom-up")
 
   if (!is.numeric(lags)) {
@@ -113,44 +112,42 @@ np.mojo.multilag <- function(x, G, lags = c(0, 1), kernel.f = c("quad.exp","gaus
   lag.cpts <- vector(mode = "list", length = length(lags))
 
   cpts <- init.cpts <- matrix(NA, nrow = 0, ncol = 3)
-  dimnames(init.cpts)[[2]] <- c('cp', 'lag', 'p.val')
-  dimnames(cpts)[[2]] <- c('cp', 'lag', 'p.val')
+  dimnames(init.cpts)[[2]] <- c("cp", "lag", "p.val")
+  dimnames(cpts)[[2]] <- c("cp", "lag", "p.val")
 
-  for(l in seq_len(length(lag.cpts))){
+  for (l in seq_len(length(lag.cpts))) {
+    lag.cpts[[l]] <- np.mojo(
+      x = x, G = G, lag = lags[l], kernel.f = kernel.f, data.driven.kern.par = data.driven.kern.par,
+      alpha = alpha, kern.par = kern.par, reps = reps, boot.dep = boot.dep, parallel = parallel,
+      boot.method = boot.method, criterion = criterion, eta = eta, epsilon = epsilon, use.mean = use.mean, threshold = threshold,
+      threshold.val = threshold.val
+    )
 
-    lag.cpts[[l]] <- np.mojo(x = x, G = G, lag = lags[l], kernel.f = kernel.f,  data.driven.kern.par = data.driven.kern.par,
-                                       alpha = alpha, kern.par = kern.par, reps = reps, boot.dep = boot.dep, parallel = parallel,
-                                       boot.method = boot.method, criterion = criterion, eta=eta, epsilon = epsilon, use.mean = use.mean, threshold = threshold,
-                               threshold.val = threshold.val)
-
-    if(length(lag.cpts[[l]]$cpts)>0){
+    if (length(lag.cpts[[l]]$cpts) > 0) {
       new.cpts <- cbind(lag.cpts[[l]]$cpts, rep(lags[l], length(lag.cpts[[l]]$cpts)), lag.cpts[[l]]$p.vals)
       init.cpts <- rbind(init.cpts, new.cpts)
     }
-
   }
 
-  merged.cpts <- multilag.cpts.merge(lag.cpts,  eta.merge = eta.merge, merge.type = merge.type)
+  merged.cpts <- multilag.cpts.merge(lag.cpts, eta.merge = eta.merge, merge.type = merge.type)
 
-  ret <- list(G = G,
-              lags = lags,
-              kernel.f = kernel.f,
-              data.driven.kern.par = data.driven.kern.par,
-              merged.cpts = merged.cpts,
-              threshold = threshold,
-              boot.dep = boot.dep,
-              boot.method = boot.method,
-              reps = reps,
-              parallel = parallel,
-              alpha = alpha,
-              criterion = criterion,
-              eta = eta,
-              epsilon = epsilon,
-              use.mean = use.mean)
+  ret <- list(
+    G = G,
+    lags = lags,
+    kernel.f = kernel.f,
+    data.driven.kern.par = data.driven.kern.par,
+    merged.cpts = merged.cpts,
+    threshold = threshold,
+    boot.dep = boot.dep,
+    boot.method = boot.method,
+    reps = reps,
+    parallel = parallel,
+    alpha = alpha,
+    criterion = criterion,
+    eta = eta,
+    epsilon = epsilon,
+    use.mean = use.mean
+  )
 
   return(ret)
-
-
 }
-
-

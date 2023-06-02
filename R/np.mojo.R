@@ -81,8 +81,8 @@
 #' \donttest{
 #' set.seed(123)
 #' n <- 1000
-#' noise <- c(rep(1,300),rep(0.4,700))*stats::arima.sim(model = list(ar =0.3), n = 1000)
-#' signal <- c(rep(0,700),rep(0.5,300))
+#' noise <- c(rep(1, 300), rep(0.4, 700)) * stats::arima.sim(model = list(ar = 0.3), n = 1000)
+#' signal <- c(rep(0, 700), rep(0.5, 300))
 #' x <- signal + noise
 #' x.c <- np.mojo(x, G = 166, lag = 0)
 #' x.c$cpts
@@ -92,19 +92,19 @@
 #' @useDynLib CptNonPar, .registration = TRUE
 #' @importFrom foreach %dopar%
 #' @seealso \link{np.mojo.multilag}
-np.mojo <- function(x, G, lag = 0, kernel.f = c("quad.exp", "gauss", "euclidean","laplace","sine")[1],
-                      kern.par = 1, data.driven.kern.par = TRUE, alpha = 0.1, threshold = c("bootstrap", "manual")[1],
-                      threshold.val = NULL, reps = 199,  boot.dep = 1.5*(dim(as.matrix(x))[1]^(1/3)), parallel = FALSE,
-                      boot.method = 1, criterion = "eta", eta = 0.4, epsilon = 0.02, use.mean = FALSE){
+np.mojo <- function(x, G, lag = 0, kernel.f = c("quad.exp", "gauss", "euclidean", "laplace", "sine")[1],
+                    kern.par = 1, data.driven.kern.par = TRUE, alpha = 0.1, threshold = c("bootstrap", "manual")[1],
+                    threshold.val = NULL, reps = 199, boot.dep = 1.5 * (dim(as.matrix(x))[1]^(1 / 3)), parallel = FALSE,
+                    boot.method = 1, criterion = "eta", eta = 0.4, epsilon = 0.02, use.mean = FALSE) {
 
 
 
-  #A faster implementation of cpt.nonpar using calls to Rcpp for matrix and vector operations in the bootstrap procedure
+  # A faster implementation of cpt.nonpar using calls to Rcpp for matrix and vector operations in the bootstrap procedure
 
-  #Finds nonparametric changes using the integrated squared distance between
-  #joint characteristic function to left and right of change within a MOSUM procedure
+  # Finds nonparametric changes using the integrated squared distance between
+  # joint characteristic function to left and right of change within a MOSUM procedure
 
-  #Error handling:
+  # Error handling:
   stopifnot(alpha >= 0 && alpha <= 1)
   stopifnot(criterion == "epsilon" || criterion == "eta")
   stopifnot(criterion != "epsilon" || epsilon >= 0)
@@ -121,182 +121,141 @@ np.mojo <- function(x, G, lag = 0, kernel.f = c("quad.exp", "gauss", "euclidean"
   if (!is.numeric(reps)) {
     stop("Number of bootstrap replications should be a single positive integer")
   }
-  if ((length(reps) != 1) | (reps%%1 != 0) | (reps < 1)) {
+  if ((length(reps) != 1) | (reps %% 1 != 0) | (reps < 1)) {
     stop("Number of bootstrap replications should be a single positive integer")
   }
-  if(kernel.f != "gauss" & kernel.f != "euclidean" & kernel.f != "laplace" & kernel.f != "sine" & kernel.f != "quad.exp"){
+  if (kernel.f != "gauss" & kernel.f != "euclidean" & kernel.f != "laplace" & kernel.f != "sine" & kernel.f != "quad.exp") {
     stop("The kernel.f function must be either 'quad.exp', 'gauss', 'laplace', 'sine', or 'euclidean'")
   }
   if ((threshold != "bootstrap") & (reps != 199)) {
     warning("reps is only used with threshold=bootstrap")
   }
-  if (kern.par<0) {
+  if (kern.par < 0) {
     warning("The kernel parameter must be a positive value.")
   }
-  if((kernel.f == "euclidean") & (kern.par <=0 || kern.par>=2)){
+  if ((kernel.f == "euclidean") & (kern.par <= 0 || kern.par >= 2)) {
     stop("For the 'euclidean' kernel function, the kernel parameter must be in the interval (0,2)")
   }
 
-  if(is.null(dim(x))){
+  if (is.null(dim(x))) {
     data.len <- length(x)
     x <- matrix(x)
-  }else{
+  } else {
     data.len <- dim(x)[1]
   }
 
-  if (G>data.len/2) {
+  if (G > data.len / 2) {
     stop("Bandwidth is too large for the length of time series.")
   }
 
-  if(lag!=0){
-    y <- cbind(x[1:(data.len-lag),], x[(lag+1):data.len,])
-  } else{
+  if (lag != 0) {
+    y <- cbind(x[1:(data.len - lag), ], x[(lag + 1):data.len, ])
+  } else {
     y <- x
   }
 
   p.vals <- numeric(0)
 
-  #calculate the Euclidean distances required for the test statistic calculation:
+  # calculate the Euclidean distances required for the test statistic calculation:
 
-  if(data.driven.kern.par == TRUE){
-    if(kernel.f == "euclidean"){
+  if (data.driven.kern.par == TRUE) {
+    if (kernel.f == "euclidean") {
       warning("Data driven parameter choice not suited for Euclidean kernel. Parameter kern.par reset to 1.")
       kern.par <- 1
-    }
-    else{
-      D.par <- mosum_dist_calc(y = y, G = G, n = data.len-lag, kern = "euc.dist", kern_par = kern.par)
-      if(use.mean == TRUE){
-        delta <- mean(D.par[D.par>0])
-      } else{
-        delta <- stats::median(D.par[D.par>0])
+    } else {
+      D.par <- mosum_dist_calc(y = y, G = G, n = data.len - lag, kern = "euc.dist", kern_par = kern.par)
+      if (use.mean == TRUE) {
+        delta <- mean(D.par[D.par > 0])
+      } else {
+        delta <- stats::median(D.par[D.par > 0])
       }
-      if(kernel.f == "gauss"){
-        kern.par <- 1/sqrt(delta)
-      } else if (kernel.f == "quad.exp"){
-        kern.par <- 0.5*delta
+      if (kernel.f == "gauss") {
+        kern.par <- 1 / sqrt(delta)
+      } else if (kernel.f == "quad.exp") {
+        kern.par <- 0.5 * delta
       }
     }
   }
 
 
-  if(kernel.f == "gauss" & data.driven.kern.par == TRUE){
+  if (kernel.f == "gauss" & data.driven.kern.par == TRUE) {
     D <- D.par
-  } else{
-    D <- mosum_dist_calc(y = y, G = G, n = data.len-lag, kern = kernel.f, kern_par = kern.par)
+  } else {
+    D <- mosum_dist_calc(y = y, G = G, n = data.len - lag, kern = kernel.f, kern_par = kern.par)
 
-    if(kernel.f != "euclidean" && kernel.f != "gauss"){
+    if (kernel.f != "euclidean" && kernel.f != "gauss") {
       diag(D) <- 1
     }
   }
 
-
-
-  h.matcalc <- function(D, lag, G, kernel.f, kern.par){
-
-    #calculates the entries of the h kernel matrix required to compute the MOSUM test statistic
-
-    n <- dim(D)[2]
-
-    h.dim <- n-G
-
-    if(kernel.f == "gauss"){
-      h.mat <- exp(-kern.par^2*(D[1:h.dim,1:h.dim])/2)+exp(-kern.par^2*(D[(G+1):(n),(G+1):(n)])/2)-
-        exp(-kern.par^2*(D[1:h.dim, (G+1):(n)])/2) - exp(-kern.par^2*(D[(G+1):(n), 1:h.dim])/2)
-    }else if(kernel.f == "euclidean"){
-      h.mat <- (D[1:h.dim, (G+1):(n)])+ (D[(G+1):n, 1:h.dim]) -(D[1:h.dim,1:h.dim])-
-        (D[(G+1):(n),(G+1):(n)])
-    }else{
-      h.mat <- -(D[1:h.dim, (G+1):(n)]) - D[(G+1):n, 1:h.dim] +
-        (D[1:h.dim,1:h.dim]) +(D[(G+1):(n),(G+1):(n)])
-    }
-
-    h.mat
-  }
-
-  #calculate the entries of the kernel statistic:
+  # calculate the entries of the kernel statistic:
 
   h.mat <- h.matcalc(D = D, lag = lag, G = G, kernel.f = kernel.f, kern.par = kern.par)
 
   h.mat.ncol <- ncol(h.mat)
 
-  init.val <- sum(h.mat[1:(G-lag),1:(G-lag)])
+  init.val <- sum(h.mat[1:(G - lag), 1:(G - lag)])
 
-  #calculate the MOSUM test statistic to find change points:
+  # calculate the MOSUM test statistic to find change points:
 
   test.stat <- rolling_matrix_sum(stat_mat = h.mat, G = G, lag = lag, init_val = init.val, n = h.mat.ncol)
 
-  test.stat <- c(rep(0,G-1),test.stat[1:(data.len-2*G+1)]/((G-lag)^2),rep(0,G))
+  test.stat <- c(rep(0, G - 1), test.stat[1:(data.len - 2 * G + 1)] / ((G - lag)^2), rep(0, G))
 
-  bootstrap.char <- function(h.mat, test.stat, G,lag, reps, boot.dep, parallel, boot.method, data.len, h.mat.ncol){
+  # perform wild multiplier bootstrap to assess significance of changes:
 
-    if (parallel==FALSE){
-      d <- replicate(reps, bootstrap.tstat.faster(h.mat = h.mat, test.stat = test.stat, G = G, lag = lag, boot.dep = boot.dep,
-                                          boot.method = boot.method, data.len = data.len, h.mat.ncol = h.mat.ncol))
+  if (threshold == "bootstrap") {
+    if (parallel == TRUE) {
+      closeAllConnections()
+      cl <- parallel::makeCluster(parallel::detectCores())
+      doParallel::registerDoParallel(cl)
+      parallel::clusterSetRNGStream(cl = cl, iseed = 9182)
+
+      Tstar <- foreach::foreach(iterators::icount(reps), .combine = cbind, .packages = c("foreach", "Rcpp", "CptNonPar")) %dopar% bootstrap.char(h.mat, test.stat, G, lag, reps = 1, boot.dep, parallel, boot.method, data.len, h.mat.ncol)
+
+      parallel::stopCluster(cl)
+    } else {
+      Tstar <- bootstrap.char(
+        h.mat = h.mat, test.stat = test.stat, G = G, lag = lag, reps = reps, boot.dep = boot.dep,
+        parallel = parallel, boot.method = boot.method, data.len = data.len, h.mat.ncol = h.mat.ncol
+      )
     }
-    else{
-      d <- bootstrap.tstat.faster(h.mat, test.stat, G, lag, boot.dep, boot.method, data.len = data.len, h.mat.ncol)
-    }
 
-    d
-
-  }
-
-  #perform wild multiplier bootstrap to assess significance of changes:
-
-  if(threshold=="bootstrap"){
-
-      if (parallel == TRUE) {
-        closeAllConnections()
-        cl <- parallel::makeCluster(parallel::detectCores())
-        doParallel::registerDoParallel(cl)
-        parallel::clusterSetRNGStream(cl = cl, iseed = 9182)
-
-        Tstar <- foreach::foreach(iterators::icount(reps), .combine = cbind, .packages = c("foreach", "Rcpp", "CptNonPar")) %dopar% bootstrap.char(h.mat,test.stat,G,lag,reps=1,boot.dep,parallel,boot.method,data.len,h.mat.ncol)
-
-        parallel::stopCluster(cl)
-      }
-      else{
-        Tstar <- bootstrap.char(h.mat = h.mat, test.stat = test.stat, G = G, lag = lag, reps = reps, boot.dep = boot.dep,
-                                parallel = parallel, boot.method = boot.method, data.len = data.len, h.mat.ncol = h.mat.ncol)
-      }
-
-      threshold.val <- stats::quantile(Tstar, probs = 1-alpha)
-
+    threshold.val <- stats::quantile(Tstar, probs = 1 - alpha)
   }
 
   cpt.locs <- numeric(0)
 
-  if(max(test.stat)>threshold.val){
-
-    exceedings <- (test.stat>threshold.val)
+  if (max(test.stat) > threshold.val) {
+    exceedings <- (test.stat > threshold.val)
 
     if (criterion == "epsilon") {
-      exceedingsCount <- (exceedings) * unlist(lapply(rle(exceedings)$lengths,
-                                                      seq_len))
+      exceedingsCount <- (exceedings) * unlist(lapply(
+        rle(exceedings)$lengths,
+        seq_len
+      ))
       minIntervalSize <- max(1, G * epsilon)
       intervalEndPoints <- which(diff(exceedingsCount) <= -minIntervalSize)
       intervalBeginPoints <- intervalEndPoints - exceedingsCount[intervalEndPoints] + 1
 
       if (exceedings[data.len - G] && !((data.len - G) %in% intervalEndPoints)) {
-
         lastBeginPoint <- data.len - G - exceedingsCount[data.len - G] + 1
         stopifnot(exceedings[seq(lastBeginPoint, data.len - G)])
         stopifnot(!(lastBeginPoint %in% intervalBeginPoints))
         highestStatPoint <- which.max(test.stat[seq(lastBeginPoint, data.len - G)]) + lastBeginPoint - 1
 
-        if (highestStatPoint - lastBeginPoint >= minIntervalSize/2) {
+        if (highestStatPoint - lastBeginPoint >= minIntervalSize / 2) {
           intervalEndPoints <- c(intervalEndPoints, data.len - G)
-          intervalBeginPoints <- c(intervalBeginPoints,lastBeginPoint)
+          intervalBeginPoints <- c(intervalBeginPoints, lastBeginPoint)
         }
       }
       if (exceedings[G] && !(G %in% intervalBeginPoints)) {
-
         firstEndPoint <- which(diff(exceedingsCount) < 0)[1]
         stopifnot(exceedings[seq(G, firstEndPoint)])
         stopifnot(!(firstEndPoint %in% intervalEndPoints))
         highestStatPoint <- which.max(test.stat[seq(G, firstEndPoint)]) + G - 1
 
-        if (firstEndPoint - highestStatPoint >= minIntervalSize/2) {
+        if (firstEndPoint - highestStatPoint >= minIntervalSize / 2) {
           intervalEndPoints <- c(firstEndPoint, intervalEndPoints)
           intervalBeginPoints <- c(G, intervalBeginPoints)
         }
@@ -310,18 +269,17 @@ np.mojo <- function(x, G, lag = 0, kernel.f = c("quad.exp", "gauss", "euclidean"
           cpt.locs <- c(cpt.locs, changePoint)
         }
       }
-    }
-    else {
+    } else {
       stat.exceed <- which(test.stat > threshold.val)
       r <- rle(diff(stat.exceed))
       end.r <- cumsum(r$lengths)
       start.r <- end.r - r$lengths + 1
 
-      epsilon.satisfied.start <- stat.exceed[start.r[r$lengths>epsilon*G]]
-      epsilon.satisfied.end <- stat.exceed[end.r[r$lengths>epsilon*G]]
+      epsilon.satisfied.start <- stat.exceed[start.r[r$lengths > epsilon * G]]
+      epsilon.satisfied.end <- stat.exceed[end.r[r$lengths > epsilon * G]]
 
       epsilon.exceedings <- rep(FALSE, data.len)
-      for(i in seq_len(length(epsilon.satisfied.start))){
+      for (i in seq_len(length(epsilon.satisfied.start))) {
         epsilon.exceedings[epsilon.satisfied.start[i]:epsilon.satisfied.end[i]] <- TRUE
       }
 
@@ -331,48 +289,45 @@ np.mojo <- function(x, G, lag = 0, kernel.f = c("quad.exp", "gauss", "euclidean"
       cpt.locs <- mojo_eta_criterion_help(p.candidates, test.stat, eta, G, G)
     }
 
-    if(threshold == "bootstrap"){
+    if (threshold == "bootstrap") {
       p.vals <- numeric(0)
-      if(length(cpt.locs)==0){
-        p.vals <- sum(Tstar >= max(test.stat))/(reps + 1)
-      }
-      else{
-        for(i in 1:seq_len(length(cpt.locs))){
-          p.vals <- c(p.vals, sum(Tstar >= test.stat[cpt.locs[i]])/(reps + 1))
+      if (length(cpt.locs) == 0) {
+        p.vals <- sum(Tstar >= max(test.stat)) / (reps + 1)
+      } else {
+        for (i in 1:seq_len(length(cpt.locs))) {
+          p.vals <- c(p.vals, sum(Tstar >= test.stat[cpt.locs[i]]) / (reps + 1))
         }
       }
     }
-  }
-  else{
-    if(threshold == "bootstrap"){
-      p.vals <- sum(Tstar >= max(test.stat))/(reps + 1)
+  } else {
+    if (threshold == "bootstrap") {
+      p.vals <- sum(Tstar >= max(test.stat)) / (reps + 1)
     }
   }
 
 
-  ret <- list(x = x,
-              G = G,
-              lag = lag,
-              kernel.f = kernel.f,
-              kern.par = kern.par,
-              data.driven.kern.par = data.driven.kern.par,
-              test.stat = test.stat,
-              cpts = cpt.locs,
-              p.vals = p.vals,
-              threshold = threshold,
-              threshold.val = threshold.val,
-              boot.dep = boot.dep,
-              boot.method = boot.method,
-              reps = reps,
-              parallel = parallel,
-              alpha = alpha,
-              criterion = criterion,
-              eta = eta,
-              epsilon = epsilon,
-              use.mean = use.mean)
+  ret <- list(
+    x = x,
+    G = G,
+    lag = lag,
+    kernel.f = kernel.f,
+    kern.par = kern.par,
+    data.driven.kern.par = data.driven.kern.par,
+    test.stat = test.stat,
+    cpts = cpt.locs,
+    p.vals = p.vals,
+    threshold = threshold,
+    threshold.val = threshold.val,
+    boot.dep = boot.dep,
+    boot.method = boot.method,
+    reps = reps,
+    parallel = parallel,
+    alpha = alpha,
+    criterion = criterion,
+    eta = eta,
+    epsilon = epsilon,
+    use.mean = use.mean
+  )
 
   return(ret)
-
 }
-
-

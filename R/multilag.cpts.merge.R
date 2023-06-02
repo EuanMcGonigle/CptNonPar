@@ -25,23 +25,22 @@
 #' \donttest{
 #' set.seed(123)
 #' n <- 1000
-#' noise <- c(rep(1,300),rep(0.4,700))*stats::arima.sim(model = list(ar =0.3), n = 1000)
-#' signal <- c(rep(0,700),rep(0.5,300))
+#' noise <- c(rep(1, 300), rep(0.4, 700)) * stats::arima.sim(model = list(ar = 0.3), n = 1000)
+#' signal <- c(rep(0, 700), rep(0.5, 300))
 #' x <- signal + noise
 #' x.c0 <- np.mojo(x, G = 166, lag = 0)
 #' x.c1 <- np.mojo(x, G = 166, lag = 1)
 #' x.c2 <- np.mojo(x, G = 166, lag = 2)
-#' x.c <- multilag.cpts.merge(list(x.c0,x.c1,x.c2))
+#' x.c <- multilag.cpts.merge(list(x.c0, x.c1, x.c2))
 #' x.c
 #' }
 #' @seealso \link{np.mojo}, \link{np.mojo.multilag}
-multilag.cpts.merge <- function(x.c, eta.merge = 1, merge.type = c("sequential", "bottom-up")[1]){
-
+multilag.cpts.merge <- function(x.c, eta.merge = 1, merge.type = c("sequential", "bottom-up")[1]) {
   stopifnot(merge.type == "sequential" || merge.type == "bottom-up")
 
   cpts <- init.cpts <- matrix(NA, nrow = 0, ncol = 3)
-  dimnames(init.cpts)[[2]] <- c('cp', 'lag', 'p.val')
-  dimnames(cpts)[[2]] <- c('cp', 'lag', 'p.val')
+  dimnames(init.cpts)[[2]] <- c("cp", "lag", "p.val")
+  dimnames(cpts)[[2]] <- c("cp", "lag", "p.val")
 
   cpt.clusters <- list()
 
@@ -49,43 +48,39 @@ multilag.cpts.merge <- function(x.c, eta.merge = 1, merge.type = c("sequential",
 
   G <- x.c[[1]]$G
 
-  for(l in 1:L){
-
+  for (l in 1:L) {
     lag.cpts <- x.c[[l]]
 
-    if(length(lag.cpts$cpts)>0){
+    if (length(lag.cpts$cpts) > 0) {
       new.cpts <- cbind(lag.cpts$cpts, rep(lag.cpts$lag, length(lag.cpts$cpts)), lag.cpts$p.vals)
       init.cpts <- rbind(init.cpts, new.cpts)
     }
-
   }
 
-  if(nrow(init.cpts)<=1){
+  if (nrow(init.cpts) <= 1) {
     return(list(cpts = init.cpts, cpt.clusters = init.cpts))
   }
 
-  if(merge.type == "sequential"){
+  if (merge.type == "sequential") {
+    cpt.order <- order(init.cpts[, 1])
 
-    cpt.order <- order(init.cpts[,1])
-
-    init.cpts <- init.cpts[cpt.order,]
+    init.cpts <- init.cpts[cpt.order, ]
 
     j <- 1
 
-    while(nrow(init.cpts)!=0){
-
-      if(nrow(init.cpts)==1){
+    while (nrow(init.cpts) != 0) {
+      if (nrow(init.cpts) == 1) {
         cpts <- rbind(cpts, init.cpts)
         cpt.clusters[[j]] <- init.cpts
-      } else{
-        cpt.left <- init.cpts[1,1]
-        linked.cpts <- init.cpts[2:nrow(init.cpts),1]
-        linked.cpts <- c(cpt.left,linked.cpts[linked.cpts-cpt.left < eta.merge*G])
+      } else {
+        cpt.left <- init.cpts[1, 1]
+        linked.cpts <- init.cpts[2:nrow(init.cpts), 1]
+        linked.cpts <- c(cpt.left, linked.cpts[linked.cpts - cpt.left < eta.merge * G])
 
         num.linked.cpts <- length(linked.cpts)
 
-        linked.lags <- init.cpts[1:num.linked.cpts,2]
-        linked.p.vals <- init.cpts[1:num.linked.cpts,3]
+        linked.lags <- init.cpts[1:num.linked.cpts, 2]
+        linked.p.vals <- init.cpts[1:num.linked.cpts, 3]
 
         final.cpt <- linked.cpts[which.min(linked.p.vals)]
         final.lag <- linked.lags[which.min(linked.p.vals)]
@@ -93,45 +88,38 @@ multilag.cpts.merge <- function(x.c, eta.merge = 1, merge.type = c("sequential",
 
         cpts <- rbind(cpts, c(final.cpt, final.lag, final.pval))
 
-        cpt.clusters[[j]] <- init.cpts[1:num.linked.cpts, , drop = FALSE][order(init.cpts[1:num.linked.cpts,2]), , drop = FALSE]
+        cpt.clusters[[j]] <- init.cpts[1:num.linked.cpts, , drop = FALSE][order(init.cpts[1:num.linked.cpts, 2]), , drop = FALSE]
       }
-      init.cpts <- init.cpts[-(1:num.linked.cpts),, drop = FALSE]
+      init.cpts <- init.cpts[-(1:num.linked.cpts), , drop = FALSE]
       j <- j + 1
     }
+  } else {
+    cpt.order <- order(init.cpts[, 3])
 
-  }else{
-
-    cpt.order <- order(init.cpts[,3])
-
-    init.cpts <- init.cpts[cpt.order,]
+    init.cpts <- init.cpts[cpt.order, ]
 
     j <- 1
 
 
-    while(nrow(init.cpts)!=0){
-
-      if(nrow(init.cpts)==1){
+    while (nrow(init.cpts) != 0) {
+      if (nrow(init.cpts) == 1) {
         cpts <- rbind(cpts, init.cpts)
         cpt.clusters[[j]] <- init.cpts
-      } else{
+      } else {
+        cpt.min <- init.cpts[1, 1]
 
-        cpt.min <- init.cpts[1,1]
+        nearby.cpts <- which(abs(init.cpts[, 1] - cpt.min) < eta.merge * G)
+        linked.cpts <- init.cpts[nearby.cpts, , drop = FALSE]
 
-        nearby.cpts <- which(abs(init.cpts[,1]-cpt.min) < eta.merge*G)
-        linked.cpts <- init.cpts[nearby.cpts,, drop = FALSE]
-
-        cpts <- rbind(cpts,  init.cpts[1,])
-        cpt.clusters[[j]] <- linked.cpts[order(linked.cpts[,2]),]
+        cpts <- rbind(cpts, init.cpts[1, ])
+        cpt.clusters[[j]] <- linked.cpts[order(linked.cpts[, 2]), ]
       }
-      init.cpts <- init.cpts[-nearby.cpts,, drop = FALSE]
+      init.cpts <- init.cpts[-nearby.cpts, , drop = FALSE]
       j <- j + 1
     }
 
-    cpts <- cpts[order(cpts[,1]),]
-
+    cpts <- cpts[order(cpts[, 1]), ]
   }
 
   return(list(cpts = cpts, cpt.clusters = cpt.clusters))
-
 }
-
