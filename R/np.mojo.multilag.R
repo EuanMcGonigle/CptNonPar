@@ -116,7 +116,7 @@ np.mojo.multilag <- function(x, G, lags = c(0, 1), kernel.f = c("quad.exp","gaus
   dimnames(init.cpts)[[2]] <- c('cp', 'lag', 'p.val')
   dimnames(cpts)[[2]] <- c('cp', 'lag', 'p.val')
 
-  for(l in 1:length(lag.cpts)){
+  for(l in seq_len(length(lag.cpts))){
 
     lag.cpts[[l]] <- np.mojo(x = x, G = G, lag = lags[l], kernel.f = kernel.f,  data.driven.kern.par = data.driven.kern.par,
                                        alpha = alpha, kern.par = kern.par, reps = reps, boot.dep = boot.dep, parallel = parallel,

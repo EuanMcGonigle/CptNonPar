@@ -171,9 +171,9 @@ np.mojo <- function(x, G, lag = 0, kernel.f = c("quad.exp", "gauss", "euclidean"
         delta <- stats::median(D.par[D.par>0])
       }
       if(kernel.f == "gauss"){
-        kern.par = 1/sqrt(delta)
+        kern.par <- 1/sqrt(delta)
       } else if (kernel.f == "quad.exp"){
-        kern.par = 0.5*delta
+        kern.par <- 0.5*delta
       }
     }
   }
@@ -191,7 +191,7 @@ np.mojo <- function(x, G, lag = 0, kernel.f = c("quad.exp", "gauss", "euclidean"
 
 
 
-  h.matcalc = function(D, lag, G, kernel.f, kern.par){
+  h.matcalc <- function(D, lag, G, kernel.f, kern.par){
 
     #calculates the entries of the h kernel matrix required to compute the MOSUM test statistic
 
@@ -219,22 +219,22 @@ np.mojo <- function(x, G, lag = 0, kernel.f = c("quad.exp", "gauss", "euclidean"
 
   h.mat.ncol <- ncol(h.mat)
 
-  init.val = sum(h.mat[1:(G-lag),1:(G-lag)])
+  init.val <- sum(h.mat[1:(G-lag),1:(G-lag)])
 
   #calculate the MOSUM test statistic to find change points:
 
-  test.stat = rolling_matrix_sum(stat_mat = h.mat, G = G, lag = lag, init_val = init.val, n = h.mat.ncol)
+  test.stat <- rolling_matrix_sum(stat_mat = h.mat, G = G, lag = lag, init_val = init.val, n = h.mat.ncol)
 
-  test.stat = c(rep(0,G-1),test.stat[1:(data.len-2*G+1)]/((G-lag)^2),rep(0,G))
+  test.stat <- c(rep(0,G-1),test.stat[1:(data.len-2*G+1)]/((G-lag)^2),rep(0,G))
 
-  bootstrap.char = function(h.mat, test.stat, G,lag, reps, boot.dep, parallel, boot.method, data.len, h.mat.ncol){
+  bootstrap.char <- function(h.mat, test.stat, G,lag, reps, boot.dep, parallel, boot.method, data.len, h.mat.ncol){
 
     if (parallel==FALSE){
-      d = replicate(reps, bootstrap.tstat.faster(h.mat = h.mat, test.stat = test.stat, G = G, lag = lag, boot.dep = boot.dep,
+      d <- replicate(reps, bootstrap.tstat.faster(h.mat = h.mat, test.stat = test.stat, G = G, lag = lag, boot.dep = boot.dep,
                                           boot.method = boot.method, data.len = data.len, h.mat.ncol = h.mat.ncol))
     }
     else{
-      d = bootstrap.tstat.faster(h.mat, test.stat, G, lag, boot.dep, boot.method, data.len = data.len, h.mat.ncol)
+      d <- bootstrap.tstat.faster(h.mat, test.stat, G, lag, boot.dep, boot.method, data.len = data.len, h.mat.ncol)
     }
 
     d
@@ -313,9 +313,9 @@ np.mojo <- function(x, G, lag = 0, kernel.f = c("quad.exp", "gauss", "euclidean"
     }
     else {
       stat.exceed <- which(test.stat > threshold.val)
-      r = rle(diff(stat.exceed))
-      end.r = cumsum(r$lengths)
-      start.r = end.r - r$lengths + 1
+      r <- rle(diff(stat.exceed))
+      end.r <- cumsum(r$lengths)
+      start.r <- end.r - r$lengths + 1
 
       epsilon.satisfied.start <- stat.exceed[start.r[r$lengths>epsilon*G]]
       epsilon.satisfied.end <- stat.exceed[end.r[r$lengths>epsilon*G]]
@@ -337,7 +337,7 @@ np.mojo <- function(x, G, lag = 0, kernel.f = c("quad.exp", "gauss", "euclidean"
         p.vals <- sum(Tstar >= max(test.stat))/(reps + 1)
       }
       else{
-        for(i in 1:length(cpt.locs)){
+        for(i in 1:seq_len(length(cpt.locs))){
           p.vals <- c(p.vals, sum(Tstar >= test.stat[cpt.locs[i]])/(reps + 1))
         }
       }

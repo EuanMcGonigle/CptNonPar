@@ -17,7 +17,7 @@ bootstrap.tstat.faster = function(h.mat, test.stat, G, lag, boot.dep, boot.metho
 
     t.stat <- rep(0, h.mat.ncol+G+lag)
 
-    W.mean = runmean(Wtstar, G-lag)
+    W.mean <- runmean(Wtstar, G-lag)
 
     Wtstar.out.a <- Rfast::Outer(Wtstar,Wtstar)
 
@@ -29,12 +29,12 @@ bootstrap.tstat.faster = function(h.mat, test.stat, G, lag, boot.dep, boot.metho
 
     init.val.b <- sum(h.mat.b[1:(G-lag),1:(G-lag)])
 
-    t.stat.a = rolling_matrix_sum(stat_mat = h.mat.a, G = G, lag = lag, init_val = init.val.a, n = h.mat.ncol)
-    t.stat.b = rolling_matrix_sum(stat_mat = h.mat.b, G = G, lag = lag, init_val = init.val.b, n = h.mat.ncol)
+    t.stat.a <- rolling_matrix_sum(stat_mat = h.mat.a, G = G, lag = lag, init_val = init.val.a, n = h.mat.ncol)
+    t.stat.b <- rolling_matrix_sum(stat_mat = h.mat.b, G = G, lag = lag, init_val = init.val.b, n = h.mat.ncol)
 
-    t.stat.a = c(rep(0,G-1),t.stat.a[1:(data.len-2*G+1)]/((G-lag)^2),rep(0,G))
+    t.stat.a <- c(rep(0,G-1),t.stat.a[1:(data.len-2*G+1)]/((G-lag)^2),rep(0,G))
 
-    t.stat.b = c(rep(0,G-1),t.stat.b[1:(data.len-2*G+1)]/((G-lag)^2),rep(0,G))
+    t.stat.b <- c(rep(0,G-1),t.stat.b[1:(data.len-2*G+1)]/((G-lag)^2),rep(0,G))
 
     t.stat[1:(h.mat.ncol)] <- t.stat.a[1:(h.mat.ncol)]- 2*W.mean*t.stat.b[1:(h.mat.ncol)] +
       W.mean^2*test.stat[1:(h.mat.ncol)]
@@ -43,15 +43,15 @@ bootstrap.tstat.faster = function(h.mat, test.stat, G, lag, boot.dep, boot.metho
   }
   else{
 
-    Wtstar.out = outer(Wtstar,Wtstar)
+    Wtstar.out <- outer(Wtstar,Wtstar)
 
-    h.mat2 = Wtstar.out*h.mat
+    h.mat2 <- Wtstar.out*h.mat
 
-    init.val = sum(h.mat2[1:(G-lag),1:(G-lag)])
+    init.val <- sum(h.mat2[1:(G-lag),1:(G-lag)])
 
-    t.stat = rolling_matrix_sum(stat_mat = h.mat2,G = G, lag = lag, init_val = init.val, n = h.mat.ncol)
+    t.stat <- rolling_matrix_sum(stat_mat = h.mat2,G = G, lag = lag, init_val = init.val, n = h.mat.ncol)
 
-    t.stat = t.stat/((G-lag)^2)
+    t.stat <- t.stat/((G-lag)^2)
 
   }
 
