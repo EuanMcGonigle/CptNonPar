@@ -34,7 +34,7 @@ or a \code{numeric} matrix with rows representing variables)}
 \item{lag}{The lagged values of the time series used to detect changes. If \code{lag = 0}, then only marginal changes are detected.
 If \code{lag} \eqn{= \ell \neq 0}, then changes in the pairwise distribution of \eqn{(X_t , X_{t+\ell})} are detected.}
 
-\item{kernel.f}{String indicating which kernel function to use when calculating the NP-MOJO statistic; possible values are
+\item{kernel.f}{String indicating which kernel function to use when calculating the NP-MOJO statistic; with \code{kern.par} \eqn{= a}, possible values are
  \itemize{
    \item{\code{"quad.exp"}}{: kernel \eqn{h_2} in McGonigle and Cho (2023), kernel 5 in Fan et al. (2017):
    \deqn{h (x,y) = \prod_{i=1}^{2p} \frac{ (2a - (x_i - y_i)^2) \exp (-\frac{1}{4a} (x_i - y_i)^2 )}{2a} .}  }
@@ -82,8 +82,8 @@ if \code{FALSE} no parallelisation is performed.}
 \item{criterion}{String indicating how to determine whether each point \code{k} at which NP-MOJO statistic
 exceeds the threshold is a change point; possible values are
  \itemize{
-   \item{\code{"epsilon"}}{\code{k} is the maximum of its local exceeding environment, which has at least size \code{epsilon*G}}
-       \item{\code{"eta"}}{there is no larger exceeding in an \code{eta*G} environment of \code{k}.}
+   \item{\code{"epsilon"}}{: \code{k} is the maximum of its local exceeding environment, which has at least size \code{epsilon*G}}
+       \item{\code{"eta"}}{: there is no larger exceeding in an \code{eta*G} environment of \code{k}.}
 }}
 
 \item{eta}{A positive numeric value for the minimal mutual distance of
@@ -116,7 +116,8 @@ time series. If \code{lag = 0}, then only marginal changes are detected.
 If \code{lag} \eqn{\ell \neq 0}, then changes in the pairwise distribution of \eqn{(X_t , X_{t+\ell})} are detected.
 }
 \details{
-See McGonigle and Cho (2023) for further details.
+The single-lag NP-MOJO algorithm for nonparametric change point detection is described in McGonigle, E. T. and Cho, H. (2023)
+Nonparametric data segmentation in multivariate time series via joint characteristic functions.  \emph{arXiv preprint \href{https://doi.org/10.48550/arXiv.2305.07581}{arXiv:2305.07581}.}
 }
 \examples{
 \donttest{

@@ -1,14 +1,15 @@
 #' @title Nonparametric Multiple Lag Change Point Detection for Multivariate Time Series
 #' @description For a given set of lagged values of the time series, performs nonparametric change point detection of a possibly multivariate
 #' time series.
-#' @details See McGonigle and Cho (2023) for further details.
+#' @details The multi-lag NP-MOJO algorithm for nonparametric change point detection is described in McGonigle, E. T. and Cho, H. (2023)
+#' Nonparametric data segmentation in multivariate time series via joint characteristic functions.  \emph{arXiv preprint \href{https://doi.org/10.48550/arXiv.2305.07581}{arXiv:2305.07581}.}
 #' @param x Input data (a \code{numeric} vector or an object of classes \code{ts} and \code{timeSeries},
 #' or a \code{numeric} matrix with rows representing variables)
 #' @param G An integer value for the moving sum bandwidth;
 #' \code{G} should be less than \code{length(n)/2}.
 #' @param lags A \code{numeric} vector giving the range of lagged values of the time series that will be used to detect changes. See
 #' \link{np.mojo} for further details.
-#' @param kernel.f String indicating which kernel function to use when calculating the NP-MOJO statistic; possible values are
+#' @param kernel.f String indicating which kernel function to use when calculating the NP-MOJO statistic; with \code{kern.par} \eqn{= a}, possible values are
 #'  \itemize{
 #'    \item{\code{"quad.exp"}}{: kernel \eqn{h_2} in McGonigle and Cho (2023), kernel 5 in Fan et al. (2017):
 #'    \deqn{h (x,y) = \prod_{i=1}^{2p} \frac{ (2a - (x_i - y_i)^2) \exp (-\frac{1}{4a} (x_i - y_i)^2 )}{2a} .}  }
@@ -97,11 +98,13 @@
 #' }
 #'
 #' @seealso \link{np.mojo}, \link{multilag.cpts.merge}
-np.mojo.multilag <- function(x, G, lags = c(0), kernel.f = c("quad.exp","gauss", "euclidean", "laplace","sine")[1],
+np.mojo.multilag <- function(x, G, lags = c(0, 1), kernel.f = c("quad.exp","gauss", "euclidean", "laplace","sine")[1],
                              kern.par = 1, data.driven.kern.par = TRUE, threshold = c("bootstrap", "manual")[1], threshold.val = NULL,
                              alpha = 0.1,  reps = 199, boot.dep = 1.5*(dim(as.matrix(x))[1]^(1/3)), parallel = FALSE, boot.method = 1,
                               criterion = "eta", eta = 0.4, epsilon = 0.02, use.mean = FALSE, eta.merge = 1,
                              merge.type = c("sequential", "bottom-up")[1]){
+
+  stopifnot(merge.type == "sequential" || merge.type == "bottom-up")
 
   if (!is.numeric(lags)) {
     stop("The set of lags must be a numeric vector.")

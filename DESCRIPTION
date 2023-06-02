@@ -1,13 +1,13 @@
 Package: CptNonPar
 Type: Package
-Title: Nonparametric Change Point Detection for Dependent Multivariate Time Series
+Title: Nonparametric Change Point Detection for Multivariate Time Series
 Version: 0.1.0
 Date: 2023-05-01
 Depends: R (>= 4.1.0)
 Author: Euan T. McGonigle
-Maintainer: Euan T. McGonigle <euan.mcgonigle@bristol.ac.uk>
-Description: Implements methods for nonparametric change point detection of multivariate time series exhibiting serial dependence.
+Maintainer: Euan T. McGonigle <e.t.mcgonigle@soton.ac.uk>
 License: GPL (>= 3)
+Description: Implements the NP-MOJO procedure for nonparametric multiple change point detection in multivariate time series. See McGonigle, E. T., Cho, H. (2023) <arXiv:2305.07581> for description of the NP-MOJO methodology.
 Encoding: UTF-8
 LazyData: true
 LinkingTo: Rcpp, RcppArmadillo
