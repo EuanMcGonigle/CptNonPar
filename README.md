@@ -1,5 +1,6 @@
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/EuanMcGonigle/CptNonPar/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/EuanMcGonigle/CptNonPar/actions/workflows/R-CMD-check.yaml)
+[![Travis build status](https://travis-ci.com/EuanMcGonigle/CptNonPar.svg?branch=main)](https://travis-ci.com/EuanMcGonigle/CptNonPar)
 <!-- badges: end -->
 # CptNonPar
 Nonparametric change point detection for multivariate time series. Implements the NP-MOJO methdology proposed in
