@@ -25,7 +25,7 @@ devtools::install_github("https://github.com/EuanMcGonigle/CptNonPar")
 
 ## Usage
 
-For detailed examples, see the help files within the package. We can generate a small example for change point detection as follows.
+For further examples, see the help files within the package. We can generate an example for change point detection as follows.
 
 Generate a univariate time series of length 1000, with a mean change at time 300, and an autocovariance (but not marginal) change at time 650:
 
