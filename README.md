@@ -10,6 +10,13 @@ Nonparametric change point detection for multivariate time series. Implements th
 
 ## Installation
 
+To install `CptNonPar` from CRAN:
+
+```
+install.packages("CptNonPar")
+```
+
+
 To install `CptNonPar` from GitHub:
 
 ```
