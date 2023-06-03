@@ -14,3 +14,6 @@ Imports: Rcpp, doParallel, parallel, foreach, Rfast, iterators, stats
 URL: https://github.com/EuanMcGonigle/CptNonPar
 BugReports: https://github.com/EuanMcGonigle/CptNonPar/issues
 RoxygenNote: 7.1.2
+Suggests: 
+    spelling
+Language: en-US
