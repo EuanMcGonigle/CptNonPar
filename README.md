@@ -3,7 +3,7 @@
 [![Travis build status](https://travis-ci.com/EuanMcGonigle/CptNonPar.svg?branch=main)](https://travis-ci.com/EuanMcGonigle/CptNonPar)
 <!-- badges: end -->
 # CptNonPar
-Nonparametric change point detection for multivariate time series. Implements the NP-MOJO methdology proposed in
+Nonparametric change point detection for multivariate time series. Implements the NP-MOJO methodology proposed in
 
 > McGonigle, E. T., Cho, H. (2023). Nonparametric data segmentation in multivariate time series via joint characteristic functions. 
 > [(link to paper here)](https://arxiv.org/abs/2305.07581).
@@ -25,7 +25,7 @@ devtools::install_github("https://github.com/EuanMcGonigle/CptNonPar")
 
 ## Usage
 
-For detailed examples, see the help files within the package. We can generate a small example for change point detection as follows.
+For further examples, see the help files within the package. We can generate an example for change point detection as follows.
 
 Generate a univariate time series of length 1000, with a mean change at time 300, and an autocovariance (but not marginal) change at time 650:
 
