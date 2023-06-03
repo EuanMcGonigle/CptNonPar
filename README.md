@@ -25,16 +25,36 @@ devtools::install_github("https://github.com/EuanMcGonigle/CptNonPar")
 
 ## Usage
 
-For detailed examples, see the help files within the package. We can generate a small example for change point detection as follows:
+For detailed examples, see the help files within the package. We can generate a small example for change point detection as follows.
+
+Generate a univariate time series of length 1000, with a mean change at time 300, and an autocovariance (but not marginal) change at time 650:
 
 ```
-set.seed(123)
 n <- 1000
-noise <- c(rep(1,300),rep(0.4,700))*stats::arima.sim(model = list(ar =0.3), n = 1000)
-signal <- c(rep(0,700),rep(0.5,300))
-x <- signal + noise
-x.c <- np.mojo(x, G = 166, lag = 0)
-x.c$cpts
+set.seed(123)
 
+noise1 <- stats::arima.sim(model = list(ar = -0.5), n = n, sd = sqrt(1-0.5^2))
+noise2 <- stats::arima.sim(model = list(ar = 0.5), n = n, sd = sqrt(1-0.5^2))
+
+noise <- c(noise1[1:650],noise2[651:n])
+
+signal <- c(rep(0,300),rep(0.7,700))
+
+x <- signal + noise
+
+```
+Perform the multilag NP-MOJO algorithm with lags 0 and 1:
+
+```
+x.c <- np.mojo.multilag(x,G=166, lags = c(0,1))
+```
+
+Print the estimated change points and the associated clusters:
+
+```
+x.c$merged.cpts$cpts
+
+x.c$merged.cpts$cpt.clusters
+```
 
 
