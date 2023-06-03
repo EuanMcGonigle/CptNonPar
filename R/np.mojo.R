@@ -294,7 +294,7 @@ np.mojo <- function(x, G, lag = 0, kernel.f = c("quad.exp", "gauss", "euclidean"
       if (length(cpt.locs) == 0) {
         p.vals <- sum(Tstar >= max(test.stat)) / (reps + 1)
       } else {
-        for (i in 1:seq_len(length(cpt.locs))) {
+        for (i in seq_len(length(cpt.locs))) {
           p.vals <- c(p.vals, sum(Tstar >= test.stat[cpt.locs[i]]) / (reps + 1))
         }
       }
