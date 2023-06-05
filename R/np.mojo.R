@@ -1,16 +1,16 @@
 #' @title Nonparametric Single Lag Change Point Detection for Multivariate Time Series
 #' @description For a given lagged value of the time series, performs nonparametric change point detection of a possibly multivariate
-#' time series. If \code{lag = 0}, then only marginal changes are detected.
+#' time series. If \code{lag} \eqn{\ell = 0}, then only marginal changes are detected.
 #' If \code{lag} \eqn{\ell \neq 0}, then changes in the pairwise distribution of \eqn{(X_t , X_{t+\ell})} are detected.
 #' @details The single-lag NP-MOJO algorithm for nonparametric change point detection is described in McGonigle, E. T. and Cho, H. (2023)
 #' Nonparametric data segmentation in multivariate time series via joint characteristic functions.  \emph{arXiv preprint arXiv:2305.07581}.
 #' @param x Input data (a \code{numeric} vector or an object of classes \code{ts} and \code{timeSeries},
-#' or a \code{numeric} matrix with rows representing variables)
+#' or a \code{numeric} matrix with rows representing variables).
 #' @param G An integer value for the moving sum bandwidth;
 #' \code{G} should be less than \code{length(n)/2}.
-#' @param lag The lagged values of the time series used to detect changes. If \code{lag = 0}, then only marginal changes are detected.
-#' If \code{lag} \eqn{= \ell \neq 0}, then changes in the pairwise distribution of \eqn{(X_t , X_{t+\ell})} are detected.
-#' @param kernel.f String indicating which kernel function to use when calculating the NP-MOJO statistic; with \code{kern.par} \eqn{= a}, possible values are
+#' @param lag The lagged values of the time series used to detect changes. If \code{lag} \eqn{\ell = 0}, then only marginal changes are detected.
+#' If \code{lag} \eqn{\ell \neq 0}, then changes in the pairwise distribution of \eqn{(X_t , X_{t+\ell})} are detected.
+#' @param kernel.f String indicating which kernel function to use when calculating the NP-MOJO detectors statistics; with \code{kern.par} \eqn{= a}, possible values are
 #'  \itemize{
 #'    \item{\code{"quad.exp"}}{: kernel \eqn{h_2} in McGonigle and Cho (2023), kernel 5 in Fan et al. (2017):
 #'    \deqn{h (x,y) = \prod_{i=1}^{2p} \frac{ (2a - (x_i - y_i)^2) \exp (-\frac{1}{4a} (x_i - y_i)^2 )}{2a} .}  }
@@ -29,15 +29,15 @@
 #' @param data.driven.kern.par A \code{logical} variable, if set to \code{TRUE}, then the kernel tuning parameter is calculated
 #'  using the median heuristic, if \code{FALSE} it is given by \code{kern.par}.
 #' @param alpha A numeric value for the significance level with
-#' \code{0 <= alpha <= 1}; use iff \code{threshold = "bootstrap"}
+#' \code{0 <= alpha <= 1}; use iff \code{threshold = "bootstrap"}.
 #' @param reps An integer value for the number of bootstrap replications performed, if \code{threshold = "bootstrap"}.
 #' @param boot.dep A positive value for the strength of dependence in the multiplier bootstrap sequence, if \code{threshold = "bootstrap"}.
 #' @param parallel A \code{logical} variable, if set to \code{TRUE}, then parallelisation is used if bootstrapping is performed,
 #'  if \code{FALSE} no parallelisation is performed.
 #' @param boot.method A string indicating the method for creating bootstrap replications. It is not recommended to change this. Possible choices are
-#' #'  \itemize{
-#'    \item{\code{"1"}}{: empirical mean subtraction is performed to the bootstrapped replicates, improving power.}
-#'        \item{\code{"2"}}{: empirical mean subtraction is not performed, improving size control.}
+#' \itemize{
+#'    \item{\code{1}}{: the default choice, empirical mean subtraction is performed to the bootstrapped replicates, improving power.}
+#'        \item{\code{2}}{: empirical mean subtraction is not performed, improving size control.}
 #' }
 #' @param criterion String indicating how to determine whether each point \code{k} at which NP-MOJO statistic
 #' exceeds the threshold is a change point; possible values are
@@ -117,6 +117,9 @@ np.mojo <- function(x, G, lag = 0, kernel.f = c("quad.exp", "gauss", "euclidean"
     stop("Missing values in data: NA is not allowed in the data.")
   }
 
+  if(is.null(threshold.val) && threshold == "manual") {
+    stop("Threshold type has been set to 'manual', but threshold.val has not been set.")
+  }
 
   if (!is.numeric(reps)) {
     stop("Number of bootstrap replications should be a single positive integer")

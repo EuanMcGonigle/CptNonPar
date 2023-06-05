@@ -28,7 +28,7 @@ np.mojo.multilag(
 }
 \arguments{
 \item{x}{Input data (a \code{numeric} vector or an object of classes \code{ts} and \code{timeSeries},
-or a \code{numeric} matrix with rows representing variables)}
+or a \code{numeric} matrix with rows representing variables).}
 
 \item{G}{An integer value for the moving sum bandwidth;
 \code{G} should be less than \code{length(n)/2}.}
@@ -36,7 +36,7 @@ or a \code{numeric} matrix with rows representing variables)}
 \item{lags}{A \code{numeric} vector giving the range of lagged values of the time series that will be used to detect changes. See
 \link{np.mojo} for further details.}
 
-\item{kernel.f}{String indicating which kernel function to use when calculating the NP-MOJO statistic; with \code{kern.par} \eqn{= a}, possible values are
+\item{kernel.f}{String indicating which kernel function to use when calculating the NP-MOJO detector statistics; with \code{kern.par} \eqn{= a}, possible values are
  \itemize{
    \item{\code{"quad.exp"}}{: kernel \eqn{h_2} in McGonigle and Cho (2023), kernel 5 in Fan et al. (2017):
    \deqn{h (x,y) = \prod_{i=1}^{2p} \frac{ (2a - (x_i - y_i)^2) \exp (-\frac{1}{4a} (x_i - y_i)^2 )}{2a} .}  }
@@ -64,7 +64,7 @@ using the median heuristic, if \code{FALSE} it is given by \code{kern.par}.}
 \item{threshold.val}{The value of the threshold used to delcare change points, only to be used if \code{threshold = "manual"}.}
 
 \item{alpha}{a numeric value for the significance level with
-\code{0 <= alpha <= 1}; use iff \code{threshold = "bootstrap"}}
+\code{0 <= alpha <= 1}; use iff \code{threshold = "bootstrap"}.}
 
 \item{reps}{An integer value for the number of bootstrap replications performed, if \code{threshold = "bootstrap"}.}
 
@@ -74,9 +74,9 @@ using the median heuristic, if \code{FALSE} it is given by \code{kern.par}.}
 if \code{FALSE} no parallelisation is performed.}
 
 \item{boot.method}{A string indicating the method for creating bootstrap replications. It is not recommended to change this. Possible choices are
-#'  \itemize{
-   \item{\code{"1"}}{: empirical mean subtraction is performed to the bootstrapped replicates, improving power.}
-       \item{\code{"2"}}{: empirical mean subtraction is not performed, improving size control.}
+ \itemize{
+   \item{\code{1}}{: the default choice, empirical mean subtraction is performed to the bootstrapped replicates, improving power.}
+   \item{\code{2}}{: empirical mean subtraction is not performed, improving size control.}
 }}
 
 \item{criterion}{String indicating how to determine whether each point \code{k} at which NP-MOJO statistic
@@ -117,7 +117,7 @@ A \code{list} object that contains the following fields:
    \item{criterion, eta, epsilon}{Input parameters}
    \item{merged.cpts}{A \code{list} object which contains the following fields:
    \itemize{
-   \item{cpts}{: a matrix with rows corresponding to final change point estimators, with associate lag and p-value given in columns}
+   \item{cpts}{: a matrix with rows corresponding to final change point estimators, with estimated change point location and associated lag and p-value given in columns.}
    \item{cpt.clusters}{: a \code{list} object of length given by the number of detected change points. Each field contains a matrix of all
    change point estimators that are declared to be associated to the corresponding change point in the \code{cpts} field.}}
    }

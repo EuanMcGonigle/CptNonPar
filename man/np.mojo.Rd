@@ -26,15 +26,15 @@ np.mojo(
 }
 \arguments{
 \item{x}{Input data (a \code{numeric} vector or an object of classes \code{ts} and \code{timeSeries},
-or a \code{numeric} matrix with rows representing variables)}
+or a \code{numeric} matrix with rows representing variables).}
 
 \item{G}{An integer value for the moving sum bandwidth;
 \code{G} should be less than \code{length(n)/2}.}
 
-\item{lag}{The lagged values of the time series used to detect changes. If \code{lag = 0}, then only marginal changes are detected.
-If \code{lag} \eqn{= \ell \neq 0}, then changes in the pairwise distribution of \eqn{(X_t , X_{t+\ell})} are detected.}
+\item{lag}{The lagged values of the time series used to detect changes. If \code{lag} \eqn{\ell = 0}, then only marginal changes are detected.
+If \code{lag} \eqn{\ell \neq 0}, then changes in the pairwise distribution of \eqn{(X_t , X_{t+\ell})} are detected.}
 
-\item{kernel.f}{String indicating which kernel function to use when calculating the NP-MOJO statistic; with \code{kern.par} \eqn{= a}, possible values are
+\item{kernel.f}{String indicating which kernel function to use when calculating the NP-MOJO detectors statistics; with \code{kern.par} \eqn{= a}, possible values are
  \itemize{
    \item{\code{"quad.exp"}}{: kernel \eqn{h_2} in McGonigle and Cho (2023), kernel 5 in Fan et al. (2017):
    \deqn{h (x,y) = \prod_{i=1}^{2p} \frac{ (2a - (x_i - y_i)^2) \exp (-\frac{1}{4a} (x_i - y_i)^2 )}{2a} .}  }
@@ -56,7 +56,7 @@ otherwise \code{kern.par} \eqn{> 0}.}
 using the median heuristic, if \code{FALSE} it is given by \code{kern.par}.}
 
 \item{alpha}{A numeric value for the significance level with
-\code{0 <= alpha <= 1}; use iff \code{threshold = "bootstrap"}}
+\code{0 <= alpha <= 1}; use iff \code{threshold = "bootstrap"}.}
 
 \item{threshold}{String indicating how the threshold is computed. Possible values are
  \itemize{
@@ -74,9 +74,9 @@ using the median heuristic, if \code{FALSE} it is given by \code{kern.par}.}
 if \code{FALSE} no parallelisation is performed.}
 
 \item{boot.method}{A string indicating the method for creating bootstrap replications. It is not recommended to change this. Possible choices are
-#'  \itemize{
-   \item{\code{"1"}}{: empirical mean subtraction is performed to the bootstrapped replicates, improving power.}
-       \item{\code{"2"}}{: empirical mean subtraction is not performed, improving size control.}
+\itemize{
+   \item{\code{1}}{: the default choice, empirical mean subtraction is performed to the bootstrapped replicates, improving power.}
+       \item{\code{2}}{: empirical mean subtraction is not performed, improving size control.}
 }}
 
 \item{criterion}{String indicating how to determine whether each point \code{k} at which NP-MOJO statistic
@@ -112,7 +112,7 @@ A \code{list} object that contains the following fields:
 }
 \description{
 For a given lagged value of the time series, performs nonparametric change point detection of a possibly multivariate
-time series. If \code{lag = 0}, then only marginal changes are detected.
+time series. If \code{lag} \eqn{\ell = 0}, then only marginal changes are detected.
 If \code{lag} \eqn{\ell \neq 0}, then changes in the pairwise distribution of \eqn{(X_t , X_{t+\ell})} are detected.
 }
 \details{

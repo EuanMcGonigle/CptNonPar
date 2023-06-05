@@ -4,6 +4,8 @@ runmean <- function(x, n = 5) {
   stats::filter(x, rep(1 / n, n), sides = 1)
 }
 
+#' @importFrom Rcpp evalCpp
+#' @useDynLib CptNonPar, .registration = TRUE
 #' @keywords internal
 
 bootstrap.tstat.faster <- function(h.mat, test.stat, G, lag, boot.dep, boot.method, data.len, h.mat.ncol) {
@@ -52,8 +54,6 @@ bootstrap.tstat.faster <- function(h.mat, test.stat, G, lag, boot.dep, boot.meth
 
     t.stat <- t.stat / ((G - lag)^2)
   }
-
-  # print(max(t.stat, na.rm=TRUE))
 
   max(t.stat, na.rm = TRUE)
 }

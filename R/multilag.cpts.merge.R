@@ -7,7 +7,7 @@
 #' changes, relative to bandwidth, used to merge change point estimators across different lags.
 #' @param merge.type String indicating the method used to merge change point estimators from different lags. Possible choices are
 #'  \itemize{
-#'    \item{\code{"sequential"}}{:  Starting from the left-most change point estimator and proceeding forward in time, estimators
+#'    \item{\code{"sequential"}}{: starting from the left-most change point estimator and proceeding forward in time, estimators
 #'    are grouped into clusters based on mutual distance. The estimator yielding the smallest corresponding p-value is
 #'    chosen as the change point estimator for that cluster. See McGonigle and Cho (2023) for details.}
 #'        \item{\code{"bottom-up"}}{: starting with the smallest p-value, the change points are merged using bottom-up merging (Messer
@@ -15,11 +15,13 @@
 #' }
 #'
 #' @return A \code{list} object which contains the following fields
-#' \item{cpts}{A matrix with rows corresponding to final change point estimators, with associate lag and p-value given in columns}
+#' \item{cpts}{A matrix with rows corresponding to final change point estimators, with estimated change point location and associated lag and p-value given in columns.}
 #'    \item{cpt.clusters}{A \code{list} object of length given by the number of detected change points. Each field contains a matrix of all
 #'    change point estimators that are declared to be associated to the corresponding change point in the \code{cpts} field.}
 #' @references McGonigle, E.T., Cho, H. (2023). Nonparametric data segmentation in multivariate time series via joint characteristic functions.
 #' \emph{arXiv preprint arXiv:2305.07581}.
+#' @references Messer M., Kirchner M., Schiemann J., Roeper J., Neininger R., Schneider G. (2014). A Multiple Filter Test for
+#' the Detection of Rate Changes in Renewal Processes with Varying Variance. \emph{The Annals of Applied Statistics}, 8(4), 2027-2067.
 #' @export
 #'
 #' @examples
