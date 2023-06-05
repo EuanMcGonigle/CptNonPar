@@ -61,7 +61,7 @@ using the median heuristic, if \code{FALSE} it is given by \code{kern.par}.}
        \item{\code{"manual"}}{: the threshold is set by the user and must be specified using the \code{threshold.val} parameter.}
 }}
 
-\item{threshold.val}{The value of the threshold used to delcare change points, only to be used if \code{threshold = "manual"}.}
+\item{threshold.val}{The value of the threshold used to declare change points, only to be used if \code{threshold = "manual"}.}
 
 \item{alpha}{a numeric value for the significance level with
 \code{0 <= alpha <= 1}; use iff \code{threshold = "bootstrap"}.}
@@ -70,8 +70,8 @@ using the median heuristic, if \code{FALSE} it is given by \code{kern.par}.}
 
 \item{boot.dep}{A positive value for the strength of dependence in the multiplier bootstrap sequence, if \code{threshold = "bootstrap"}.}
 
-\item{parallel}{A \code{logical} variable, if set to \code{TRUE}, then computation is performed in parallel is used if bootstrapping is performed,
-if \code{FALSE} no parallelisation is performed.}
+\item{parallel}{A \code{logical} variable, if set to \code{TRUE}, then parallel computing is used in the bootstrapping procedure
+if bootstrapping is performed.}
 
 \item{boot.method}{A string indicating the method for creating bootstrap replications. It is not recommended to change this. Possible choices are
  \itemize{

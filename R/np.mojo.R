@@ -32,8 +32,8 @@
 #' \code{0 <= alpha <= 1}; use iff \code{threshold = "bootstrap"}.
 #' @param reps An integer value for the number of bootstrap replications performed, if \code{threshold = "bootstrap"}.
 #' @param boot.dep A positive value for the strength of dependence in the multiplier bootstrap sequence, if \code{threshold = "bootstrap"}.
-#' @param parallel A \code{logical} variable, if set to \code{TRUE}, then parallelisation is used if bootstrapping is performed,
-#'  if \code{FALSE} no parallelisation is performed.
+#' @param parallel A \code{logical} variable, if set to \code{TRUE}, then parallel computing is used in the bootstrapping procedure
+#'  if bootstrapping is performed.
 #' @param boot.method A string indicating the method for creating bootstrap replications. It is not recommended to change this. Possible choices are
 #' \itemize{
 #'    \item{\code{1}}{: the default choice, empirical mean subtraction is performed to the bootstrapped replicates, improving power.}

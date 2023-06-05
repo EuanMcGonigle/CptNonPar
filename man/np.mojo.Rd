@@ -70,8 +70,8 @@ using the median heuristic, if \code{FALSE} it is given by \code{kern.par}.}
 
 \item{boot.dep}{A positive value for the strength of dependence in the multiplier bootstrap sequence, if \code{threshold = "bootstrap"}.}
 
-\item{parallel}{A \code{logical} variable, if set to \code{TRUE}, then parallelisation is used if bootstrapping is performed,
-if \code{FALSE} no parallelisation is performed.}
+\item{parallel}{A \code{logical} variable, if set to \code{TRUE}, then parallel computing is used in the bootstrapping procedure
+if bootstrapping is performed.}
 
 \item{boot.method}{A string indicating the method for creating bootstrap replications. It is not recommended to change this. Possible choices are
 \itemize{
@@ -109,7 +109,7 @@ A \code{list} object that contains the following fields:
    \item{threshold, alpha, reps, boot.dep, boot.method, parallel}{Input parameters}
    \item{threshold.val}{Threshold value for declaring change points}
    \item{criterion, eta, epsilon}{Input parameters}
-   \item{test.stat}{A vector containing the NP-MOSTAT detector statistics computed from the input data}
+   \item{test.stat}{A vector containing the NP-MOJO detector statistics computed from the input data}
    \item{cpts}{A vector containing the estimated change point locations}
    \item{p.vals}{The corresponding p values of the change points, if the bootstrap method was used}
 }
