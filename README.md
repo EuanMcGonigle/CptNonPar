@@ -42,7 +42,7 @@ signal <- c(rep(0,300),rep(0.7,700))
 x <- signal + noise
 
 ```
-Perform the multilag NP-MOJO algorithm with lags 0 and 1:
+Perform the multi-lag NP-MOJO algorithm with lags 0 and 1:
 
 ```
 x.c <- np.mojo.multilag(x,G=166, lags = c(0,1))

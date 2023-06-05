@@ -39,6 +39,7 @@
 #' }
 #' @seealso \link{np.mojo}, \link{np.mojo.multilag}
 multilag.cpts.merge <- function(x.c, eta.merge = 1, merge.type = c("sequential", "bottom-up")[1]) {
+
   stopifnot(merge.type == "sequential" || merge.type == "bottom-up")
 
   cpts <- init.cpts <- matrix(NA, nrow = 0, ncol = 3)

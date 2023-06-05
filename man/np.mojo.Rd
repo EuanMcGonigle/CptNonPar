@@ -15,10 +15,10 @@ np.mojo(
   threshold = c("bootstrap", "manual")[1],
   threshold.val = NULL,
   reps = 199,
-  boot.dep = 1.5 * (dim(as.matrix(x))[1]^(1/3)),
+  boot.dep = 1.5 * (nrow(as.matrix(x))^(1/3)),
   parallel = FALSE,
   boot.method = 1,
-  criterion = "eta",
+  criterion = c("eta", "epsilon", "eta.and.epsilon")[3],
   eta = 0.4,
   epsilon = 0.02,
   use.mean = FALSE
@@ -82,15 +82,18 @@ if \code{FALSE} no parallelisation is performed.}
 \item{criterion}{String indicating how to determine whether each point \code{k} at which NP-MOJO statistic
 exceeds the threshold is a change point; possible values are
  \itemize{
-   \item{\code{"epsilon"}}{: \code{k} is the maximum of its local exceeding environment, which has at least size \code{epsilon*G}}
+   \item{\code{"epsilon"}}{: \code{k} is the maximum of its local exceeding environment, which has at least size \code{epsilon*G}.}
        \item{\code{"eta"}}{: there is no larger exceeding in an \code{eta*G} environment of \code{k}.}
+       \item{\code{"eta.and.epsilon"}}{: the recommended default option; \code{k} satisfies both the eta and epsilon criterion.
+       Recommended to use with the standard value of eta that would be used if \code{criterion = "eta"} (e.g. 0.4),
+       but much smaller value of epsilon than would be used if \code{criterion = "epsilon"}, e.g. 0.02.}
 }}
 
 \item{eta}{A positive numeric value for the minimal mutual distance of
-changes, relative to bandwidth (if \code{criterion = "eta"}).}
+changes, relative to bandwidth (if \code{criterion = "eta"} or \code{criterion = "eta.and.epsilon"}).}
 
 \item{epsilon}{a numeric value in (0,1] for the minimal size of exceeding
-environments, relative to moving sum bandwidth (iff \code{criterion = "epsilon"})}
+environments, relative to moving sum bandwidth (if \code{criterion = "epsilon"} or \code{criterion = "eta.and.epsilon"}).}
 
 \item{use.mean}{\code{Logical variable}, only to be used if \code{data.drive.kern.par=TRUE}. If set to \code{TRUE}, the mean
 of pairwise distances is used to set the kernel function tuning parameter, instead of the median. May be useful for binary data,

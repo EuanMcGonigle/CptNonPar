@@ -39,13 +39,16 @@
 #' @param criterion String indicating how to determine whether each point \code{k} at which NP-MOJO statistic
 #' exceeds the threshold is a change point; possible values are
 #'  \itemize{
-#'    \item{\code{"epsilon"}}{: \code{k} is the maximum of its local exceeding environment, which has at least size \code{epsilon*G}}
+#'    \item{\code{"epsilon"}}{: \code{k} is the maximum of its local exceeding environment, which has at least size \code{epsilon*G}.}
 #'        \item{\code{"eta"}}{: there is no larger exceeding in an \code{eta*G} environment of \code{k}.}
+#'        \item{\code{"eta.and.epsilon"}}{: the recommended default option; \code{k} satisfies both the eta and epsilon criterion.
+#'        Recommended to use with the standard value of eta that would be used if \code{criterion = "eta"} (e.g. 0.4),
+#'        but much smaller value of epsilon than would be used if \code{criterion = "epsilon"}, e.g. 0.02.}
 #' }
 #' @param eta A positive numeric value for the minimal mutual distance of
-#' changes, relative to bandwidth (if \code{criterion = "eta"}).
+#' changes, relative to bandwidth (if \code{criterion = "eta"} or \code{criterion = "eta.and.epsilon"}).
 #' @param epsilon a numeric value in (0,1] for the minimal size of exceeding
-#' environments, relative to moving sum bandwidth (iff \code{criterion = "epsilon"})
+#' environments, relative to moving sum bandwidth (if \code{criterion = "epsilon"} or \code{criterion = "eta.and.epsilon"}).
 #' @param use.mean \code{Logical variable}, only to be used if \code{data.drive.kern.par=TRUE}. If set to \code{TRUE}, the mean
 #' of pairwise distances is used to set the kernel function tuning parameter, instead of the median. May be useful for binary data,
 #' not recommended to be used otherwise.
@@ -65,7 +68,7 @@
 #'    \item{\code{"bootstrap"}}{: the threshold is calculated using the bootstrap method with significance level \code{alpha}.}
 #'        \item{\code{"manual"}}{: the threshold is set by the user and must be specified using the \code{threshold.val} parameter.}
 #' }
-#' @param threshold.val The value of the threshold used to delcare change points, only to be used if \code{threshold = "manual"}.
+#' @param threshold.val The value of the threshold used to declare change points, only to be used if \code{threshold = "manual"}.
 #'
 #' @return A \code{list} object that contains the following fields:
 #'    \item{G}{Moving window bandwidth}
@@ -101,13 +104,17 @@
 #' @seealso \link{np.mojo}, \link{multilag.cpts.merge}
 np.mojo.multilag <- function(x, G, lags = c(0, 1), kernel.f = c("quad.exp", "gauss", "euclidean", "laplace", "sine")[1],
                              kern.par = 1, data.driven.kern.par = TRUE, threshold = c("bootstrap", "manual")[1], threshold.val = NULL,
-                             alpha = 0.1, reps = 199, boot.dep = 1.5 * (dim(as.matrix(x))[1]^(1 / 3)), parallel = FALSE, boot.method = 1,
-                             criterion = "eta", eta = 0.4, epsilon = 0.02, use.mean = FALSE, eta.merge = 1,
+                             alpha = 0.1, reps = 199, boot.dep = 1.5 * (nrow(as.matrix(x))^(1 / 3)), parallel = FALSE, boot.method = 1,
+                             criterion = c("eta", "epsilon", "eta.and.epsilon")[3], eta = 0.4, epsilon = 0.02, use.mean = FALSE, eta.merge = 1,
                              merge.type = c("sequential", "bottom-up")[1]) {
+
   stopifnot(merge.type == "sequential" || merge.type == "bottom-up")
 
   if (!is.numeric(lags)) {
-    stop("The set of lags must be a numeric vector.")
+    stop("The set of lags must be a numeric vector of positive integer values.")
+  }
+  if(sum((lags %% 1 != 0) | (lags < 0))!=0) {
+    stop("The set of lags must be a numeric vector of positive integer values.")
   }
 
   lag.cpts <- vector(mode = "list", length = length(lags))

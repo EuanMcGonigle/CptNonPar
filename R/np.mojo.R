@@ -42,13 +42,16 @@
 #' @param criterion String indicating how to determine whether each point \code{k} at which NP-MOJO statistic
 #' exceeds the threshold is a change point; possible values are
 #'  \itemize{
-#'    \item{\code{"epsilon"}}{: \code{k} is the maximum of its local exceeding environment, which has at least size \code{epsilon*G}}
+#'    \item{\code{"epsilon"}}{: \code{k} is the maximum of its local exceeding environment, which has at least size \code{epsilon*G}.}
 #'        \item{\code{"eta"}}{: there is no larger exceeding in an \code{eta*G} environment of \code{k}.}
+#'        \item{\code{"eta.and.epsilon"}}{: the recommended default option; \code{k} satisfies both the eta and epsilon criterion.
+#'        Recommended to use with the standard value of eta that would be used if \code{criterion = "eta"} (e.g. 0.4),
+#'        but much smaller value of epsilon than would be used if \code{criterion = "epsilon"}, e.g. 0.02.}
 #' }
 #' @param eta A positive numeric value for the minimal mutual distance of
-#' changes, relative to bandwidth (if \code{criterion = "eta"}).
+#' changes, relative to bandwidth (if \code{criterion = "eta"} or \code{criterion = "eta.and.epsilon"}).
 #' @param epsilon a numeric value in (0,1] for the minimal size of exceeding
-#' environments, relative to moving sum bandwidth (iff \code{criterion = "epsilon"})
+#' environments, relative to moving sum bandwidth (if \code{criterion = "epsilon"} or \code{criterion = "eta.and.epsilon"}).
 #' @param use.mean \code{Logical variable}, only to be used if \code{data.drive.kern.par=TRUE}. If set to \code{TRUE}, the mean
 #' of pairwise distances is used to set the kernel function tuning parameter, instead of the median. May be useful for binary data,
 #' not recommended to be used otherwise.
@@ -68,7 +71,7 @@
 #'    \item{threshold, alpha, reps, boot.dep, boot.method, parallel}{Input parameters}
 #'    \item{threshold.val}{Threshold value for declaring change points}
 #'    \item{criterion, eta, epsilon}{Input parameters}
-#'    \item{test.stat}{A vector containing the NP-MOSTAT detector statistics computed from the input data}
+#'    \item{test.stat}{A vector containing the NP-MOJO detector statistics computed from the input data}
 #'    \item{cpts}{A vector containing the estimated change point locations}
 #'    \item{p.vals}{The corresponding p values of the change points, if the bootstrap method was used}
 #' @references McGonigle, E.T., Cho, H. (2023). Nonparametric data segmentation in multivariate time series via joint characteristic functions. \emph{arXiv preprint arXiv:2305.07581}.
@@ -94,24 +97,26 @@
 #' @seealso \link{np.mojo.multilag}
 np.mojo <- function(x, G, lag = 0, kernel.f = c("quad.exp", "gauss", "euclidean", "laplace", "sine")[1],
                     kern.par = 1, data.driven.kern.par = TRUE, alpha = 0.1, threshold = c("bootstrap", "manual")[1],
-                    threshold.val = NULL, reps = 199, boot.dep = 1.5 * (dim(as.matrix(x))[1]^(1 / 3)), parallel = FALSE,
-                    boot.method = 1, criterion = "eta", eta = 0.4, epsilon = 0.02, use.mean = FALSE) {
+                    threshold.val = NULL, reps = 199, boot.dep = 1.5 * (nrow(as.matrix(x))^(1 / 3)), parallel = FALSE,
+                    boot.method = 1, criterion = c("eta", "epsilon", "eta.and.epsilon")[3], eta = 0.4, epsilon = 0.02, use.mean = FALSE) {
 
-
-
-  # A faster implementation of cpt.nonpar using calls to Rcpp for matrix and vector operations in the bootstrap procedure
-
-  # Finds nonparametric changes using the integrated squared distance between
-  # joint characteristic function to left and right of change within a MOSUM procedure
 
   # Error handling:
-  stopifnot(alpha >= 0 && alpha <= 1)
-  stopifnot(criterion == "epsilon" || criterion == "eta")
-  stopifnot(criterion != "epsilon" || epsilon >= 0)
-  stopifnot(criterion != "eta" || eta >= 0)
+  stopifnot("Error: alpha must be a number between 0 and 1." =  alpha >= 0 && alpha <= 1)
+  stopifnot("Error: change point detection criterion must be one of 'eta', 'epsilon', or 'eta.and.epsilon'." = criterion == "epsilon" || criterion == "eta" || criterion == "eta.and.epsilon")
+  stopifnot("Error: epsilon must be a positive nummber." =  criterion != "epsilon" || epsilon >= 0)
+  stopifnot("Error: eta must be a positive nummber." = criterion != "eta" || eta >= 0)
+  stopifnot("Error: epsilon must be a positive nummbers." = criterion != "eta.and.epsilon" || epsilon >=0)
+  stopifnot("Error: eta must be a positive nummbers." = criterion != "eta.and.epsilon" || eta >= 0)
 
+  if (!is.numeric(lag)) {
+    stop("The lag parameter should be a single positive integer.")
+  }
+  if ((length(lag) != 1) || (lag %% 1 != 0) || (lag < 0)) {
+    stop("The lag parameter should be a single positive integer.")
+  }
   if (!is.numeric(x)) {
-    stop("Data must be numeric")
+    stop("Data must be numeric.")
   }
   if (any(is.na(x))) {
     stop("Missing values in data: NA is not allowed in the data.")
@@ -122,21 +127,24 @@ np.mojo <- function(x, G, lag = 0, kernel.f = c("quad.exp", "gauss", "euclidean"
   }
 
   if (!is.numeric(reps)) {
-    stop("Number of bootstrap replications should be a single positive integer")
+    stop("Number of bootstrap replications should be a single positive integer.")
   }
-  if ((length(reps) != 1) | (reps %% 1 != 0) | (reps < 1)) {
-    stop("Number of bootstrap replications should be a single positive integer")
+  if ((length(reps) != 1) || (reps %% 1 != 0) || (reps < 1)) {
+    stop("Number of bootstrap replications should be a single positive integer.")
   }
-  if (kernel.f != "gauss" & kernel.f != "euclidean" & kernel.f != "laplace" & kernel.f != "sine" & kernel.f != "quad.exp") {
+  if (kernel.f != "gauss" && kernel.f != "euclidean" && kernel.f != "laplace" && kernel.f != "sine" && kernel.f != "quad.exp") {
     stop("The kernel.f function must be either 'quad.exp', 'gauss', 'laplace', 'sine', or 'euclidean'")
   }
-  if ((threshold != "bootstrap") & (reps != 199)) {
+  if ((threshold != "bootstrap") && (reps != 199)) {
     warning("reps is only used with threshold=bootstrap")
   }
   if (kern.par < 0) {
     warning("The kernel parameter must be a positive value.")
   }
-  if ((kernel.f == "euclidean") & (kern.par <= 0 || kern.par >= 2)) {
+  if (boot.dep < 0) {
+    warning("The bootstrap dependence parameter 'boot.dep' must be a positive value.")
+  }
+  if ((kernel.f == "euclidean") && (kern.par <= 0 || kern.par >= 2)) {
     stop("For the 'euclidean' kernel function, the kernel parameter must be in the interval (0,2)")
   }
 
@@ -144,7 +152,7 @@ np.mojo <- function(x, G, lag = 0, kernel.f = c("quad.exp", "gauss", "euclidean"
     data.len <- length(x)
     x <- matrix(x)
   } else {
-    data.len <- dim(x)[1]
+    data.len <- nrow(x)
   }
 
   if (G > data.len / 2) {
@@ -181,7 +189,7 @@ np.mojo <- function(x, G, lag = 0, kernel.f = c("quad.exp", "gauss", "euclidean"
   }
 
 
-  if (kernel.f == "gauss" & data.driven.kern.par == TRUE) {
+  if (kernel.f == "gauss" && data.driven.kern.par == TRUE) {
     D <- D.par
   } else {
     D <- mosum_dist_calc(y = y, G = G, n = data.len - lag, kern = kernel.f, kern_par = kern.par)
