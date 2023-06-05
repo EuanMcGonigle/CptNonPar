@@ -3,7 +3,7 @@
 #' time series. If \code{lag = 0}, then only marginal changes are detected.
 #' If \code{lag} \eqn{\ell \neq 0}, then changes in the pairwise distribution of \eqn{(X_t , X_{t+\ell})} are detected.
 #' @details The single-lag NP-MOJO algorithm for nonparametric change point detection is described in McGonigle, E. T. and Cho, H. (2023)
-#' Nonparametric data segmentation in multivariate time series via joint characteristic functions.  \emph{arXiv preprint \href{https://doi.org/10.48550/arXiv.2305.07581}{arXiv:2305.07581}.}
+#' Nonparametric data segmentation in multivariate time series via joint characteristic functions.  \emph{arXiv preprint arXiv:2305.07581}.
 #' @param x Input data (a \code{numeric} vector or an object of classes \code{ts} and \code{timeSeries},
 #' or a \code{numeric} matrix with rows representing variables)
 #' @param G An integer value for the moving sum bandwidth;
@@ -71,7 +71,7 @@
 #'    \item{test.stat}{A vector containing the NP-MOSTAT detector statistics computed from the input data}
 #'    \item{cpts}{A vector containing the estimated change point locations}
 #'    \item{p.vals}{The corresponding p values of the change points, if the bootstrap method was used}
-#' @references McGonigle, E.T., Cho, H. (2023). Nonparametric data segmentation in multivariate time series via joint characteristic functions. \emph{arXiv preprint \href{https://doi.org/10.48550/arXiv.2305.07581}{arXiv:2305.07581}.}
+#' @references McGonigle, E.T., Cho, H. (2023). Nonparametric data segmentation in multivariate time series via joint characteristic functions. \emph{arXiv preprint arXiv:2305.07581}.
 #' @references Fan, Y., de Micheaux, P.L., Penev, S. and Salopek, D. (2017). Multivariate nonparametric test of independence. \emph{Journal of Multivariate Analysis},
 #' 153, pp.189-210.
 #'

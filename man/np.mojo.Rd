@@ -117,14 +117,14 @@ If \code{lag} \eqn{\ell \neq 0}, then changes in the pairwise distribution of \e
 }
 \details{
 The single-lag NP-MOJO algorithm for nonparametric change point detection is described in McGonigle, E. T. and Cho, H. (2023)
-Nonparametric data segmentation in multivariate time series via joint characteristic functions.  \emph{arXiv preprint \href{https://doi.org/10.48550/arXiv.2305.07581}{arXiv:2305.07581}.}
+Nonparametric data segmentation in multivariate time series via joint characteristic functions.  \emph{arXiv preprint arXiv:2305.07581}.
 }
 \examples{
 \donttest{
 set.seed(123)
 n <- 1000
-noise <- c(rep(1,300),rep(0.4,700))*stats::arima.sim(model = list(ar =0.3), n = 1000)
-signal <- c(rep(0,700),rep(0.5,300))
+noise <- c(rep(1, 300), rep(0.4, 700)) * stats::arima.sim(model = list(ar = 0.3), n = 1000)
+signal <- c(rep(0, 700), rep(0.5, 300))
 x <- signal + noise
 x.c <- np.mojo(x, G = 166, lag = 0)
 x.c$cpts
@@ -132,7 +132,7 @@ x.c$p.vals
 }
 }
 \references{
-McGonigle, E.T., Cho, H. (2023). Nonparametric data segmentation in multivariate time series via joint characteristic functions. \emph{arXiv preprint \href{https://doi.org/10.48550/arXiv.2305.07581}{arXiv:2305.07581}.}
+McGonigle, E.T., Cho, H. (2023). Nonparametric data segmentation in multivariate time series via joint characteristic functions. \emph{arXiv preprint arXiv:2305.07581}.
 
 Fan, Y., de Micheaux, P.L., Penev, S. and Salopek, D. (2017). Multivariate nonparametric test of independence. \emph{Journal of Multivariate Analysis},
 153, pp.189-210.

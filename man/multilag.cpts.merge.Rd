@@ -42,18 +42,19 @@ See McGonigle and Cho (2023) for further details.
 \donttest{
 set.seed(123)
 n <- 1000
-noise <- c(rep(1,300),rep(0.4,700))*stats::arima.sim(model = list(ar =0.3), n = 1000)
-signal <- c(rep(0,700),rep(0.5,300))
+noise <- c(rep(1, 300), rep(0.4, 700)) * stats::arima.sim(model = list(ar = 0.3), n = 1000)
+signal <- c(rep(0, 700), rep(0.5, 300))
 x <- signal + noise
 x.c0 <- np.mojo(x, G = 166, lag = 0)
 x.c1 <- np.mojo(x, G = 166, lag = 1)
 x.c2 <- np.mojo(x, G = 166, lag = 2)
-x.c <- multilag.cpts.merge(list(x.c0,x.c1,x.c2))
+x.c <- multilag.cpts.merge(list(x.c0, x.c1, x.c2))
 x.c
 }
 }
 \references{
-McGonigle, E.T., Cho, H. (2023). Nonparametric data segmentation in multivariate time series via joint characteristic functions. \emph{arXiv preprint \href{https://doi.org/10.48550/arXiv.2305.07581}{arXiv:2305.07581}.}
+McGonigle, E.T., Cho, H. (2023). Nonparametric data segmentation in multivariate time series via joint characteristic functions.
+\emph{arXiv preprint arXiv:2305.07581}.
 }
 \seealso{
 \link{np.mojo}, \link{np.mojo.multilag}

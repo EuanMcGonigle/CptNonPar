@@ -2,7 +2,7 @@
 #' @description For a given set of lagged values of the time series, performs nonparametric change point detection of a possibly multivariate
 #' time series.
 #' @details The multi-lag NP-MOJO algorithm for nonparametric change point detection is described in McGonigle, E. T. and Cho, H. (2023)
-#' Nonparametric data segmentation in multivariate time series via joint characteristic functions.  \emph{arXiv preprint \href{https://doi.org/10.48550/arXiv.2305.07581}{arXiv:2305.07581}.}
+#' Nonparametric data segmentation in multivariate time series via joint characteristic functions.  \emph{arXiv preprint arXiv:2305.07581}.
 #' @param x Input data (a \code{numeric} vector or an object of classes \code{ts} and \code{timeSeries},
 #' or a \code{numeric} matrix with rows representing variables)
 #' @param G An integer value for the moving sum bandwidth;
@@ -79,7 +79,8 @@
 #'    \item{cpt.clusters}{: a \code{list} object of length given by the number of detected change points. Each field contains a matrix of all
 #'    change point estimators that are declared to be associated to the corresponding change point in the \code{cpts} field.}}
 #'    }
-#' @references McGonigle, E.T., Cho, H. (2023). Nonparametric data segmentation in multivariate time series via joint characteristic functions. \emph{arXiv preprint \href{https://doi.org/10.48550/arXiv.2305.07581}{arXiv:2305.07581}.}
+#' @references McGonigle, E.T., Cho, H. (2023). Nonparametric data segmentation in multivariate time series via joint characteristic functions.
+#' \emph{arXiv preprint arXiv:2305.07581}.
 #' @references Fan, Y., de Micheaux, P.L., Penev, S. and Salopek, D. (2017). Multivariate nonparametric test of independence. \emph{Journal of Multivariate Analysis},
 #' 153, pp.189-210.
 #' @references Messer M., Kirchner M., Schiemann J., Roeper J., Neininger R., Schneider G. (2014). A Multiple Filter Test for
