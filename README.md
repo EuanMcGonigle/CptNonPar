@@ -17,7 +17,7 @@ Implements the NP-MOJO methodology proposed in
 
 ## Installation
 
-To install `CptNonPar` from CRAN:
+You can install the released version of `CptNonPar` from [CRAN](https://CRAN.R-project.org) with:
 
     install.packages("CptNonPar")
 
