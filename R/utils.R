@@ -69,7 +69,6 @@ bootstrap.tstat <- function(h.mat, test.stat, G, lag, boot.dep, boot.method, dat
 #' @noRd
 
 h.matcalc <- function(D, lag, G, kernel.f, kern.par) {
-
   n <- dim(D)[2]
 
   h.dim <- n - G
@@ -134,11 +133,11 @@ mojo.error.checks <- function(x, G, lag, kernel.f, kern.par, data.driven.kern.pa
     stop("The lag parameter should be a single positive integer.")
   }
 
-  if(!is.numeric(G) || (G < 0)) {
+  if (!is.numeric(G) || (G < 0)) {
     stop("Bandwidth parameter G must be numeric positive integer.")
   }
 
-  if(G <= lag) {
+  if (G <= lag) {
     stop("Bandwidth parameter G must be larger than the chosen lag.")
   }
 
@@ -184,5 +183,4 @@ mojo.error.checks <- function(x, G, lag, kernel.f, kern.par, data.driven.kern.pa
     stop("Parameter 'boot.method' must be set to be either 'mean.subtract' or 'no.mean.subtract'. Highly
          recommended to set boot.method = 'mean.subtract'.")
   }
-
 }

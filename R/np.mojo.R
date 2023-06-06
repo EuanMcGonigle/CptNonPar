@@ -98,7 +98,7 @@
 np.mojo <- function(x, G, lag = 0, kernel.f = c("quad.exp", "gauss", "euclidean", "laplace", "sine")[1],
                     kern.par = 1, data.driven.kern.par = TRUE, alpha = 0.1, threshold = c("bootstrap", "manual")[1],
                     threshold.val = NULL, reps = 199, boot.dep = 1.5 * (nrow(as.matrix(x))^(1 / 3)), parallel = FALSE,
-                    boot.method = c("mean.subtract","no.mean.subtract")[1],
+                    boot.method = c("mean.subtract", "no.mean.subtract")[1],
                     criterion = c("eta", "epsilon", "eta.and.epsilon")[3], eta = 0.4, epsilon = 0.02, use.mean = FALSE) {
   mojo.error.checks(
     x = x, G = G, lag = lag, kernel.f = kernel.f, kern.par = kern.par, data.driven.kern.par = data.driven.kern.par,
