@@ -76,12 +76,9 @@
 #'    \item{kernel.f, data.driven.kern.par, use.mean}{Input parameters}
 #'    \item{threshold, alpha, reps, boot.dep, boot.method, parallel}{Input parameters}
 #'    \item{criterion, eta, epsilon}{Input parameters}
-#'    \item{merged.cpts}{A \code{list} object which contains the following fields:
-#'    \itemize{
-#'    \item{cpts}{: a matrix with rows corresponding to final change point estimators, with estimated change point location and associated lag and p-value given in columns.}
-#'    \item{cpt.clusters}{: a \code{list} object of length given by the number of detected change points. Each field contains a matrix of all
-#'    change point estimators that are declared to be associated to the corresponding change point in the \code{cpts} field.}}
-#'    }
+#'    \item{cpts}{A matrix with rows corresponding to final change point estimators, with estimated change point location and associated lag and p-value given in columns.}
+#'    \item{cpt.clusters}{A \code{list} object of length given by the number of detected change points. Each field contains a matrix of all
+#'    change point estimators that are declared to be associated to the corresponding change point in the \code{cpts} field.}
 #' @references McGonigle, E.T., Cho, H. (2023). Nonparametric data segmentation in multivariate time series via joint characteristic functions.
 #' \emph{arXiv preprint arXiv:2305.07581}.
 #' @references Fan, Y., de Micheaux, P.L., Penev, S. and Salopek, D. (2017). Multivariate nonparametric test of independence. \emph{Journal of Multivariate Analysis},
@@ -98,7 +95,8 @@
 #' signal <- c(rep(0, 700), rep(0.5, 300))
 #' x <- signal + noise
 #' x.c <- np.mojo.multilag(x, G = 166, lags = c(0, 1, 2))
-#' x.c$merged.cpts
+#' x.c$cpts
+#' x.c$cpt.clusters
 #' }
 #'
 #' @seealso \link{np.mojo}, \link{multilag.cpts.merge}
@@ -143,7 +141,6 @@ np.mojo.multilag <- function(x, G, lags = c(0, 1), kernel.f = c("quad.exp", "gau
     lags = lags,
     kernel.f = kernel.f,
     data.driven.kern.par = data.driven.kern.par,
-    merged.cpts = merged.cpts,
     threshold = threshold,
     boot.dep = boot.dep,
     boot.method = boot.method,
@@ -153,7 +150,9 @@ np.mojo.multilag <- function(x, G, lags = c(0, 1), kernel.f = c("quad.exp", "gau
     criterion = criterion,
     eta = eta,
     epsilon = epsilon,
-    use.mean = use.mean
+    use.mean = use.mean,
+    cpts = merged.cpts$cpts,
+    cpt.clusters = merged.cpts$cpt.clusters
   )
 
   return(ret)
