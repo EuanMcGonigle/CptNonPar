@@ -1,15 +1,20 @@
+#' @title Compute Running Mean
+#' @description Internal function for performing running mean used in the bootstrapping procedure
 #' @keywords internal
+#' @noRd
 
 runmean <- function(x, n = 5) {
   stats::filter(x, rep(1 / n, n), sides = 1)
 }
 
+#' @title Performing multiplier bootstrapping procedure
+#' @description Internal function for performing bootstrapping procedure with implementation using Rcpp
 #' @importFrom Rcpp evalCpp
 #' @useDynLib CptNonPar, .registration = TRUE
 #' @keywords internal
+#' @noRd
 
-bootstrap.tstat.faster <- function(h.mat, test.stat, G, lag, boot.dep, boot.method, data.len, h.mat.ncol) {
-
+bootstrap.tstat <- function(h.mat, test.stat, G, lag, boot.dep, boot.method, data.len, h.mat.ncol) {
   # set.seed(1)
 
   Wtstar <- stats::arima.sim(
@@ -58,11 +63,12 @@ bootstrap.tstat.faster <- function(h.mat, test.stat, G, lag, boot.dep, boot.meth
   max(t.stat, na.rm = TRUE)
 }
 
+#' @title Compute Entries of the h Kernel Matrix
+#' @description Internal function for computing the entries of the h kernel matrix required to compute the NP-MOJO detector statistics
 #' @keywords internal
+#' @noRd
 
 h.matcalc <- function(D, lag, G, kernel.f, kern.par) {
-
-  # calculates the entries of the h kernel matrix required to compute the MOSUM test statistic
 
   n <- dim(D)[2]
 
@@ -82,17 +88,85 @@ h.matcalc <- function(D, lag, G, kernel.f, kern.par) {
   h.mat
 }
 
+#' @title Generate Bootstrap Replicates
+#' @description Internal helper function for performing bootstrapping procedure
 #' @keywords internal
+#' @noRd
 
 bootstrap.char <- function(h.mat, test.stat, G, lag, reps, boot.dep, parallel, boot.method, data.len, h.mat.ncol) {
   if (parallel == FALSE) {
-    d <- replicate(reps, bootstrap.tstat.faster(
+    d <- replicate(reps, bootstrap.tstat(
       h.mat = h.mat, test.stat = test.stat, G = G, lag = lag, boot.dep = boot.dep,
       boot.method = boot.method, data.len = data.len, h.mat.ncol = h.mat.ncol
     ))
   } else {
-    d <- bootstrap.tstat.faster(h.mat, test.stat, G, lag, boot.dep, boot.method, data.len = data.len, h.mat.ncol)
+    d <- bootstrap.tstat(h.mat, test.stat, G, lag, boot.dep, boot.method, data.len = data.len, h.mat.ncol)
   }
 
   d
+}
+
+#' @title Perform Error Checks
+#' @description Internal function for performing error checks for the inputs to the np,mojo function
+#' @keywords internal
+#' @noRd
+
+mojo.error.checks <- function(x, G, lag, kernel.f, kern.par, data.driven.kern.par, alpha, threshold,
+                              threshold.val, reps, boot.dep, parallel, boot.method, criterion, eta, epsilon,
+                              use.mean) {
+  stopifnot("Error: alpha must be a number between 0 and 1." = alpha >= 0 && alpha <= 1)
+
+  stopifnot("Error: change point detection criterion must be one of 'eta', 'epsilon', or 'eta.and.epsilon'." = criterion == "epsilon" || criterion == "eta" || criterion == "eta.and.epsilon")
+
+  stopifnot("Error: epsilon must be a positive nummber." = criterion != "epsilon" || epsilon >= 0)
+  stopifnot("Error: eta must be a positive nummber." = criterion != "eta" || eta >= 0)
+  stopifnot("Error: epsilon must be a positive nummbers." = criterion != "eta.and.epsilon" || epsilon >= 0)
+  stopifnot("Error: eta must be a positive nummbers." = criterion != "eta.and.epsilon" || eta >= 0)
+
+  stopifnot("Error: 'parallel' argument must be logical variable." = is.logical(parallel))
+  stopifnot("Error: 'data.driven.kern.par' argument must be logical variable." = is.logical(data.driven.kern.par))
+  stopifnot("Error: 'use.mean' argument must be logical variable." = is.logical(use.mean))
+
+  if (!is.numeric(lag)) {
+    stop("The lag parameter should be a single positive integer.")
+  }
+  if ((length(lag) != 1) || (lag %% 1 != 0) || (lag < 0)) {
+    stop("The lag parameter should be a single positive integer.")
+  }
+
+  if (!is.numeric(x)) {
+    stop("Data must be numeric.")
+  }
+  if (any(is.na(x))) {
+    stop("Missing values in data: NA is not allowed in the data.")
+  }
+
+  if (threshold != "bootstrap" && threshold != "manual") {
+    stop("Threshold type parameter 'threshold' must be set to be either 'bootstrap' or 'manual'.")
+  }
+  if ((threshold != "bootstrap") && (reps != 199)) {
+    warning("reps is only used with threshold=bootstrap")
+  }
+  if (is.null(threshold.val) && threshold == "manual") {
+    stop("Threshold type has been set to 'manual', but threshold.val has not been set.")
+  }
+
+  if (!is.numeric(reps)) {
+    stop("Number of bootstrap replications should be a single positive integer.")
+  }
+  if ((length(reps) != 1) || (reps %% 1 != 0) || (reps < 1)) {
+    stop("Number of bootstrap replications should be a single positive integer.")
+  }
+  if (kernel.f != "gauss" && kernel.f != "euclidean" && kernel.f != "laplace" && kernel.f != "sine" && kernel.f != "quad.exp") {
+    stop("The kernel.f function must be either 'quad.exp', 'gauss', 'laplace', 'sine', or 'euclidean'")
+  }
+  if (kern.par < 0) {
+    warning("The kernel parameter must be a positive value.")
+  }
+  if (boot.dep < 0) {
+    warning("The bootstrap dependence parameter 'boot.dep' must be a positive value.")
+  }
+  if ((kernel.f == "euclidean") && (kern.par <= 0 || kern.par >= 2)) {
+    stop("For the 'euclidean' kernel function, the kernel parameter must be in the interval (0,2)")
+  }
 }

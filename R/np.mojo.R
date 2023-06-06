@@ -99,54 +99,12 @@ np.mojo <- function(x, G, lag = 0, kernel.f = c("quad.exp", "gauss", "euclidean"
                     kern.par = 1, data.driven.kern.par = TRUE, alpha = 0.1, threshold = c("bootstrap", "manual")[1],
                     threshold.val = NULL, reps = 199, boot.dep = 1.5 * (nrow(as.matrix(x))^(1 / 3)), parallel = FALSE,
                     boot.method = 1, criterion = c("eta", "epsilon", "eta.and.epsilon")[3], eta = 0.4, epsilon = 0.02, use.mean = FALSE) {
-
-
-  # Error handling:
-  stopifnot("Error: alpha must be a number between 0 and 1." =  alpha >= 0 && alpha <= 1)
-  stopifnot("Error: change point detection criterion must be one of 'eta', 'epsilon', or 'eta.and.epsilon'." = criterion == "epsilon" || criterion == "eta" || criterion == "eta.and.epsilon")
-  stopifnot("Error: epsilon must be a positive nummber." =  criterion != "epsilon" || epsilon >= 0)
-  stopifnot("Error: eta must be a positive nummber." = criterion != "eta" || eta >= 0)
-  stopifnot("Error: epsilon must be a positive nummbers." = criterion != "eta.and.epsilon" || epsilon >=0)
-  stopifnot("Error: eta must be a positive nummbers." = criterion != "eta.and.epsilon" || eta >= 0)
-
-  if (!is.numeric(lag)) {
-    stop("The lag parameter should be a single positive integer.")
-  }
-  if ((length(lag) != 1) || (lag %% 1 != 0) || (lag < 0)) {
-    stop("The lag parameter should be a single positive integer.")
-  }
-  if (!is.numeric(x)) {
-    stop("Data must be numeric.")
-  }
-  if (any(is.na(x))) {
-    stop("Missing values in data: NA is not allowed in the data.")
-  }
-
-  if(is.null(threshold.val) && threshold == "manual") {
-    stop("Threshold type has been set to 'manual', but threshold.val has not been set.")
-  }
-
-  if (!is.numeric(reps)) {
-    stop("Number of bootstrap replications should be a single positive integer.")
-  }
-  if ((length(reps) != 1) || (reps %% 1 != 0) || (reps < 1)) {
-    stop("Number of bootstrap replications should be a single positive integer.")
-  }
-  if (kernel.f != "gauss" && kernel.f != "euclidean" && kernel.f != "laplace" && kernel.f != "sine" && kernel.f != "quad.exp") {
-    stop("The kernel.f function must be either 'quad.exp', 'gauss', 'laplace', 'sine', or 'euclidean'")
-  }
-  if ((threshold != "bootstrap") && (reps != 199)) {
-    warning("reps is only used with threshold=bootstrap")
-  }
-  if (kern.par < 0) {
-    warning("The kernel parameter must be a positive value.")
-  }
-  if (boot.dep < 0) {
-    warning("The bootstrap dependence parameter 'boot.dep' must be a positive value.")
-  }
-  if ((kernel.f == "euclidean") && (kern.par <= 0 || kern.par >= 2)) {
-    stop("For the 'euclidean' kernel function, the kernel parameter must be in the interval (0,2)")
-  }
+  mojo.error.checks(
+    x = x, G = G, lag = lag, kernel.f = kernel.f, kern.par = kern.par, data.driven.kern.par = data.driven.kern.par,
+    alpha = alpha, threshold = threshold, threshold.val = threshold.val, reps = reps, boot.dep = boot.dep,
+    parallel = parallel, boot.method = boot.method, criterion = criterion, eta = eta, epsilon = epsilon,
+    use.mean = use.mean
+  )
 
   if (is.null(dim(x))) {
     data.len <- length(x)
@@ -164,8 +122,6 @@ np.mojo <- function(x, G, lag = 0, kernel.f = c("quad.exp", "gauss", "euclidean"
   } else {
     y <- x
   }
-
-  p.vals <- numeric(0)
 
   # calculate the Euclidean distances required for the test statistic calculation:
 
@@ -236,6 +192,7 @@ np.mojo <- function(x, G, lag = 0, kernel.f = c("quad.exp", "gauss", "euclidean"
   }
 
   cpt.locs <- numeric(0)
+  p.vals <- numeric(0)
 
   if (max(test.stat) > threshold.val) {
     exceedings <- (test.stat > threshold.val)
@@ -281,11 +238,10 @@ np.mojo <- function(x, G, lag = 0, kernel.f = c("quad.exp", "gauss", "euclidean"
         }
       }
     } else {
-
       localMaxima <- (c((diff.default(test.stat) < 0), NA) & c(NA, diff.default(test.stat) > 0))
       localMaxima[data.len - G] <- TRUE
 
-      if(criterion=="eta.and.epsilon") {
+      if (criterion == "eta.and.epsilon") {
         stat.exceed <- which(test.stat > threshold.val)
         r <- rle(diff(stat.exceed))
         end.r <- cumsum(r$lengths)
@@ -300,13 +256,11 @@ np.mojo <- function(x, G, lag = 0, kernel.f = c("quad.exp", "gauss", "euclidean"
         }
 
         p.candidates <- which(epsilon.exceedings & localMaxima)
-
       } else {
         p.candidates <- which(localMaxima)
       }
 
       cpt.locs <- mojo_eta_criterion_help(p.candidates, test.stat, eta, G, G)
-
     }
 
     if (threshold == "bootstrap") {
