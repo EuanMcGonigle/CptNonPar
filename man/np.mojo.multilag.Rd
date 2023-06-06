@@ -2,7 +2,7 @@
 % Please edit documentation in R/np.mojo.multilag.R
 \name{np.mojo.multilag}
 \alias{np.mojo.multilag}
-\title{Nonparametric Multiple Lag Change Point Detection for Multivariate Time Series}
+\title{Nonparametric Multiple Lag Change Point Detection}
 \usage{
 np.mojo.multilag(
   x,
@@ -28,7 +28,7 @@ np.mojo.multilag(
 }
 \arguments{
 \item{x}{Input data (a \code{numeric} vector or an object of classes \code{ts} and \code{timeSeries},
-or a \code{numeric} matrix with rows representing variables).}
+or a \code{numeric} matrix with rows representing observations and columns representing variables).}
 
 \item{G}{An integer value for the moving sum bandwidth;
 \code{G} should be less than \code{length(n)/2}.}

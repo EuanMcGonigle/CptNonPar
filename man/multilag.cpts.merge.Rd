@@ -2,7 +2,7 @@
 % Please edit documentation in R/multilag.cpts.merge.R
 \name{multilag.cpts.merge}
 \alias{multilag.cpts.merge}
-\title{Merging Change Point Estimators from Multiple Lags Into Final Set of Change Point Estimators}
+\title{Merge Change Point Estimators from Multiple Lags}
 \usage{
 multilag.cpts.merge(
   x.c,

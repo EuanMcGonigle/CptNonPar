@@ -2,7 +2,7 @@
 % Please edit documentation in R/np.mojo.R
 \name{np.mojo}
 \alias{np.mojo}
-\title{Nonparametric Single Lag Change Point Detection for Multivariate Time Series}
+\title{Nonparametric Single Lag Change Point Detection}
 \usage{
 np.mojo(
   x,
@@ -26,7 +26,7 @@ np.mojo(
 }
 \arguments{
 \item{x}{Input data (a \code{numeric} vector or an object of classes \code{ts} and \code{timeSeries},
-or a \code{numeric} matrix with rows representing variables).}
+or a \code{numeric} matrix with rows representing observations and columns representing variables).}
 
 \item{G}{An integer value for the moving sum bandwidth;
 \code{G} should be less than \code{length(n)/2}.}

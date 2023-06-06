@@ -1,11 +1,11 @@
-#' @title Nonparametric Single Lag Change Point Detection for Multivariate Time Series
+#' @title Nonparametric Single Lag Change Point Detection
 #' @description For a given lagged value of the time series, performs nonparametric change point detection of a possibly multivariate
 #' time series. If \code{lag} \eqn{\ell = 0}, then only marginal changes are detected.
 #' If \code{lag} \eqn{\ell \neq 0}, then changes in the pairwise distribution of \eqn{(X_t , X_{t+\ell})} are detected.
 #' @details The single-lag NP-MOJO algorithm for nonparametric change point detection is described in McGonigle, E. T. and Cho, H. (2023)
 #' Nonparametric data segmentation in multivariate time series via joint characteristic functions.  \emph{arXiv preprint arXiv:2305.07581}.
 #' @param x Input data (a \code{numeric} vector or an object of classes \code{ts} and \code{timeSeries},
-#' or a \code{numeric} matrix with rows representing variables).
+#' or a \code{numeric} matrix with rows representing observations and columns representing variables).
 #' @param G An integer value for the moving sum bandwidth;
 #' \code{G} should be less than \code{length(n)/2}.
 #' @param lag The lagged values of the time series used to detect changes. If \code{lag} \eqn{\ell = 0}, then only marginal changes are detected.

@@ -1,10 +1,10 @@
-#' @title Nonparametric Multiple Lag Change Point Detection for Multivariate Time Series
+#' @title Nonparametric Multiple Lag Change Point Detection
 #' @description For a given set of lagged values of the time series, performs nonparametric change point detection of a possibly multivariate
 #' time series.
 #' @details The multi-lag NP-MOJO algorithm for nonparametric change point detection is described in McGonigle, E. T. and Cho, H. (2023)
 #' Nonparametric data segmentation in multivariate time series via joint characteristic functions.  \emph{arXiv preprint arXiv:2305.07581}.
 #' @param x Input data (a \code{numeric} vector or an object of classes \code{ts} and \code{timeSeries},
-#' or a \code{numeric} matrix with rows representing variables).
+#' or a \code{numeric} matrix with rows representing observations and columns representing variables).
 #' @param G An integer value for the moving sum bandwidth;
 #' \code{G} should be less than \code{length(n)/2}.
 #' @param lags A \code{numeric} vector giving the range of lagged values of the time series that will be used to detect changes. See

@@ -1,4 +1,4 @@
-#' @title Merging Change Point Estimators from Multiple Lags Into Final Set of Change Point Estimators
+#' @title Merge Change Point Estimators from Multiple Lags
 #' @description Merges change point estimators from different lagged values into a final set of overall change point estimators.
 #' @details See McGonigle and Cho (2023) for further details.
 #' @param x.c A \code{list} object, where each element of the list is the output of the \link{np.mojo} function computed at a
