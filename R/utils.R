@@ -118,10 +118,10 @@ mojo.error.checks <- function(x, G, lag, kernel.f, kern.par, data.driven.kern.pa
 
   stopifnot("Error: change point detection criterion must be one of 'eta', 'epsilon', or 'eta.and.epsilon'." = criterion == "epsilon" || criterion == "eta" || criterion == "eta.and.epsilon")
 
-  stopifnot("Error: epsilon must be a positive nummber." = criterion != "epsilon" || epsilon >= 0)
-  stopifnot("Error: eta must be a positive nummber." = criterion != "eta" || eta >= 0)
-  stopifnot("Error: epsilon must be a positive nummbers." = criterion != "eta.and.epsilon" || epsilon >= 0)
-  stopifnot("Error: eta must be a positive nummbers." = criterion != "eta.and.epsilon" || eta >= 0)
+  stopifnot("Error: epsilon must be a positive number." = criterion != "epsilon" || epsilon >= 0)
+  stopifnot("Error: eta must be a positive number." = criterion != "eta" || eta >= 0)
+  stopifnot("Error: epsilon must be a positive numbers." = criterion != "eta.and.epsilon" || epsilon >= 0)
+  stopifnot("Error: eta must be a positive numbers." = criterion != "eta.and.epsilon" || eta >= 0)
 
   stopifnot("Error: 'parallel' argument must be logical variable." = is.logical(parallel))
   stopifnot("Error: 'data.driven.kern.par' argument must be logical variable." = is.logical(data.driven.kern.par))
