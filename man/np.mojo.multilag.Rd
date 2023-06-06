@@ -17,7 +17,7 @@ np.mojo.multilag(
   reps = 199,
   boot.dep = 1.5 * (nrow(as.matrix(x))^(1/3)),
   parallel = FALSE,
-  boot.method = 1,
+  boot.method = c("mean.subtract", "no.mean.subtract")[1],
   criterion = c("eta", "epsilon", "eta.and.epsilon")[3],
   eta = 0.4,
   epsilon = 0.02,
@@ -75,8 +75,8 @@ if bootstrapping is performed.}
 
 \item{boot.method}{A string indicating the method for creating bootstrap replications. It is not recommended to change this. Possible choices are
  \itemize{
-   \item{\code{1}}{: the default choice, empirical mean subtraction is performed to the bootstrapped replicates, improving power.}
-   \item{\code{2}}{: empirical mean subtraction is not performed, improving size control.}
+   \item{\code{"mean.subtract"}}{: the default choice, as described in McGonigle and Cho (2023). Empirical mean subtraction is performed to the bootstrapped replicates, improving power.}
+   \item{\code{"no.mean.subtract"}}{: empirical mean subtraction is not performed, improving size control.}
 }}
 
 \item{criterion}{String indicating how to determine whether each point \code{k} at which NP-MOJO statistic

@@ -36,8 +36,8 @@
 #'  if bootstrapping is performed.
 #' @param boot.method A string indicating the method for creating bootstrap replications. It is not recommended to change this. Possible choices are
 #' \itemize{
-#'    \item{\code{1}}{: the default choice, empirical mean subtraction is performed to the bootstrapped replicates, improving power.}
-#'        \item{\code{2}}{: empirical mean subtraction is not performed, improving size control.}
+#'    \item{\code{"mean.subtract"}}{: the default choice, as described in McGonigle and Cho (2023). Empirical mean subtraction is performed to the bootstrapped replicates, improving power.}
+#'        \item{\code{"no.mean.subtract"}}{: empirical mean subtraction is not performed, improving size control.}
 #' }
 #' @param criterion String indicating how to determine whether each point \code{k} at which NP-MOJO statistic
 #' exceeds the threshold is a change point; possible values are
@@ -98,7 +98,8 @@
 np.mojo <- function(x, G, lag = 0, kernel.f = c("quad.exp", "gauss", "euclidean", "laplace", "sine")[1],
                     kern.par = 1, data.driven.kern.par = TRUE, alpha = 0.1, threshold = c("bootstrap", "manual")[1],
                     threshold.val = NULL, reps = 199, boot.dep = 1.5 * (nrow(as.matrix(x))^(1 / 3)), parallel = FALSE,
-                    boot.method = 1, criterion = c("eta", "epsilon", "eta.and.epsilon")[3], eta = 0.4, epsilon = 0.02, use.mean = FALSE) {
+                    boot.method = c("mean.subtract","no.mean.subtract")[1],
+                    criterion = c("eta", "epsilon", "eta.and.epsilon")[3], eta = 0.4, epsilon = 0.02, use.mean = FALSE) {
   mojo.error.checks(
     x = x, G = G, lag = lag, kernel.f = kernel.f, kern.par = kern.par, data.driven.kern.par = data.driven.kern.par,
     alpha = alpha, threshold = threshold, threshold.val = threshold.val, reps = reps, boot.dep = boot.dep,

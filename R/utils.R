@@ -24,7 +24,7 @@ bootstrap.tstat <- function(h.mat, test.stat, G, lag, boot.dep, boot.method, dat
 
   t.stat <- rep(0, h.mat.ncol)
 
-  if (boot.method == 1) {
+  if (boot.method == "mean.subtract") {
     t.stat <- rep(0, h.mat.ncol + G + lag)
 
     W.mean <- runmean(Wtstar, G - lag)
@@ -134,6 +134,14 @@ mojo.error.checks <- function(x, G, lag, kernel.f, kern.par, data.driven.kern.pa
     stop("The lag parameter should be a single positive integer.")
   }
 
+  if(!is.numeric(G) || (G < 0)) {
+    stop("Bandwidth parameter G must be numeric positive integer.")
+  }
+
+  if(G <= lag) {
+    stop("Bandwidth parameter G must be larger than the chosen lag.")
+  }
+
   if (!is.numeric(x)) {
     stop("Data must be numeric.")
   }
@@ -157,16 +165,24 @@ mojo.error.checks <- function(x, G, lag, kernel.f, kern.par, data.driven.kern.pa
   if ((length(reps) != 1) || (reps %% 1 != 0) || (reps < 1)) {
     stop("Number of bootstrap replications should be a single positive integer.")
   }
+
   if (kernel.f != "gauss" && kernel.f != "euclidean" && kernel.f != "laplace" && kernel.f != "sine" && kernel.f != "quad.exp") {
     stop("The kernel.f function must be either 'quad.exp', 'gauss', 'laplace', 'sine', or 'euclidean'")
-  }
-  if (kern.par < 0) {
-    warning("The kernel parameter must be a positive value.")
-  }
-  if (boot.dep < 0) {
-    warning("The bootstrap dependence parameter 'boot.dep' must be a positive value.")
   }
   if ((kernel.f == "euclidean") && (kern.par <= 0 || kern.par >= 2)) {
     stop("For the 'euclidean' kernel function, the kernel parameter must be in the interval (0,2)")
   }
+
+  if (kern.par < 0) {
+    warning("The kernel parameter must be a positive value.")
+  }
+
+  if (boot.dep < 0) {
+    warning("The bootstrap dependence parameter 'boot.dep' must be a positive value.")
+  }
+  if (boot.method != "mean.subtract" && boot.method != "no.mean.subtract") {
+    stop("Parameter 'boot.method' must be set to be either 'mean.subtract' or 'no.mean.subtract'. Highly
+         recommended to set boot.method = 'mean.subtract'.")
+  }
+
 }

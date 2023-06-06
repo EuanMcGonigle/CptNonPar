@@ -33,8 +33,8 @@
 #'  if bootstrapping is performed.
 #' @param boot.method A string indicating the method for creating bootstrap replications. It is not recommended to change this. Possible choices are
 #'  \itemize{
-#'    \item{\code{1}}{: the default choice, empirical mean subtraction is performed to the bootstrapped replicates, improving power.}
-#'    \item{\code{2}}{: empirical mean subtraction is not performed, improving size control.}
+#'    \item{\code{"mean.subtract"}}{: the default choice, as described in McGonigle and Cho (2023). Empirical mean subtraction is performed to the bootstrapped replicates, improving power.}
+#'    \item{\code{"no.mean.subtract"}}{: empirical mean subtraction is not performed, improving size control.}
 #' }
 #' @param criterion String indicating how to determine whether each point \code{k} at which NP-MOJO statistic
 #' exceeds the threshold is a change point; possible values are
@@ -104,9 +104,9 @@
 #' @seealso \link{np.mojo}, \link{multilag.cpts.merge}
 np.mojo.multilag <- function(x, G, lags = c(0, 1), kernel.f = c("quad.exp", "gauss", "euclidean", "laplace", "sine")[1],
                              kern.par = 1, data.driven.kern.par = TRUE, threshold = c("bootstrap", "manual")[1], threshold.val = NULL,
-                             alpha = 0.1, reps = 199, boot.dep = 1.5 * (nrow(as.matrix(x))^(1 / 3)), parallel = FALSE, boot.method = 1,
-                             criterion = c("eta", "epsilon", "eta.and.epsilon")[3], eta = 0.4, epsilon = 0.02, use.mean = FALSE, eta.merge = 1,
-                             merge.type = c("sequential", "bottom-up")[1]) {
+                             alpha = 0.1, reps = 199, boot.dep = 1.5 * (nrow(as.matrix(x))^(1 / 3)), parallel = FALSE,
+                             boot.method = c("mean.subtract","no.mean.subtract")[1], criterion = c("eta", "epsilon", "eta.and.epsilon")[3],
+                             eta = 0.4, epsilon = 0.02, use.mean = FALSE, eta.merge = 1, merge.type = c("sequential", "bottom-up")[1]) {
   stopifnot(merge.type == "sequential" || merge.type == "bottom-up")
 
   if (!is.numeric(lags)) {
