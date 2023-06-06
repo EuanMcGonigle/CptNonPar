@@ -288,9 +288,6 @@ np.mojo <- function(x, G, lag = 0, kernel.f = c("quad.exp", "gauss", "euclidean"
     kernel.f = kernel.f,
     kern.par = kern.par,
     data.driven.kern.par = data.driven.kern.par,
-    test.stat = test.stat,
-    cpts = cpt.locs,
-    p.vals = p.vals,
     threshold = threshold,
     threshold.val = threshold.val,
     boot.dep = boot.dep,
@@ -301,7 +298,10 @@ np.mojo <- function(x, G, lag = 0, kernel.f = c("quad.exp", "gauss", "euclidean"
     criterion = criterion,
     eta = eta,
     epsilon = epsilon,
-    use.mean = use.mean
+    use.mean = use.mean,
+    test.stat = test.stat,
+    cpts = cpt.locs,
+    p.vals = p.vals
   )
 
   return(ret)
