@@ -45,9 +45,11 @@ devtools::install_github("https://github.com/EuanMcGonigle/CptNonPar")
 
 For further examples, see the help files within the package. We can generate an example for change point detection as follows.
 
-Generate a univariate time series of length 1000, with a mean change at time 300, and an autocovariance (but not marginal) change at time 650:
+We generate a univariate time series of length 1000, with a mean change at time 300, and an autocovariance (but not marginal) change at time 650. Then, we perform the multi-lag NP-MOJO algorithm with lags 0 and 1, and print the estimated change points and the associated clusters:
 
-```
+```{r example}
+library(CptNonPar)
+
 n <- 1000
 set.seed(123)
 
@@ -60,19 +62,12 @@ signal <- c(rep(0,300),rep(0.7,700))
 
 x <- signal + noise
 
-```
-Perform the multi-lag NP-MOJO algorithm with lags 0 and 1:
-
-```
 x.c <- np.mojo.multilag(x,G=166, lags = c(0,1))
-```
 
-Print the estimated change points and the associated clusters:
-
-```
 x.c$merged.cpts$cpts
 
 x.c$merged.cpts$cpt.clusters
+
 ```
 
 

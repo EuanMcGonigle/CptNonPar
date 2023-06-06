@@ -17,7 +17,7 @@ Implements the NP-MOJO methodology proposed in
 
 ## Installation
 
-You can install the released version of `CptNonPar` from [CRAN](https://CRAN.R-project.org) with:
+To install `CptNonPar` from CRAN:
 
     install.packages("CptNonPar")
 
@@ -30,27 +30,40 @@ To install `CptNonPar` from GitHub:
 For further examples, see the help files within the package. We can
 generate an example for change point detection as follows.
 
-Generate a univariate time series of length 1000, with a mean change at
-time 300, and an autocovariance (but not marginal) change at time 650:
+We generate a univariate time series of length 1000, with a mean change
+at time 300, and an autocovariance (but not marginal) change at time
+650. Then, we perform the multi-lag NP-MOJO algorithm with lags 0 and 1,
+and print the estimated change points and the associated clusters:
 
-    n <- 1000
-    set.seed(123)
+``` r
+library(CptNonPar)
 
-    noise1 <- stats::arima.sim(model = list(ar = -0.5), n = n, sd = sqrt(1-0.5^2))
-    noise2 <- stats::arima.sim(model = list(ar = 0.5), n = n, sd = sqrt(1-0.5^2))
+n <- 1000
+set.seed(123)
 
-    noise <- c(noise1[1:650],noise2[651:n])
+noise1 <- stats::arima.sim(model = list(ar = -0.5), n = n, sd = sqrt(1-0.5^2))
+noise2 <- stats::arima.sim(model = list(ar = 0.5), n = n, sd = sqrt(1-0.5^2))
 
-    signal <- c(rep(0,300),rep(0.7,700))
+noise <- c(noise1[1:650],noise2[651:n])
 
-    x <- signal + noise
+signal <- c(rep(0,300),rep(0.7,700))
 
-Perform the multi-lag NP-MOJO algorithm with lags 0 and 1:
+x <- signal + noise
 
-    x.c <- np.mojo.multilag(x,G=166, lags = c(0,1))
+x.c <- np.mojo.multilag(x,G=166, lags = c(0,1))
 
-Print the estimated change points and the associated clusters:
+x.c$merged.cpts$cpts
+#>       cp lag p.val
+#> [1,] 295   0 0.000
+#> [2,] 648   1 0.005
 
-    x.c$merged.cpts$cpts
-
-    x.c$merged.cpts$cpt.clusters
+x.c$merged.cpts$cpt.clusters
+#> [[1]]
+#>       cp lag p.val
+#> [1,] 295   0     0
+#> [2,] 296   1     0
+#> 
+#> [[2]]
+#>       cp lag p.val
+#> [1,] 648   1 0.005
+```
