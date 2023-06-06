@@ -6,6 +6,11 @@ G <- 80
 
 x.c <- np.mojo(x,G)
 
+test_that("np.mojo executes", {
+  skip_on_cran()
+  expect_equal(class(x.c), "list")
+})
+
 
 test_that("Criterion choice is recognised",{
   expect_error(np.mojo(x = x, G = G, criterion = "eat"),
@@ -62,5 +67,24 @@ test_that("reps argument is numeric",{
                "Number of bootstrap replications should be a single positive integer.")
 })
 
+test_that("lag argument is positive",{
+  expect_error(np.mojo(x = x, G = G, lag = -1),
+               "The lag parameter should be a single positive integer.")
+})
+
+test_that("lag argument is numeric",{
+  expect_error(np.mojo(x = x, G = G, lag = "1"),
+               "The lag parameter should be a single positive integer.")
+})
+
+test_that("G is numeric",{
+  expect_error(np.mojo(x = x, G =  "100"),
+               "Bandwidth parameter G must be numeric positive integer.")
+})
+
+test_that("G is larger than lag",{
+  expect_error(np.mojo(x = x, G =  20, lag = 25),
+               "Bandwidth parameter G must be larger than the chosen lag.")
+})
 
 
