@@ -281,23 +281,32 @@ np.mojo <- function(x, G, lag = 0, kernel.f = c("quad.exp", "gauss", "euclidean"
         }
       }
     } else {
-      stat.exceed <- which(test.stat > threshold.val)
-      r <- rle(diff(stat.exceed))
-      end.r <- cumsum(r$lengths)
-      start.r <- end.r - r$lengths + 1
-
-      epsilon.satisfied.start <- stat.exceed[start.r[r$lengths > epsilon * G]]
-      epsilon.satisfied.end <- stat.exceed[end.r[r$lengths > epsilon * G]]
-
-      epsilon.exceedings <- rep(FALSE, data.len)
-      for (i in seq_len(length(epsilon.satisfied.start))) {
-        epsilon.exceedings[epsilon.satisfied.start[i]:epsilon.satisfied.end[i]] <- TRUE
-      }
 
       localMaxima <- (c((diff.default(test.stat) < 0), NA) & c(NA, diff.default(test.stat) > 0))
       localMaxima[data.len - G] <- TRUE
-      p.candidates <- which(epsilon.exceedings & localMaxima)
+
+      if(criterion=="eta.and.epsilon") {
+        stat.exceed <- which(test.stat > threshold.val)
+        r <- rle(diff(stat.exceed))
+        end.r <- cumsum(r$lengths)
+        start.r <- end.r - r$lengths + 1
+
+        epsilon.satisfied.start <- stat.exceed[start.r[r$lengths > epsilon * G]]
+        epsilon.satisfied.end <- stat.exceed[end.r[r$lengths > epsilon * G]]
+
+        epsilon.exceedings <- rep(FALSE, data.len)
+        for (i in seq_len(length(epsilon.satisfied.start))) {
+          epsilon.exceedings[epsilon.satisfied.start[i]:epsilon.satisfied.end[i]] <- TRUE
+        }
+
+        p.candidates <- which(epsilon.exceedings & localMaxima)
+
+      } else {
+        p.candidates <- which(localMaxima)
+      }
+
       cpt.locs <- mojo_eta_criterion_help(p.candidates, test.stat, eta, G, G)
+
     }
 
     if (threshold == "bootstrap") {
