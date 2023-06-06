@@ -105,7 +105,8 @@ np.mojo.multilag <- function(x, G, lags = c(0, 1), kernel.f = c("quad.exp", "gau
                              alpha = 0.1, reps = 199, boot.dep = 1.5 * (nrow(as.matrix(x))^(1 / 3)), parallel = FALSE,
                              boot.method = c("mean.subtract", "no.mean.subtract")[1], criterion = c("eta", "epsilon", "eta.and.epsilon")[3],
                              eta = 0.4, epsilon = 0.02, use.mean = FALSE, eta.merge = 1, merge.type = c("sequential", "bottom-up")[1]) {
-  stopifnot(merge.type == "sequential" || merge.type == "bottom-up")
+  stopifnot("Error: change point merging type must be either 'sequential' or 'bottom-up'." =
+              merge.type == "sequential" || merge.type == "bottom-up")
 
   if (!is.numeric(lags)) {
     stop("The set of lags must be a numeric vector of positive integer values.")
