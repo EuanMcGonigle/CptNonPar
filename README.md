@@ -12,8 +12,8 @@ Nonparametric change point detection for multivariate time series.
 Implements the NP-MOJO methodology proposed in
 
 > McGonigle, E. T., Cho, H. (2023). Nonparametric data segmentation in
-> multivariate time series via joint characteristic functions. [(link to
-> paper here)](https://arxiv.org/abs/2305.07581).
+> multivariate time series via joint characteristic functions. arXiv
+> preprint [arXiv:2305.07581](https://arxiv.org/abs/2305.07581).
 
 ## Installation
 
@@ -41,16 +41,16 @@ library(CptNonPar)
 n <- 1000
 set.seed(123)
 
-noise1 <- stats::arima.sim(model = list(ar = -0.5), n = n, sd = sqrt(1-0.5^2))
-noise2 <- stats::arima.sim(model = list(ar = 0.5), n = n, sd = sqrt(1-0.5^2))
+noise1 <- stats::arima.sim(model = list(ar = -0.5), n = n, sd = sqrt(1 - 0.5^2))
+noise2 <- stats::arima.sim(model = list(ar = 0.5), n = n, sd = sqrt(1 - 0.5^2))
 
-noise <- c(noise1[1:650],noise2[651:n])
+noise <- c(noise1[1:650], noise2[651:n])
 
-signal <- c(rep(0,300),rep(0.7,700))
+signal <- c(rep(0, 300), rep(0.7, 700))
 
 x <- signal + noise
 
-x.c <- np.mojo.multilag(x,G=166, lags = c(0,1))
+x.c <- np.mojo.multilag(x, G = 166, lags = c(0, 1))
 
 x.c$merged.cpts$cpts
 #>       cp lag p.val
