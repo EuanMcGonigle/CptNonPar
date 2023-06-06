@@ -120,8 +120,8 @@ mojo.error.checks <- function(x, G, lag, kernel.f, kern.par, data.driven.kern.pa
 
   stopifnot("Error: epsilon must be a positive number." = criterion != "epsilon" || epsilon >= 0)
   stopifnot("Error: eta must be a positive number." = criterion != "eta" || eta >= 0)
-  stopifnot("Error: epsilon must be a positive numbers." = criterion != "eta.and.epsilon" || epsilon >= 0)
-  stopifnot("Error: eta must be a positive numbers." = criterion != "eta.and.epsilon" || eta >= 0)
+  stopifnot("Error: epsilon must be a positive number." = criterion != "eta.and.epsilon" || epsilon >= 0)
+  stopifnot("Error: eta must be a positive number." = criterion != "eta.and.epsilon" || eta >= 0)
 
   stopifnot("Error: 'parallel' argument must be logical variable." = is.logical(parallel))
   stopifnot("Error: 'data.driven.kern.par' argument must be logical variable." = is.logical(data.driven.kern.par))
@@ -174,11 +174,11 @@ mojo.error.checks <- function(x, G, lag, kernel.f, kern.par, data.driven.kern.pa
   }
 
   if (kern.par < 0) {
-    warning("The kernel parameter must be a positive value.")
+    stop("The kernel parameter must be a positive value.")
   }
 
   if (boot.dep < 0) {
-    warning("The bootstrap dependence parameter 'boot.dep' must be a positive value.")
+    stop("The bootstrap dependence parameter 'boot.dep' must be a positive value.")
   }
   if (boot.method != "mean.subtract" && boot.method != "no.mean.subtract") {
     stop("Parameter 'boot.method' must be set to be either 'mean.subtract' or 'no.mean.subtract'. Highly
