@@ -54,12 +54,12 @@ x <- signal + noise
 
 x.c <- np.mojo.multilag(x, G = 166, lags = c(0, 1))
 
-x.c$merged.cpts$cpts
+x.c$cpts
 #>       cp lag p.val
 #> [1,] 295   0 0.000
 #> [2,] 648   1 0.005
 
-x.c$merged.cpts$cpt.clusters
+x.c$cpt.clusters
 #> [[1]]
 #>       cp lag p.val
 #> [1,] 295   0     0
