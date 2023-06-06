@@ -17,11 +17,13 @@ Implements the NP-MOJO methodology proposed in
 
 ## Installation
 
-To install `CptNonPar` from CRAN:
+You can install the released version of `CptNonPar` from
+[CRAN](https://CRAN.R-project.org) with:
 
     install.packages("CptNonPar")
 
-To install `CptNonPar` from GitHub:
+You can install the development version of `CptNonPar` from
+[GitHub](https://github.com/) with:
 
     devtools::install_github("https://github.com/EuanMcGonigle/CptNonPar")
 
