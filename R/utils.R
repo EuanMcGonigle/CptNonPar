@@ -169,7 +169,7 @@ mojo.error.checks <- function(x, G, lag, kernel.f, kern.par, data.driven.kern.pa
     stop("The kernel.f function must be either 'quad.exp', 'gauss', 'laplace', 'sine', or 'euclidean'")
   }
   if ((kernel.f == "euclidean") && (kern.par <= 0 || kern.par >= 2)) {
-    stop("For the 'euclidean' kernel function, the kernel parameter must be in the interval (0,2)")
+    stop("For the 'euclidean' kernel, the kernel parameter must be in the interval (0,2).")
   }
 
   if (kern.par < 0) {
