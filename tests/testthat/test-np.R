@@ -1,7 +1,7 @@
 #Tests for np.mojo function
 
 set.seed(1)
-x <- rnorm(500)+c(rep(0,200),rep(2,300))
+x <- stats::rnorm(500)+c(rep(0,200),rep(2,300))
 G <- 80
 
 x.c <- np.mojo(x,G)
@@ -85,6 +85,16 @@ test_that("G is numeric",{
 test_that("G is larger than lag",{
   expect_error(np.mojo(x = x, G =  20, lag = 25),
                "Bandwidth parameter G must be larger than the chosen lag.")
+})
+
+test_that("x has no NAs",{
+  expect_error(np.mojo(x = c(x[1:499],NA), G =  G),
+               "Missing values in data: NA is not allowed in the data.")
+})
+
+test_that("x is numeric",{
+  expect_error(np.mojo(x = rep("1",500), G =  G),
+               "Data must be numeric.")
 })
 
 
