@@ -266,13 +266,11 @@ np.mojo <- function(x, G, lag = 0, kernel.f = c("quad.exp", "gauss", "euclidean"
 
     if (threshold == "bootstrap") {
       p.vals <- numeric(0)
-      if (length(cpt.locs) == 0) {
-        p.vals <- sum(Tstar >= max(test.stat)) / (reps + 1)
-      } else {
-        for (i in seq_len(length(cpt.locs))) {
-          p.vals <- c(p.vals, sum(Tstar >= test.stat[cpt.locs[i]]) / (reps + 1))
-        }
+
+      for (i in seq_len(length(cpt.locs))) {
+        p.vals <- c(p.vals, sum(Tstar >= test.stat[cpt.locs[i]]) / (reps + 1))
       }
+
     }
   } else {
     if (threshold == "bootstrap") {
