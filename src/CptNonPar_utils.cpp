@@ -138,32 +138,6 @@ IntegerVector mojo_eta_criterion_help(const IntegerVector &candidates,
   return res;
 }
 
-/* functions to compute element-wise matrix times vector, much faster than R base version, but the matrix is over-written. */
-
-void hadamardMultiplyMatrixByVectorInPlace(double* restrict x, size_t numRows, size_t numCols, const double* restrict y) {
-  if (numRows == 0 || numCols == 0) return;
-
-  for (size_t row = 0; row < numRows; ++row) {
-    double* restrict x_row = x + row * numCols;
-
-    for (size_t col = 0; col < numCols; ++col) {
-      x_row[col] *= y[row];
-    }
-  }
-}
-
-
-// [[Rcpp::export]]
-
-NumericMatrix C_matvecprod_elwise_inplace(NumericMatrix& X, const NumericVector& y)
-{
-  // do some dimension checking here
-
-  hadamardMultiplyMatrixByVectorInPlace(X.begin(), X.nrow(), X.ncol(),y.begin());
-
-  return X;
-}
-
 /* functions to compute element-wise matrix times vector, faster than R base version, with no over-writing. */
 
 void hadamardMultiplyMatrixByVector(const double* restrict x,
@@ -199,49 +173,6 @@ SEXP C_matvecprod_elwise(const NumericMatrix& X, const NumericVector& y)
   Rf_setAttrib(Z, R_DimSymbol, dimsExpr);
 
   hadamardMultiplyMatrixByVector(X.begin(), X.nrow(), X.ncol(), y.begin(), REAL(Z));
-
-  UNPROTECT(2);
-
-  return Z;
-}
-
-
-/* function to compute element-wise matrix times matrix, faster than R base version, no over-writing. */
-
-void hadamardMultiplyMatrixByMatrix(const double* restrict x,
-                                    size_t numRows, size_t numCols,
-                                    const double* restrict y,
-                                    double* restrict z)
-{
-  if (numRows == 0 || numCols == 0) return;
-
-  for (size_t row = 0; row < numRows; ++row) {
-    const double* restrict x_row = x + row * numCols;
-    const double* restrict y_row = y + row * numCols;
-    double* restrict z_row = z + row * numCols;
-
-    for (size_t col = 0; col < numCols; ++col) {
-      z_row[col] = x_row[col] * y_row[col];
-    }
-  }
-}
-
-// [[Rcpp::export]]
-SEXP C_matmatprod_elwise(const NumericMatrix& X, const NumericMatrix& Y)
-{
-  size_t numRows = X.nrow();
-  size_t numCols = X.ncol();
-
-  // do some dimension checking here
-
-  SEXP Z = PROTECT(Rf_allocVector(REALSXP, (int) (numRows * numCols)));
-  SEXP dimsExpr = PROTECT(Rf_allocVector(INTSXP, 2));
-  int* dims = INTEGER(dimsExpr);
-  dims[0] = (int) numRows;
-  dims[1] = (int) numCols;
-  Rf_setAttrib(Z, R_DimSymbol, dimsExpr);
-
-  hadamardMultiplyMatrixByMatrix(X.begin(), X.nrow(), X.ncol(), Y.begin(),REAL(Z));
 
   UNPROTECT(2);
 

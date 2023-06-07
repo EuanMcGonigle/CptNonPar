@@ -56,18 +56,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// C_matvecprod_elwise_inplace
-NumericMatrix C_matvecprod_elwise_inplace(NumericMatrix& X, const NumericVector& y);
-RcppExport SEXP _CptNonPar_C_matvecprod_elwise_inplace(SEXP XSEXP, SEXP ySEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericMatrix& >::type X(XSEXP);
-    Rcpp::traits::input_parameter< const NumericVector& >::type y(ySEXP);
-    rcpp_result_gen = Rcpp::wrap(C_matvecprod_elwise_inplace(X, y));
-    return rcpp_result_gen;
-END_RCPP
-}
 // C_matvecprod_elwise
 SEXP C_matvecprod_elwise(const NumericMatrix& X, const NumericVector& y);
 RcppExport SEXP _CptNonPar_C_matvecprod_elwise(SEXP XSEXP, SEXP ySEXP) {
@@ -77,18 +65,6 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const NumericMatrix& >::type X(XSEXP);
     Rcpp::traits::input_parameter< const NumericVector& >::type y(ySEXP);
     rcpp_result_gen = Rcpp::wrap(C_matvecprod_elwise(X, y));
-    return rcpp_result_gen;
-END_RCPP
-}
-// C_matmatprod_elwise
-SEXP C_matmatprod_elwise(const NumericMatrix& X, const NumericMatrix& Y);
-RcppExport SEXP _CptNonPar_C_matmatprod_elwise(SEXP XSEXP, SEXP YSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const NumericMatrix& >::type X(XSEXP);
-    Rcpp::traits::input_parameter< const NumericMatrix& >::type Y(YSEXP);
-    rcpp_result_gen = Rcpp::wrap(C_matmatprod_elwise(X, Y));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -109,9 +85,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_CptNonPar_mosum_dist_calc", (DL_FUNC) &_CptNonPar_mosum_dist_calc, 5},
     {"_CptNonPar_rolling_matrix_sum", (DL_FUNC) &_CptNonPar_rolling_matrix_sum, 5},
     {"_CptNonPar_mojo_eta_criterion_help", (DL_FUNC) &_CptNonPar_mojo_eta_criterion_help, 5},
-    {"_CptNonPar_C_matvecprod_elwise_inplace", (DL_FUNC) &_CptNonPar_C_matvecprod_elwise_inplace, 2},
     {"_CptNonPar_C_matvecprod_elwise", (DL_FUNC) &_CptNonPar_C_matvecprod_elwise, 2},
-    {"_CptNonPar_C_matmatprod_elwise", (DL_FUNC) &_CptNonPar_C_matmatprod_elwise, 2},
     {"_CptNonPar_C_matmatprod_elwise_inplace", (DL_FUNC) &_CptNonPar_C_matmatprod_elwise_inplace, 2},
     {NULL, NULL, 0}
 };

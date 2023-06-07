@@ -15,16 +15,8 @@ mojo_eta_criterion_help <- function(candidates, m_values, eta, G_left, G_right) 
     .Call(`_CptNonPar_mojo_eta_criterion_help`, candidates, m_values, eta, G_left, G_right)
 }
 
-C_matvecprod_elwise_inplace <- function(X, y) {
-    .Call(`_CptNonPar_C_matvecprod_elwise_inplace`, X, y)
-}
-
 C_matvecprod_elwise <- function(X, y) {
     .Call(`_CptNonPar_C_matvecprod_elwise`, X, y)
-}
-
-C_matmatprod_elwise <- function(X, Y) {
-    .Call(`_CptNonPar_C_matmatprod_elwise`, X, Y)
 }
 
 C_matmatprod_elwise_inplace <- function(X, Y) {
