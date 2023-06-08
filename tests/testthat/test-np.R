@@ -4,11 +4,70 @@ set.seed(1)
 x <- stats::rnorm(500)+c(rep(0,200),rep(2,300))
 G <- 80
 
-x.c <- np.mojo(x,G)
+kernels <- c('quad.exp', 'gauss', 'laplace', 'sine', 'euclidean')
+criteria <- c('eta', 'epsilon', 'eta.and.epsilon')
 
-test_that("np.mojo executes", {
+for(i in seq_len(length(kernels))){
+  test_that(paste0('np.mojo with Kernel #',i, " executes with data.driven.par FALSE"), {
+    skip_on_cran()
+    expect_equal(class(np.mojo(x,G, kernel.f = kernels[i], data.driven.kern.par = FALSE)), "list")
+  })
+}
+
+for(i in (seq_len(length(kernels)-1))){
+  test_that(paste0('np.mojo with Kernel #',i, " executes with data.driven.par TRUE"), {
+    skip_on_cran()
+    expect_equal(class(np.mojo(x,G, kernel.f = kernels[i], data.driven.kern.par = TRUE)), "list")
+  })
+}
+
+for(i in seq_len(length(criteria))){
+  test_that(paste0('np.mojo with criteria #',i, " executes"), {
+    skip_on_cran()
+    expect_equal(class(np.mojo(x,G, criterion = criteria[i])), "list")
+  })
+}
+
+test_that("np.mojo executes with param 'boot.method' = 'no.mean.subtract'", {
   skip_on_cran()
-  expect_equal(class(x.c), "list")
+  expect_equal(class(np.mojo(x,G, boot.method = "no.mean.subtract")), "list")
+})
+
+
+test_that("np.mojo executes with default params", {
+  skip_on_cran()
+  expect_equal(class(np.mojo(x,G)), "list")
+})
+
+test_that("np.mojo executes with exceeding at left boundary that doesn't satisfy epsilon criterion", {
+  skip_on_cran()
+  set.seed(123)
+  x.l <- stats::rnorm(500)+c(rep(0,100),rep(1,400))
+  expect_equal(class(np.mojo(x.l,G, criterion = "epsilon", threshold = "manual", threshold.val = 0.083, epsilon = 0.05)), "list")
+})
+
+test_that("np.mojo executes with exceeding at right boundary that doesn't satisfy epsilon criterion", {
+  skip_on_cran()
+  set.seed(123)
+  x.l <- rev(stats::rnorm(500)+c(rep(0,100),rep(1,400)))
+  expect_equal(class(np.mojo(x.l,G, criterion = "epsilon", threshold = "manual", threshold.val = 0.083, epsilon = 0.05)), "list")
+})
+
+test_that("np.mojo executes with parallel", {
+   skip_on_cran()
+   options(mc.cores=2)
+   expect_equal(class(np.mojo(x,G, parallel = TRUE)), "list")
+ })
+
+test_that("np.mojo executes with use.mean", {
+  skip_on_cran()
+  expect_equal(class(np.mojo(x,G, use.mean = TRUE)), "list")
+})
+
+test_that("np.mojo executes with matrix data", {
+  skip_on_cran()
+  X <- matrix(stats::rnorm(1000), ncol = 2, nrow = 500)
+  expect_equal(class(np.mojo(X,G)), "list")
 })
 
 
@@ -27,7 +86,6 @@ test_that("boot.method choice is recognised",{
                "Parameter 'boot.method' must be set to be either 'mean.subtract' or 'no.mean.subtract'. Highly
          recommended to set boot.method = 'mean.subtract'.")
 })
-
 
 
 test_that("parallel argument is logical",{
@@ -97,4 +155,42 @@ test_that("x is numeric",{
                "Data must be numeric.")
 })
 
+
+test_that("threshold is recognised",{
+  expect_error(np.mojo(x = x, G =  G, threshold = "asymptotic"),
+               "Threshold type parameter 'threshold' must be set to be either 'bootstrap' or 'manual'.")
+})
+
+
+test_that("threshold type 'manual' has threshold.val set",{
+  expect_error(np.mojo(x = x, G =  G, threshold = "manual"),
+               "Threshold type has been set to 'manual', but threshold.val has not been set.")
+})
+
+test_that("threshold type 'manual' has positive numeric threshold.val",{
+  expect_error(np.mojo(x = x, G =  G, threshold = "manual", threshold.val = -0.05),
+               "Parameter threshold.val must be a nonnegative number.")
+})
+
+test_that("reps only used with threshold = 'bootstrap",{
+  skip_on_cran()
+  expect_warning(np.mojo(x = x, G =  G, threshold = "manual", threshold.val = 0.1, reps = 200),
+                 "reps is only used with threshold=bootstrap")
+})
+
+test_that("Euclidean kernel has appropriate kern.par value",{
+  expect_error(np.mojo(x = x, G =  G, kernel.f = "euclidean", kern.par = 10, data.driven.kern.par = FALSE),
+               "For the 'euclidean' kernel, the kernel parameter must be in the interval (0,2).",
+               fixed = TRUE)
+})
+
+test_that("warning when Euclidean kernel used with data.driven.par = TRUE",{
+  expect_warning(np.mojo(x = x, G =  G, kernel.f = "euclidean", data.driven.kern.par = TRUE),
+               "Data driven parameter choice not suited for Euclidean kernel. Parameter kern.par reset to 1.")
+})
+
+test_that("G is not too large",{
+  expect_error(np.mojo(x = x, G =  400),
+                 "Bandwidth is too large for the length of time series.")
+})
 
