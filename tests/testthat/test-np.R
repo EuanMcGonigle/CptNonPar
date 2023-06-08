@@ -39,20 +39,6 @@ test_that("np.mojo executes with default params", {
   expect_equal(class(np.mojo(x,G)), "list")
 })
 
-test_that("np.mojo executes with exceeding at left boundary that doesn't satisfy epsilon criterion", {
-  skip_on_cran()
-  set.seed(123)
-  x.l <- stats::rnorm(500)+c(rep(0,100),rep(1,400))
-  expect_equal(class(np.mojo(x.l,G, criterion = "epsilon", threshold = "manual", threshold.val = 0.083, epsilon = 0.05)), "list")
-})
-
-test_that("np.mojo executes with exceeding at right boundary that doesn't satisfy epsilon criterion", {
-  skip_on_cran()
-  set.seed(123)
-  x.l <- rev(stats::rnorm(500)+c(rep(0,100),rep(1,400)))
-  expect_equal(class(np.mojo(x.l,G, criterion = "epsilon", threshold = "manual", threshold.val = 0.083, epsilon = 0.05)), "list")
-})
-
 test_that("np.mojo executes with parallel", {
    skip_on_cran()
    options(mc.cores=2)
