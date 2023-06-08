@@ -206,29 +206,6 @@ np.mojo <- function(x, G, lag = 0, kernel.f = c("quad.exp", "gauss", "euclidean"
       intervalEndPoints <- which(diff(exceedingsCount) <= -minIntervalSize)
       intervalBeginPoints <- intervalEndPoints - exceedingsCount[intervalEndPoints] + 1
 
-      if (exceedings[data.len - G] && !((data.len - G) %in% intervalEndPoints)) {
-        lastBeginPoint <- data.len - G - exceedingsCount[data.len - G] + 1
-        stopifnot(exceedings[seq(lastBeginPoint, data.len - G)])
-        stopifnot(!(lastBeginPoint %in% intervalBeginPoints))
-        highestStatPoint <- which.max(test.stat[seq(lastBeginPoint, data.len - G)]) + lastBeginPoint - 1
-
-        if (highestStatPoint - lastBeginPoint >= minIntervalSize / 2) {
-          intervalEndPoints <- c(intervalEndPoints, data.len - G)
-          intervalBeginPoints <- c(intervalBeginPoints, lastBeginPoint)
-        }
-      }
-      if (exceedings[G] && !(G %in% intervalBeginPoints)) {
-        firstEndPoint <- which(diff(exceedingsCount) < 0)[1]
-        stopifnot(exceedings[seq(G, firstEndPoint)])
-        stopifnot(!(firstEndPoint %in% intervalEndPoints))
-        highestStatPoint <- which.max(test.stat[seq(G, firstEndPoint)]) + G - 1
-
-        if (firstEndPoint - highestStatPoint >= minIntervalSize / 2) {
-          intervalEndPoints <- c(firstEndPoint, intervalEndPoints)
-          intervalBeginPoints <- c(G, intervalBeginPoints)
-        }
-      }
-
       numChangePoints <- length(intervalBeginPoints)
       if (numChangePoints > 0) {
         for (i in 1:numChangePoints) {
@@ -248,7 +225,7 @@ np.mojo <- function(x, G, lag = 0, kernel.f = c("quad.exp", "gauss", "euclidean"
         start.r <- end.r - r$lengths + 1
 
         epsilon.satisfied.start <- stat.exceed[start.r[r$lengths > epsilon * G]]
-        epsilon.satisfied.end <- stat.exceed[end.r[r$lengths > epsilon * G]]
+        epsilon.satisfied.end <- stat.exceed[end.r[r$lengths > epsilon * G]]+1
 
         epsilon.exceedings <- rep(FALSE, data.len)
         for (i in seq_len(length(epsilon.satisfied.start))) {
