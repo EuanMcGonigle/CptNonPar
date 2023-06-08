@@ -104,7 +104,6 @@ multilag.cpts.merge <- function(x.c, eta.merge = 1, merge.type = c("sequential",
 
     j <- 1
 
-
     while (nrow(init.cpts) != 0) {
       if (nrow(init.cpts) == 1) {
         cpts <- rbind(cpts, init.cpts)
