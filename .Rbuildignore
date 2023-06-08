@@ -4,3 +4,5 @@
 ^\.travis\.yml$
 ^cran-comments\.md$
 ^README\.Rmd$
+^\.gitlab-ci\.yml$
+^codecov\.yml$

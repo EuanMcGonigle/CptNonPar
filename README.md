@@ -6,6 +6,8 @@
 <!-- badges: start -->
 
 [![R-CMD-check](https://github.com/EuanMcGonigle/CptNonPar/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/EuanMcGonigle/CptNonPar/actions/workflows/R-CMD-check.yaml)
+[![Codecov test
+coverage](https://codecov.io/gh/EuanMcGonigle/CptNonPar/branch/main/graph/badge.svg)](https://app.codecov.io/gh/EuanMcGonigle/CptNonPar?branch=main)
 <!-- badges: end -->
 
 Nonparametric change point detection for multivariate time series.
