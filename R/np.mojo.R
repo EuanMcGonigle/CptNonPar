@@ -175,9 +175,8 @@ np.mojo <- function(x, G, lag = 0, kernel.f = c("quad.exp", "gauss", "euclidean"
   if (threshold == "bootstrap") {
     if (parallel == TRUE) {
       closeAllConnections()
-      cl <- parallel::makeCluster(parallel::detectCores())
+      cl <- parallel::makeCluster(parallelly::availableCores())
       doParallel::registerDoParallel(cl)
-      parallel::clusterSetRNGStream(cl = cl, iseed = 9182)
 
       Tstar <- foreach::foreach(iterators::icount(reps), .combine = cbind, .packages = c("foreach", "Rcpp", "CptNonPar")) %dopar% bootstrap.char(h.mat, test.stat, G, lag, reps = 1, boot.dep, parallel, boot.method, data.len, h.mat.ncol)
 
