@@ -163,7 +163,7 @@ SEXP C_matvecprod_elwise(const NumericMatrix& X, const NumericVector& y)
   size_t numRows = X.nrow();
   size_t numCols = X.ncol();
 
-  // do some dimension checking here
+
 
   SEXP Z = PROTECT(Rf_allocVector(REALSXP, (int) (numRows * numCols)));
   SEXP dimsExpr = PROTECT(Rf_allocVector(INTSXP, 2));
@@ -199,7 +199,7 @@ void hadamardMultiplyMatrixByMatrixInPlace(double* restrict X, size_t numRows, s
 
 NumericMatrix C_matmatprod_elwise_inplace(NumericMatrix& X, const NumericMatrix& Y)
 {
-  // do some dimension checking here
+
 
   hadamardMultiplyMatrixByMatrixInPlace(X.begin(), X.nrow(), X.ncol(), Y.begin());
 
