@@ -157,6 +157,10 @@ mojo.error.checks <- function(x, G, lag, kernel.f, kern.par, data.driven.kern.pa
   if (is.null(threshold.val) && threshold == "manual") {
     stop("Threshold type has been set to 'manual', but threshold.val has not been set.")
   }
+  if ((threshold.val < 0 || !is.numeric(threshold.val)) && threshold == "manual") {
+    stop("Parameter threshold.val must be a nonnegative number.")
+  }
+
 
   if (!is.numeric(reps)) {
     stop("Number of bootstrap replications should be a single positive integer.")
