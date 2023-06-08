@@ -9,7 +9,7 @@ License: GPL (>= 3)
 Description: Implements the NP-MOJO procedure for nonparametric multiple change point detection in multivariate time series. See McGonigle, E. T., Cho, H. (2023) <arXiv:2305.07581> for description of the NP-MOJO methodology.
 Encoding: UTF-8
 LazyData: true
-LinkingTo: Rcpp, RcppArmadillo
+LinkingTo: Rcpp
 Imports: Rcpp, doParallel, parallel, parallelly, foreach, Rfast, iterators, stats
 URL: https://github.com/EuanMcGonigle/CptNonPar
 BugReports: https://github.com/EuanMcGonigle/CptNonPar/issues

@@ -1,7 +1,7 @@
 #define restrict __restrict__ // gcc/clang
 //#define restrict __restrict   // MS Visual Studio
 
-#include <RcppArmadillo.h>
+#include <Rcpp.h>
 using namespace Rcpp;
 
 #include <cstdlib>
