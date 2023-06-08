@@ -10,7 +10,7 @@ Description: Implements the NP-MOJO procedure for nonparametric multiple change 
 Encoding: UTF-8
 LazyData: true
 LinkingTo: Rcpp, RcppArmadillo
-Imports: Rcpp, doParallel, parallel, foreach, Rfast, iterators, stats
+Imports: Rcpp, doParallel, parallel, parallelly, foreach, Rfast, iterators, stats
 URL: https://github.com/EuanMcGonigle/CptNonPar
 BugReports: https://github.com/EuanMcGonigle/CptNonPar/issues
 RoxygenNote: 7.2.3
