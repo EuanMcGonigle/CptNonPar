@@ -41,7 +41,6 @@ test_that("np.mojo executes with default params", {
 
 test_that("np.mojo executes with parallel", {
    skip_on_cran()
-   options(mc.cores=2)
    expect_equal(class(np.mojo(x,G, parallel = TRUE)), "list")
  })
 
