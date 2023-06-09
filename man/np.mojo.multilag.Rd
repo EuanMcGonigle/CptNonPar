@@ -31,7 +31,7 @@ np.mojo.multilag(
 or a \code{numeric} matrix with rows representing observations and columns representing variables).}
 
 \item{G}{An integer value for the moving sum bandwidth;
-\code{G} should be less than \code{length(n)/2}.}
+\code{G} should be less than half the length of the time series.}
 
 \item{lags}{A \code{numeric} vector giving the range of lagged values of the time series that will be used to detect changes. See
 \link{np.mojo} for further details.}
@@ -131,17 +131,14 @@ The multi-lag NP-MOJO algorithm for nonparametric change point detection is desc
 Nonparametric data segmentation in multivariate time series via joint characteristic functions.  \emph{arXiv preprint arXiv:2305.07581}.
 }
 \examples{
-\donttest{
-set.seed(123)
-n <- 1000
-noise <- c(rep(1, 300), rep(0.4, 700)) * stats::arima.sim(model = list(ar = 0.3), n = 1000)
-signal <- c(rep(0, 700), rep(0.5, 300))
+set.seed(1)
+n <- 500
+noise <- c(rep(1, 300), rep(0.4, 200)) * stats::arima.sim(model = list(ar = 0.3), n = n)
+signal <- c(rep(0, 100), rep(2, 400))
 x <- signal + noise
 x.c <- np.mojo.multilag(x, G = 166, lags = c(0, 1, 2))
 x.c$cpts
 x.c$cpt.clusters
-}
-
 }
 \references{
 McGonigle, E.T., Cho, H. (2023). Nonparametric data segmentation in multivariate time series via joint characteristic functions.
