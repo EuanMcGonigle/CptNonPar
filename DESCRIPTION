@@ -1,7 +1,7 @@
 Package: CptNonPar
 Type: Package
 Title: Nonparametric Change Point Detection for Multivariate Time Series
-Version: 0.1.0
+Version: 0.1.1
 Depends: R (>= 4.1.0)
 Authors@R: c(person("Euan T.", "McGonigle", email="e.t.mcgonigle@soton.ac.uk", role=c("aut", "cre")),
     person("Haeran", "Cho", email = "haeran.cho@bristol.ac.uk", role="aut"))
