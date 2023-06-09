@@ -6,3 +6,4 @@
 ^README\.Rmd$
 ^\.gitlab-ci\.yml$
 ^codecov\.yml$
+^CRAN-SUBMISSION$
