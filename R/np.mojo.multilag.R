@@ -6,7 +6,7 @@
 #' @param x Input data (a \code{numeric} vector or an object of classes \code{ts} and \code{timeSeries},
 #' or a \code{numeric} matrix with rows representing observations and columns representing variables).
 #' @param G An integer value for the moving sum bandwidth;
-#' \code{G} should be less than \code{length(n)/2}.
+#' \code{G} should be less than half the length of the time series.
 #' @param lags A \code{numeric} vector giving the range of lagged values of the time series that will be used to detect changes. See
 #' \link{np.mojo} for further details.
 #' @param kernel.f String indicating which kernel function to use when calculating the NP-MOJO detector statistics; with \code{kern.par} \eqn{= a}, possible values are
@@ -88,17 +88,14 @@
 #' @export
 #'
 #' @examples
-#' \donttest{
-#' set.seed(123)
-#' n <- 1000
-#' noise <- c(rep(1, 300), rep(0.4, 700)) * stats::arima.sim(model = list(ar = 0.3), n = 1000)
-#' signal <- c(rep(0, 700), rep(0.5, 300))
+#' set.seed(1)
+#' n <- 500
+#' noise <- c(rep(1, 300), rep(0.4, 200)) * stats::arima.sim(model = list(ar = 0.3), n = n)
+#' signal <- c(rep(0, 100), rep(2, 400))
 #' x <- signal + noise
 #' x.c <- np.mojo.multilag(x, G = 166, lags = c(0, 1, 2))
 #' x.c$cpts
 #' x.c$cpt.clusters
-#' }
-#'
 #' @seealso \link{np.mojo}, \link{multilag.cpts.merge}
 np.mojo.multilag <- function(x, G, lags = c(0, 1), kernel.f = c("quad.exp", "gauss", "euclidean", "laplace", "sine")[1],
                              kern.par = 1, data.driven.kern.par = TRUE, threshold = c("bootstrap", "manual")[1], threshold.val = NULL,
