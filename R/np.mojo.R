@@ -7,7 +7,7 @@
 #' @param x Input data (a \code{numeric} vector or an object of classes \code{ts} and \code{timeSeries},
 #' or a \code{numeric} matrix with rows representing observations and columns representing variables).
 #' @param G An integer value for the moving sum bandwidth;
-#' \code{G} should be less than \code{length(n)/2}.
+#' \code{G} should be less than half the length of the time series.
 #' @param lag The lagged values of the time series used to detect changes. If \code{lag} \eqn{\ell = 0}, then only marginal changes are detected.
 #' If \code{lag} \eqn{\ell \neq 0}, then changes in the pairwise distribution of \eqn{(X_t , X_{t+\ell})} are detected.
 #' @param kernel.f String indicating which kernel function to use when calculating the NP-MOJO detectors statistics; with \code{kern.par} \eqn{= a}, possible values are
@@ -81,16 +81,14 @@
 #' @export
 #'
 #' @examples
-#' \donttest{
-#' set.seed(123)
-#' n <- 1000
-#' noise <- c(rep(1, 300), rep(0.4, 700)) * stats::arima.sim(model = list(ar = 0.3), n = 1000)
-#' signal <- c(rep(0, 700), rep(0.5, 300))
+#' set.seed(1)
+#' n <- 500
+#' noise <- c(rep(1, 300), rep(0.4, 200)) * stats::arima.sim(model = list(ar = 0.3), n = n)
+#' signal <- c(rep(0, 100), rep(2, 400))
 #' x <- signal + noise
-#' x.c <- np.mojo(x, G = 166, lag = 0)
+#' x.c <- np.mojo(x, G = 83, lag = 0)
 #' x.c$cpts
 #' x.c$p.vals
-#' }
 #' @importFrom Rcpp evalCpp
 #' @useDynLib CptNonPar, .registration = TRUE
 #' @importFrom foreach %dopar%
