@@ -3,10 +3,14 @@ Type: Package
 Title: Nonparametric Change Point Detection for Multivariate Time Series
 Version: 0.1.0
 Depends: R (>= 4.1.0)
-Authors@R: c(person("Euan T.", "McGonigle", email="e.t.mcgonigle@soton.ac.uk",role=c("aut", "cre")),person("Haeran", "Cho", , email = "haeran.cho@bristol.ac.uk", role="aut"))
+Authors@R: c(person("Euan T.", "McGonigle", email="e.t.mcgonigle@soton.ac.uk", role=c("aut", "cre")),
+    person("Haeran", "Cho", email = "haeran.cho@bristol.ac.uk", role="aut"))
 Maintainer: Euan T. McGonigle <e.t.mcgonigle@soton.ac.uk>
 License: GPL (>= 3)
-Description: Implements the NP-MOJO procedure for nonparametric multiple change point detection in multivariate time series. See McGonigle, E. T., Cho, H. (2023) <arXiv:2305.07581> for description of the NP-MOJO methodology.
+Description: Implements the nonparametric moving sum procedure for detecting 
+    changes in the joint characteristic function (NP-MOJO) in multivariate 
+    time series. See McGonigle, E. T., Cho, H. (2023) <arXiv:2305.07581> 
+    for description of the NP-MOJO methodology.
 Encoding: UTF-8
 LazyData: true
 LinkingTo: Rcpp
