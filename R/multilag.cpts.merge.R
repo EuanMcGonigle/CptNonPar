@@ -25,18 +25,16 @@
 #' @export
 #'
 #' @examples
-#' \donttest{
-#' set.seed(123)
-#' n <- 1000
-#' noise <- c(rep(1, 300), rep(0.4, 700)) * stats::arima.sim(model = list(ar = 0.3), n = 1000)
-#' signal <- c(rep(0, 700), rep(0.5, 300))
+#' set.seed(1)
+#' n <- 500
+#' noise <- c(rep(1, 300), rep(0.4, 200)) * stats::arima.sim(model = list(ar = 0.3), n = n)
+#' signal <- c(rep(0, 100), rep(2, 400))
 #' x <- signal + noise
 #' x.c0 <- np.mojo(x, G = 166, lag = 0)
 #' x.c1 <- np.mojo(x, G = 166, lag = 1)
 #' x.c2 <- np.mojo(x, G = 166, lag = 2)
 #' x.c <- multilag.cpts.merge(list(x.c0, x.c1, x.c2))
 #' x.c
-#' }
 #' @seealso \link{np.mojo}, \link{np.mojo.multilag}
 multilag.cpts.merge <- function(x.c, eta.merge = 1, merge.type = c("sequential", "bottom-up")[1]) {
   stopifnot("Error: change point merging type must be either 'sequential' or 'bottom-up'." =
