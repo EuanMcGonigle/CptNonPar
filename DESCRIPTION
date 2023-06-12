@@ -8,9 +8,9 @@ Authors@R: c(person("Euan T.", "McGonigle", email="e.t.mcgonigle@soton.ac.uk", r
 Maintainer: Euan T. McGonigle <e.t.mcgonigle@soton.ac.uk>
 License: GPL (>= 3)
 Description: Implements the nonparametric moving sum procedure for detecting 
-    changes in the joint characteristic function (NP-MOJO) in multivariate 
-    time series. See McGonigle, E. T., Cho, H. (2023) <arXiv:2305.07581> 
-    for description of the NP-MOJO methodology.
+    changes in the joint characteristic function (NP-MOJO) for multiple change
+    point detection in multivariate time series. See McGonigle, E. T., Cho, H. 
+    (2023) <arXiv:2305.07581> for description of the NP-MOJO methodology.
 Encoding: UTF-8
 LazyData: true
 LinkingTo: Rcpp
