@@ -44,10 +44,9 @@ n <- 500
 noise <- c(rep(1, 300), rep(0.4, 200)) * stats::arima.sim(model = list(ar = 0.3), n = n)
 signal <- c(rep(0, 100), rep(2, 400))
 x <- signal + noise
-x.c0 <- np.mojo(x, G = 166, lag = 0)
-x.c1 <- np.mojo(x, G = 166, lag = 1)
-x.c2 <- np.mojo(x, G = 166, lag = 2)
-x.c <- multilag.cpts.merge(list(x.c0, x.c1, x.c2))
+x.c0 <- np.mojo(x, G = 83, lag = 0)
+x.c1 <- np.mojo(x, G = 83, lag = 1)
+x.c <- multilag.cpts.merge(list(x.c0, x.c1))
 x.c
 }
 \references{
