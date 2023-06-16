@@ -172,7 +172,6 @@ np.mojo <- function(x, G, lag = 0, kernel.f = c("quad.exp", "gauss", "euclidean"
 
   if (threshold == "bootstrap") {
     if (parallel == TRUE) {
-      closeAllConnections()
       cl <- parallel::makeCluster(parallelly::availableCores())
       doParallel::registerDoParallel(cl)
 
