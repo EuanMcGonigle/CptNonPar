@@ -39,16 +39,16 @@ all values in the vector \code{G} should be less than half the length of the tim
 
 \item{kernel.f}{String indicating which kernel function to use when calculating the NP-MOJO detector statistics; with \code{kern.par} \eqn{= a}, possible values are
  \itemize{
-   \item{\code{"quad.exp"}}{: kernel \eqn{h_2} in McGonigle and Cho (2023), kernel 5 in Fan et al. (2017):
-   \deqn{h (x,y) = \prod_{i=1}^{2p} \frac{ (2a - (x_i - y_i)^2) \exp (-\frac{1}{4a} (x_i - y_i)^2 )}{2a} .}  }
-   \item{\code{"gauss"}}{: kernel \eqn{h_1} in McGonigle and Cho (2023), the standard Gaussian kernel:
-   \deqn{h (x,y) = \exp ( - \frac{a^2}{2} \Vert x - y  \Vert^2) .} }
-   \item{\code{"euclidean"}}{: kernel \eqn{h_3} in McGonigle and Cho (2023), the Euclidean distance-based kernel:
-   \deqn{h (x, y ) = \Vert x - y \Vert^a  .}}
-   \item{\code{"laplace"}}{: kernel 2 in Fan et al. (2017), based on a Laplace weight function:
-     \deqn{h (x, y ) = \prod_{i=1}^{2p} \left( 1+ a^2 (x_i - y_i)^2  \right)^{-1}. }}
-   \item{\code{"sine"}}{: kernel 4 in Fan et al. (2017), based on a sinusoidal weight function:
-     \deqn{h (x, y ) = \prod_{i=1}^{2p} \frac{-2 | x_i - y_i |  + | x_i - y_i - 2a|  + | x_i - y_i +2a| }{4a} .}}
+   \item \code{"quad.exp"}: kernel \eqn{h_2} in McGonigle and Cho (2023), kernel 5 in Fan et al. (2017):
+   \deqn{h (x,y) = \prod_{i=1}^{2p} \frac{ (2a - (x_i - y_i)^2) \exp (-\frac{1}{4a} (x_i - y_i)^2 )}{2a} .}
+   \item \code{"gauss"}: kernel \eqn{h_1} in McGonigle and Cho (2023), the standard Gaussian kernel:
+   \deqn{h (x,y) = \exp ( - \frac{a^2}{2} \Vert x - y  \Vert^2).}
+   \item \code{"euclidean"}: kernel \eqn{h_3} in McGonigle and Cho (2023), the Euclidean distance-based kernel:
+   \deqn{h (x, y ) = \Vert x - y \Vert^a .}
+   \item \code{"laplace"}: kernel 2 in Fan et al. (2017), based on a Laplace weight function:
+     \deqn{h (x, y ) = \prod_{i=1}^{2p} \left( 1+ a^2 (x_i - y_i)^2  \right)^{-1}.}
+   \item \code{"sine"}: kernel 4 in Fan et al. (2017), based on a sinusoidal weight function:
+     \deqn{h (x, y ) = \prod_{i=1}^{2p} \frac{-2 | x_i - y_i |  + | x_i - y_i - 2a|  + | x_i - y_i +2a| }{4a} .}
 }}
 
 \item{kern.par}{The tuning parameter that appears in the expression for the kernel function, which acts as a scaling parameter.}
@@ -58,8 +58,10 @@ using the median heuristic, if \code{FALSE} it is given by \code{kern.par}.}
 
 \item{threshold}{String indicating how the threshold is computed. Possible values are
  \itemize{
-   \item{\code{"bootstrap"}}{: the threshold is calculated using the bootstrap method with significance level \code{alpha}.}
-       \item{\code{"manual"}}{: the threshold is set by the user and must be specified using the \code{threshold.val} parameter.}
+   \item \code{"bootstrap"}: the threshold is calculated using the bootstrap method with
+   significance level \code{alpha}.
+       \item \code{"manual"}: the threshold is set by the user and must be specified using
+       the \code{threshold.val} parameter.
 }}
 
 \item{threshold.val}{The value of the threshold used to declare change points, only to be used if \code{threshold = "manual"}.}
@@ -76,18 +78,21 @@ if bootstrapping is performed.}
 
 \item{boot.method}{A string indicating the method for creating bootstrap replications. It is not recommended to change this. Possible choices are
  \itemize{
-   \item{\code{"mean.subtract"}}{: the default choice, as described in McGonigle and Cho (2023). Empirical mean subtraction is performed to the bootstrapped replicates, improving power.}
-   \item{\code{"no.mean.subtract"}}{: empirical mean subtraction is not performed, improving size control.}
+   \item \code{"mean.subtract"}: the default choice, as described in McGonigle and Cho (2023).
+   Empirical mean subtraction is performed to the bootstrapped replicates, improving power.
+   \item \code{"no.mean.subtract"}: empirical mean subtraction is not performed, improving size control.
 }}
 
 \item{criterion}{String indicating how to determine whether each point \code{k} at which NP-MOJO statistic
 exceeds the threshold is a change point; possible values are
  \itemize{
-   \item{\code{"epsilon"}}{: \code{k} is the maximum of its local exceeding environment, which has at least size \code{epsilon*G}.}
-       \item{\code{"eta"}}{: there is no larger exceeding in an \code{eta*G} environment of \code{k}.}
-       \item{\code{"eta.and.epsilon"}}{: the recommended default option; \code{k} satisfies both the eta and epsilon criterion.
-       Recommended to use with the standard value of eta that would be used if \code{criterion = "eta"} (e.g. 0.4),
-       but much smaller value of epsilon than would be used if \code{criterion = "epsilon"}, e.g. 0.02.}
+   \item \code{"epsilon"}: \code{k} is the maximum of its local exceeding environment, which has
+   at least size \code{epsilon*G}.
+       \item \code{"eta"}: there is no larger exceeding in an \code{eta*G} environment of \code{k}.
+       \item \code{"eta.and.epsilon"}: the recommended default option; \code{k} satisfies both the eta
+       and epsilon criterion. Recommended to use with the standard value of eta that would be used
+       if \code{criterion = "eta"} (e.g. 0.4), but much smaller value of epsilon than would be used
+       if \code{criterion = "epsilon"}, e.g. 0.02.
 }}
 
 \item{eta}{A positive numeric value for the minimal mutual distance of
@@ -105,11 +110,11 @@ changes, relative to bandwidth, used to merge change point estimators across dif
 
 \item{merge.type}{String indicating the method used to merge change point estimators from different lags. Possible choices are
  \itemize{
-   \item{\code{"sequential"}}{:  Starting from the left-most change point estimator and proceeding forward in time, estimators
+   \item \code{"sequential"}:  Starting from the left-most change point estimator and proceeding forward in time, estimators
    are grouped into clusters based on mutual distance. The estimator yielding the smallest corresponding p-value is
-   chosen as the change point estimator for that cluster. See McGonigle and Cho (2023) for details.}
-       \item{\code{"bottom-up"}}{: starting with the smallest p-value, the change points are merged using bottom-up merging (Messer
-       et al. (2014)).}
+   chosen as the change point estimator for that cluster. See McGonigle and Cho (2023) for details.
+       \item \code{"bottom-up"}: starting with the smallest p-value, the change points are merged using bottom-up merging (Messer
+       et al. (2014)).
 }}
 
 \item{eta.bottom.up}{A positive numeric value for the minimal mutual distance of

@@ -12,16 +12,16 @@
 #' If \code{lag} \eqn{\ell \neq 0}, then changes in the pairwise distribution of \eqn{(X_t , X_{t+\ell})} are detected.
 #' @param kernel.f String indicating which kernel function to use when calculating the NP-MOJO detectors statistics; with \code{kern.par} \eqn{= a}, possible values are
 #'  \itemize{
-#'    \item{\code{"quad.exp"}}{: kernel \eqn{h_2} in McGonigle and Cho (2023), kernel 5 in Fan et al. (2017):
-#'    \deqn{h (x,y) = \prod_{i=1}^{2p} \frac{ (2a - (x_i - y_i)^2) \exp (-\frac{1}{4a} (x_i - y_i)^2 )}{2a} .}  }
-#'    \item{\code{"gauss"}}{: kernel \eqn{h_1} in McGonigle and Cho (2023), the standard Gaussian kernel:
-#'    \deqn{h (x,y) = \exp ( - \frac{a^2}{2} \Vert x - y  \Vert^2) .} }
-#'    \item{\code{"euclidean"}}{: kernel \eqn{h_3} in McGonigle and Cho (2023), the Euclidean distance-based kernel:
-#'    \deqn{h (x, y ) = \Vert x - y \Vert^a  .}}
-#'    \item{\code{"laplace"}}{: kernel 2 in Fan et al. (2017), based on a Laplace weight function:
-#'      \deqn{h (x, y ) = \prod_{i=1}^{2p} \left( 1+ a^2 (x_i - y_i)^2  \right)^{-1}. }}
-#'    \item{\code{"sine"}}{: kernel 4 in Fan et al. (2017), based on a sinusoidal weight function:
-#'      \deqn{h (x, y ) = \prod_{i=1}^{2p} \frac{-2 | x_i - y_i |  + | x_i - y_i - 2a|  + | x_i - y_i +2a| }{4a} .}}
+#'    \item \code{"quad.exp"}: kernel \eqn{h_2} in McGonigle and Cho (2023), kernel 5 in Fan et al. (2017):
+#'    \deqn{h (x,y) = \prod_{i=1}^{2p} \frac{ (2a - (x_i - y_i)^2) \exp (-\frac{1}{4a} (x_i - y_i)^2 )}{2a} .}
+#'    \item \code{"gauss"}: kernel \eqn{h_1} in McGonigle and Cho (2023), the standard Gaussian kernel:
+#'    \deqn{h (x,y) = \exp ( - \frac{a^2}{2} \Vert x - y  \Vert^2) .}
+#'    \item \code{"euclidean"}: kernel \eqn{h_3} in McGonigle and Cho (2023), the Euclidean distance-based kernel:
+#'    \deqn{h (x, y ) = \Vert x - y \Vert^a  .}
+#'    \item \code{"laplace"}: kernel 2 in Fan et al. (2017), based on a Laplace weight function:
+#'      \deqn{h (x, y ) = \prod_{i=1}^{2p} \left( 1+ a^2 (x_i - y_i)^2  \right)^{-1}. }
+#'    \item \code{"sine"}: kernel 4 in Fan et al. (2017), based on a sinusoidal weight function:
+#'      \deqn{h (x, y ) = \prod_{i=1}^{2p} \frac{-2 | x_i - y_i |  + | x_i - y_i - 2a|  + | x_i - y_i +2a| }{4a} .}
 #' }
 #' @param kern.par The tuning parameter that appears in the expression for the kernel function, which acts as a scaling parameter,
 #' only to be used if \code{data.driven.kern.par = FALSE}. If \code{kernel.f = "euclidean"}, then \code{kern.par} \eqn{\in (0,2)},
@@ -36,17 +36,20 @@
 #'  if bootstrapping is performed.
 #' @param boot.method A string indicating the method for creating bootstrap replications. It is not recommended to change this. Possible choices are
 #' \itemize{
-#'    \item{\code{"mean.subtract"}}{: the default choice, as described in McGonigle and Cho (2023). Empirical mean subtraction is performed to the bootstrapped replicates, improving power.}
-#'        \item{\code{"no.mean.subtract"}}{: empirical mean subtraction is not performed, improving size control.}
+#'    \item \code{"mean.subtract"}: the default choice, as described in McGonigle and Cho (2023).
+#'    Empirical mean subtraction is performed to the bootstrapped replicates, improving power.
+#'        \item \code{"no.mean.subtract"}: empirical mean subtraction is not performed, improving size control.
 #' }
 #' @param criterion String indicating how to determine whether each point \code{k} at which NP-MOJO statistic
 #' exceeds the threshold is a change point; possible values are
 #'  \itemize{
-#'    \item{\code{"epsilon"}}{: \code{k} is the maximum of its local exceeding environment, which has at least size \code{epsilon*G}.}
-#'        \item{\code{"eta"}}{: there is no larger exceeding in an \code{eta*G} environment of \code{k}.}
-#'        \item{\code{"eta.and.epsilon"}}{: the recommended default option; \code{k} satisfies both the eta and epsilon criterion.
+#'    \item \code{"epsilon"}: \code{k} is the maximum of its local exceeding environment,
+#'    which has at least size \code{epsilon*G}.
+#'        \item \code{"eta"}: there is no larger exceeding in an \code{eta*G} environment of \code{k}.
+#'        \item \code{"eta.and.epsilon"}: the recommended default option; \code{k} satisfies both
+#'        the eta and epsilon criterion.
 #'        Recommended to use with the standard value of eta that would be used if \code{criterion = "eta"} (e.g. 0.4),
-#'        but much smaller value of epsilon than would be used if \code{criterion = "epsilon"}, e.g. 0.02.}
+#'        but much smaller value of epsilon than would be used if \code{criterion = "epsilon"}, e.g. 0.02.
 #' }
 #' @param eta A positive numeric value for the minimal mutual distance of
 #' changes, relative to bandwidth (if \code{criterion = "eta"} or \code{criterion = "eta.and.epsilon"}).
@@ -57,8 +60,10 @@
 #' not recommended to be used otherwise.
 #' @param threshold String indicating how the threshold is computed. Possible values are
 #'  \itemize{
-#'    \item{\code{"bootstrap"}}{: the threshold is calculated using the bootstrap method with significance level \code{alpha}.}
-#'        \item{\code{"manual"}}{: the threshold is set by the user and must be specified using the \code{threshold.val} parameter.}
+#'    \item \code{"bootstrap"}: the threshold is calculated using the bootstrap method
+#'    with significance level \code{alpha}.
+#'        \item \code{"manual"}: the threshold is set by the user and must be
+#'        specified using the \code{threshold.val} parameter.
 #' }
 #' @param threshold.val The value of the threshold used to declare change points, only to be used if \code{threshold = "manual"}.
 #'
