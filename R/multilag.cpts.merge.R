@@ -7,11 +7,11 @@
 #' changes, relative to bandwidth, used to merge change point estimators across different lags.
 #' @param merge.type String indicating the method used to merge change point estimators from different lags. Possible choices are
 #'  \itemize{
-#'    \item{\code{"sequential"}}{: starting from the left-most change point estimator and proceeding forward in time, estimators
+#'    \item \code{"sequential"}: starting from the left-most change point estimator and proceeding forward in time, estimators
 #'    are grouped into clusters based on mutual distance. The estimator yielding the smallest corresponding p-value is
-#'    chosen as the change point estimator for that cluster. See McGonigle and Cho (2023) for details.}
-#'        \item{\code{"bottom-up"}}{: starting with the smallest p-value, the change points are merged using bottom-up merging (Messer
-#'        et al. (2014)).}
+#'    chosen as the change point estimator for that cluster. See McGonigle and Cho (2023) for details.
+#'        \item \code{"bottom-up"}: starting with the smallest p-value, the change points are merged using bottom-up merging (Messer
+#'        et al. (2014)).
 #' }
 #'
 #' @return A \code{list} object which contains the following fields
