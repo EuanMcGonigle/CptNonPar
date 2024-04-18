@@ -227,7 +227,7 @@ np.mojo <- function(x, G, lag = 0, kernel.f = c("quad.exp", "gauss", "euclidean"
         start.r <- end.r - r$lengths + 1
 
         epsilon.satisfied.start <- stat.exceed[start.r[r$lengths > epsilon * G]]
-        epsilon.satisfied.end <- stat.exceed[end.r[r$lengths > epsilon * G]]+1
+        epsilon.satisfied.end <- stat.exceed[end.r[r$lengths > epsilon * G]] + 1
 
         epsilon.exceedings <- rep(FALSE, data.len)
         for (i in seq_len(length(epsilon.satisfied.start))) {
@@ -248,7 +248,6 @@ np.mojo <- function(x, G, lag = 0, kernel.f = c("quad.exp", "gauss", "euclidean"
       for (i in seq_len(length(cpt.locs))) {
         p.vals <- c(p.vals, sum(Tstar >= test.stat[cpt.locs[i]]) / (reps + 1))
       }
-
     }
   } else {
     if (threshold == "bootstrap") {

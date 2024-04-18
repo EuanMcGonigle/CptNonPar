@@ -100,7 +100,7 @@
 #' noise <- c(rep(1, 300), rep(0.4, 200)) * stats::arima.sim(model = list(ar = 0.3), n = n)
 #' signal <- c(rep(0, 100), rep(2, 400))
 #' x <- signal + noise
-#' x.c <- multiscale.np.mojo(x, G = c(50,80), lags = c(0, 1))
+#' x.c <- multiscale.np.mojo(x, G = c(50, 80), lags = c(0, 1))
 #' x.c$cpts
 #' @seealso \link{np.mojo.multilag}
 multiscale.np.mojo <- function(x, G, lags = c(0, 1), kernel.f = c("quad.exp", "gauss", "euclidean", "laplace", "sine")[1],
@@ -109,8 +109,10 @@ multiscale.np.mojo <- function(x, G, lags = c(0, 1), kernel.f = c("quad.exp", "g
                                boot.method = c("mean.subtract", "no.mean.subtract")[1], criterion = c("eta", "epsilon", "eta.and.epsilon")[3],
                                eta = 0.4, epsilon = 0.02, use.mean = FALSE, eta.merge = 1, merge.type = c("sequential", "bottom-up")[1],
                                eta.bottom.up = 0.8) {
-  stopifnot("Error: change point merging type must be either 'sequential' or 'bottom-up'." =
-              merge.type == "sequential" || merge.type == "bottom-up")
+  stopifnot(
+    "Error: change point merging type must be either 'sequential' or 'bottom-up'." =
+      merge.type == "sequential" || merge.type == "bottom-up"
+  )
 
   if (!is.numeric(lags)) {
     stop("The set of lags must be a numeric vector of positive integer values.")
@@ -146,10 +148,10 @@ multiscale.np.mojo <- function(x, G, lags = c(0, 1), kernel.f = c("quad.exp", "g
   cptsInOrder <- seq_len(nrow(init.cpts))
 
   for (i in cptsInOrder) {
-    p <- init.cpts[i,1]
-    l <- init.cpts[i,2]
-    pVal <- init.cpts[i,3]
-    G.val <- init.cpts[i,4]
+    p <- init.cpts[i, 1]
+    l <- init.cpts[i, 2]
+    pVal <- init.cpts[i, 3]
+    G.val <- init.cpts[i, 4]
     if (suppressWarnings(min(abs(p - points))) >= eta.bottom.up * G.val) {
       points <- c(points, p)
       bandwidths <- c(bandwidths, G.val)

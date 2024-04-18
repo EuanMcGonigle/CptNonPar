@@ -133,7 +133,7 @@ mojo.error.checks <- function(x, G, lag, kernel.f, kern.par, data.driven.kern.pa
     stop("The lag parameter should be a single positive integer.")
   }
 
-  if (!is.numeric(G) || (G < 0)  || (G %% 1 != 0) ) {
+  if (!is.numeric(G) || (G < 0) || (G %% 1 != 0)) {
     stop("Bandwidth parameter G must be numeric positive integer.")
   }
 

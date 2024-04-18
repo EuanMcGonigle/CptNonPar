@@ -1,4 +1,4 @@
-#Tests for multilag.cpts.merge function
+# Tests for multilag.cpts.merge function
 
 n <- 1000
 set.seed(123)
@@ -15,12 +15,12 @@ x.nocp <- stats:::rnorm(1000)
 
 G <- 166
 
-x.c0 <- np.mojo(x,G,0)
-x.c1 <- np.mojo(x,G,1)
+x.c0 <- np.mojo(x, G, 0)
+x.c1 <- np.mojo(x, G, 1)
 
 test_that("multilag.cpts.merge executes with sequential merging", {
   skip_on_cran()
-  expect_equal(class(multilag.cpts.merge(x.c = list(x.c0,x.c1), merge.type = "sequential")), "list")
+  expect_equal(class(multilag.cpts.merge(x.c = list(x.c0, x.c1), merge.type = "sequential")), "list")
 })
 
 test_that("multilag.cpts.merge executes with bottom-up merging", {
@@ -28,14 +28,16 @@ test_that("multilag.cpts.merge executes with bottom-up merging", {
   expect_equal(class(multilag.cpts.merge(x.c = list(x.c0, x.c1), merge.type = "bottom-up")), "list")
 })
 
-test_that("Change point merging type is recognised",{
-  expect_error(multilag.cpts.merge(x.c = list(x.c0, x.c1), merge.type = "pruning"),
-               "Error: change point merging type must be either 'sequential' or 'bottom-up'.")
+test_that("Change point merging type is recognised", {
+  expect_error(
+    multilag.cpts.merge(x.c = list(x.c0, x.c1), merge.type = "pruning"),
+    "Error: change point merging type must be either 'sequential' or 'bottom-up'."
+  )
 })
 
 test_that("multilag.cpts.merge executes when no change points", {
   skip_on_cran()
-  x.nocp0 <- np.mojo(x.nocp,G,0, threshold = "manual", threshold.val = 5)
-  x.nocp1 <- np.mojo(x.nocp,G,1, threshold = "manual", threshold.val = 5)
-  expect_equal(class(multilag.cpts.merge(x.c = list(x.nocp0,x.nocp1), merge.type = "sequential")), "list")
+  x.nocp0 <- np.mojo(x.nocp, G, 0, threshold = "manual", threshold.val = 5)
+  x.nocp1 <- np.mojo(x.nocp, G, 1, threshold = "manual", threshold.val = 5)
+  expect_equal(class(multilag.cpts.merge(x.c = list(x.nocp0, x.nocp1), merge.type = "sequential")), "list")
 })
