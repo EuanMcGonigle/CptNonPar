@@ -76,7 +76,7 @@
 #' }
 #' @param threshold.val The value of the threshold used to declare change points, only to be used if \code{threshold = "manual"}.
 #' @param eta.bottom.up A positive numeric value for the minimal mutual distance of
-#' changes, relative to bandwidth, for use in bottom-up merging of hange point estimators across multiple bandwidths.
+#' changes, relative to bandwidth, for use in bottom-up merging of change point estimators across multiple bandwidths.
 #' @return A \code{list} object that contains the following fields:
 #'    \item{G}{Set of moving window bandwidths}
 #'    \item{lags}{Lags used to detect changes}

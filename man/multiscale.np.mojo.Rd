@@ -118,7 +118,7 @@ changes, relative to bandwidth, used to merge change point estimators across dif
 }}
 
 \item{eta.bottom.up}{A positive numeric value for the minimal mutual distance of
-changes, relative to bandwidth, for use in bottom-up merging of hange point estimators across multiple bandwidths.}
+changes, relative to bandwidth, for use in bottom-up merging of change point estimators across multiple bandwidths.}
 }
 \value{
 A \code{list} object that contains the following fields:
@@ -147,7 +147,7 @@ n <- 500
 noise <- c(rep(1, 300), rep(0.4, 200)) * stats::arima.sim(model = list(ar = 0.3), n = n)
 signal <- c(rep(0, 100), rep(2, 400))
 x <- signal + noise
-x.c <- multiscale.np.mojo(x, G = c(50,80), lags = c(0, 1))
+x.c <- multiscale.np.mojo(x, G = c(50, 80), lags = c(0, 1))
 x.c$cpts
 }
 \references{

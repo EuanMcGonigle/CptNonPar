@@ -7,3 +7,4 @@
 ^\.gitlab-ci\.yml$
 ^codecov\.yml$
 ^CRAN-SUBMISSION$
+^revdep$
