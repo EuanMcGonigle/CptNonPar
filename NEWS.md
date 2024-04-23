@@ -1,3 +1,5 @@
+# CptNonPar 0.2.1
+
 # CptNonPar 0.2.0
 
 * Added a new function multiscale.np.mojo, this function performs multiscale, multi-lag 
