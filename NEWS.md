@@ -1,11 +1,13 @@
-# CptNonPar (development version)
+# CptNonPar 0.2.0
 
 # CptNonPar 0.2.0
 
-* New function multiscale.np.mojo: this function performs multiscale, multi-lag 
-nonparametric change point detection using a set of bandwidths, as opposed 
-to a single bandwidth.
-* Updated issue with parallelisation code.
+* Added a new function multiscale.np.mojo, this function performs multiscale, multi-lag 
+nonparametric change point detection using a set of bandwidths (as opposed 
+to a single bandwidth as in np.mojo.mulilag).
+* Updated parallelisation code in np.mojo to avoid unnecessary call to closeAllConnections(), thanks to 
+Henrik Bengtsson for highlighting this.
+* Changed uses of itemize in .Rd files to comply with CRAN check.
 
 # CptNonPar 0.1.1
 
