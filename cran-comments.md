@@ -1,9 +1,3 @@
-## Resubmission
-This is a resubmission. In this version I have:
-
-* Updated the description field in DESCRIPTION file to refer to arXiv e-print
-via its arXiv DOI.
-
 ## R CMD check results
 
 0 errors | 0 warnings | 0 notes
