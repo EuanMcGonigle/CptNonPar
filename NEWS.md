@@ -1,6 +1,6 @@
 # CptNonPar 0.2.1
 
-*Updated the link to the paper in description to comply with CRAN check.
+*Updated link to the paper in description to comply with CRAN check.
 
 # CptNonPar 0.2.0
 
