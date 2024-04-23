@@ -1,5 +1,7 @@
 # CptNonPar 0.2.1
 
+*Updated the link to the paper in description to comply with CRAN check.
+
 # CptNonPar 0.2.0
 
 * Added a new function multiscale.np.mojo, this function performs multiscale, multi-lag 
