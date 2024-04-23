@@ -127,9 +127,8 @@ A \code{list} object that contains the following fields:
    \item{kernel.f, data.driven.kern.par, use.mean}{Input parameters}
    \item{threshold, alpha, reps, boot.dep, boot.method, parallel}{Input parameters}
    \item{criterion, eta, epsilon}{Input parameters}
-   \item{cpts}{A matrix with rows corresponding to final change point estimators, with estimated change point location and associated lag and p-value given in columns.}
-   \item{cpt.clusters}{A \code{list} object of length given by the number of detected change points. Each field contains a matrix of all
-   change point estimators that are declared to be associated to the corresponding change point in the \code{cpts} field.}
+   \item{cpts}{A matrix with rows corresponding to final change point estimators,
+   with estimated change point location and associated detection bandwidth, lag and p-value given in columns.}
 }
 \description{
 For a given set of bandwidths and lagged values of the time series, performs
@@ -151,7 +150,8 @@ x.c <- multiscale.np.mojo(x, G = c(50, 80), lags = c(0, 1))
 x.c$cpts
 }
 \references{
-McGonigle, E.T., Cho, H. (2023). Nonparametric data segmentation in multivariate time series via joint characteristic functions.
+McGonigle, E.T., Cho, H. (2023). Nonparametric data segmentation
+in multivariate time series via joint characteristic functions.
 \emph{arXiv preprint arXiv:2305.07581}.
 
 Fan, Y., de Micheaux, P.L., Penev, S. and Salopek, D. (2017). Multivariate nonparametric test of independence. \emph{Journal of Multivariate Analysis},

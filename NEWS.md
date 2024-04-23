@@ -1,7 +1,5 @@
 # CptNonPar 0.2.0
 
-# CptNonPar 0.2.0
-
 * Added a new function multiscale.np.mojo, this function performs multiscale, multi-lag 
 nonparametric change point detection using a set of bandwidths (as opposed 
 to a single bandwidth as in np.mojo.mulilag).
