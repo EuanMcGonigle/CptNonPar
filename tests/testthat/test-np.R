@@ -198,7 +198,7 @@ test_that("threshold type 'manual' has positive numeric threshold.val", {
 test_that("reps only used with threshold = 'bootstrap", {
   skip_on_cran()
   expect_warning(
-    np.mojo(x = x, G = G, threshold = "manual", threshold.val = 0.1, reps = 200),
+    np.mojo(x = x, G = G, threshold = "manual", threshold.val = 0.1, reps = 100),
     "reps is only used with threshold=bootstrap"
   )
 })

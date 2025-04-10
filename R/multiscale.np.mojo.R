@@ -105,7 +105,7 @@
 #' @seealso \link{np.mojo.multilag}
 multiscale.np.mojo <- function(x, G, lags = c(0, 1), kernel.f = c("quad.exp", "gauss", "euclidean", "laplace", "sine")[1],
                                kern.par = 1, data.driven.kern.par = TRUE, threshold = c("bootstrap", "manual")[1], threshold.val = NULL,
-                               alpha = 0.1, reps = 199, boot.dep = 1.5 * (nrow(as.matrix(x))^(1 / 3)), parallel = FALSE,
+                               alpha = 0.1, reps = 200, boot.dep = 1.5 * (nrow(as.matrix(x))^(1 / 3)), parallel = FALSE,
                                boot.method = c("mean.subtract", "no.mean.subtract")[1], criterion = c("eta", "epsilon", "eta.and.epsilon")[3],
                                eta = 0.4, epsilon = 0.02, use.mean = FALSE, eta.merge = 1, merge.type = c("sequential", "bottom-up")[1],
                                eta.bottom.up = 0.8) {
@@ -159,6 +159,13 @@ multiscale.np.mojo <- function(x, G, lags = c(0, 1), kernel.f = c("quad.exp", "g
       lag.vals <- c(lag.vals, l)
     }
   }
+
+  cp_order <- order(points)
+
+  points <- points[cp_order]
+  bandwidths <- bandwidths[cp_order]
+  lag.vals <- lag.vals[cp_order]
+  p.vals <- p.vals[cp_order]
 
   cpts.merged <- data.frame(cp = points, G = bandwidths, lag = lag.vals, p.val = p.vals)
 

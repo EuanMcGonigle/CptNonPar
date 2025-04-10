@@ -14,7 +14,7 @@ multiscale.np.mojo(
   threshold = c("bootstrap", "manual")[1],
   threshold.val = NULL,
   alpha = 0.1,
-  reps = 199,
+  reps = 200,
   boot.dep = 1.5 * (nrow(as.matrix(x))^(1/3)),
   parallel = FALSE,
   boot.method = c("mean.subtract", "no.mean.subtract")[1],

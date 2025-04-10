@@ -151,7 +151,7 @@ mojo.error.checks <- function(x, G, lag, kernel.f, kern.par, data.driven.kern.pa
   if (threshold != "bootstrap" && threshold != "manual") {
     stop("Threshold type parameter 'threshold' must be set to be either 'bootstrap' or 'manual'.")
   }
-  if ((threshold != "bootstrap") && (reps != 199)) {
+  if ((threshold != "bootstrap") && (reps != 200)) {
     warning("reps is only used with threshold=bootstrap")
   }
   if (is.null(threshold.val) && threshold == "manual") {

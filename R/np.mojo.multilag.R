@@ -101,7 +101,7 @@
 #' @seealso \link{np.mojo}, \link{multilag.cpts.merge}
 np.mojo.multilag <- function(x, G, lags = c(0, 1), kernel.f = c("quad.exp", "gauss", "euclidean", "laplace", "sine")[1],
                              kern.par = 1, data.driven.kern.par = TRUE, threshold = c("bootstrap", "manual")[1], threshold.val = NULL,
-                             alpha = 0.1, reps = 199, boot.dep = 1.5 * (nrow(as.matrix(x))^(1 / 3)), parallel = FALSE,
+                             alpha = 0.1, reps = 200, boot.dep = 1.5 * (nrow(as.matrix(x))^(1 / 3)), parallel = FALSE,
                              boot.method = c("mean.subtract", "no.mean.subtract")[1], criterion = c("eta", "epsilon", "eta.and.epsilon")[3],
                              eta = 0.4, epsilon = 0.02, use.mean = FALSE, eta.merge = 1, merge.type = c("sequential", "bottom-up")[1]) {
   stopifnot(
@@ -118,9 +118,9 @@ np.mojo.multilag <- function(x, G, lags = c(0, 1), kernel.f = c("quad.exp", "gau
 
   lag.cpts <- vector(mode = "list", length = length(lags))
 
-  cpts <- init.cpts <- matrix(NA, nrow = 0, ncol = 3)
-  dimnames(init.cpts)[[2]] <- c("cp", "lag", "p.val")
-  dimnames(cpts)[[2]] <- c("cp", "lag", "p.val")
+  #cpts <- init.cpts <- matrix(NA, nrow = 0, ncol = 3)
+  #dimnames(init.cpts)[[2]] <- c("cp", "lag", "p.val")
+  #dimnames(cpts)[[2]] <- c("cp", "lag", "p.val")
 
   for (l in seq_len(length(lag.cpts))) {
     lag.cpts[[l]] <- np.mojo(
@@ -130,10 +130,10 @@ np.mojo.multilag <- function(x, G, lags = c(0, 1), kernel.f = c("quad.exp", "gau
       threshold.val = threshold.val
     )
 
-    if (length(lag.cpts[[l]]$cpts) > 0) {
-      new.cpts <- cbind(lag.cpts[[l]]$cpts, rep(lags[l], length(lag.cpts[[l]]$cpts)), lag.cpts[[l]]$p.vals)
-      init.cpts <- rbind(init.cpts, new.cpts)
-    }
+    #if (length(lag.cpts[[l]]$cpts) > 0) {
+      #new.cpts <- cbind(lag.cpts[[l]]$cpts, rep(lags[l], length(lag.cpts[[l]]$cpts)), lag.cpts[[l]]$p.vals)
+      #init.cpts <- rbind(init.cpts, new.cpts)
+    #}
   }
 
   merged.cpts <- multilag.cpts.merge(lag.cpts, eta.merge = eta.merge, merge.type = merge.type)
