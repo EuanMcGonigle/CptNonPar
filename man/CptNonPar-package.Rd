@@ -8,13 +8,18 @@
 \description{
 Implements the nonparametric moving sum procedure for detecting changes in the joint characteristic function (NP-MOJO) for multiple change point detection in multivariate time series. See McGonigle, E. T., Cho, H. (2025) \doi{10.1093/biomet/asaf024} for description of the NP-MOJO methodology.
 }
-\seealso{
-Useful links:
-\itemize{
-  \item \url{https://github.com/EuanMcGonigle/CptNonPar}
-  \item Report bugs at \url{https://github.com/EuanMcGonigle/CptNonPar/issues}
+\examples{
+set.seed(1)
+n <- 500
+noise <- c(rep(1, 300), rep(0.4, 200)) * stats::arima.sim(model = list(ar = 0.3), n = n)
+signal <- c(rep(0, 100), rep(2, 400))
+x <- signal + noise
+x.c <- np.mojo.multilag(x, G = 83, lags = c(0, 1))
+x.c$cpts
+x.c$cpt.clusters
 }
-
+\seealso{
+\link{np.mojo}, \link{np.mojo.multilag}, \link{multilag.cpts.merge}
 }
 \author{
 \strong{Maintainer}: Euan T. McGonigle \email{e.t.mcgonigle@soton.ac.uk}

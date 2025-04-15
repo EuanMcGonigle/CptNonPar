@@ -21,7 +21,7 @@ changes, relative to bandwidth, used to merge change point estimators across dif
  \itemize{
    \item \code{"sequential"}: starting from the left-most change point estimator and proceeding forward in time, estimators
    are grouped into clusters based on mutual distance. The estimator yielding the smallest corresponding p-value is
-   chosen as the change point estimator for that cluster. See McGonigle and Cho (2023) for details.
+   chosen as the change point estimator for that cluster. See McGonigle and cho (2025) for details.
        \item \code{"bottom-up"}: starting with the smallest p-value, the change points are merged using bottom-up merging (Messer
        et al. (2014)).
 }}
@@ -36,7 +36,7 @@ A \code{list} object which contains the following fields
 Merges change point estimators from different lagged values into a final set of overall change point estimators.
 }
 \details{
-See McGonigle and Cho (2023) for further details.
+See McGonigle and cho (2025) for further details.
 }
 \examples{
 set.seed(1)
@@ -50,8 +50,8 @@ x.c <- multilag.cpts.merge(list(x.c0, x.c1))
 x.c
 }
 \references{
-McGonigle, E.T., Cho, H. (2023). Nonparametric data segmentation in multivariate time series via joint characteristic functions.
-\emph{arXiv preprint arXiv:2305.07581}.
+McGonigle, E.T., Cho, H. (2025). Nonparametric data segmentation in multivariate time series via joint characteristic functions.
+\emph{Biometrika}.
 
 Messer M., Kirchner M., Schiemann J., Roeper J., Neininger R., Schneider G. (2014). A Multiple Filter Test for
 the Detection of Rate Changes in Renewal Processes with Varying Variance. \emph{The Annals of Applied Statistics}, 8(4), 2027-2067.

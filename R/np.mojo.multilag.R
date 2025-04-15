@@ -11,11 +11,11 @@
 #' \link{np.mojo} for further details.
 #' @param kernel.f String indicating which kernel function to use when calculating the NP-MOJO detector statistics; with \code{kern.par} \eqn{= a}, possible values are
 #'  \itemize{
-#'    \item \code{"quad.exp"}: kernel \eqn{h_2} in McGonigle and Cho (2023), kernel 5 in Fan et al. (2017):
+#'    \item \code{"quad.exp"}: kernel \eqn{h_2} in McGonigle and cho (2025), kernel 5 in Fan et al. (2017):
 #'    \deqn{h (x,y) = \prod_{i=1}^{2p} \frac{ (2a - (x_i - y_i)^2) \exp (-\frac{1}{4a} (x_i - y_i)^2 )}{2a} .}
-#'    \item \code{"gauss"}: kernel \eqn{h_1} in McGonigle and Cho (2023), the standard Gaussian kernel:
+#'    \item \code{"gauss"}: kernel \eqn{h_1} in McGonigle and cho (2025), the standard Gaussian kernel:
 #'    \deqn{h (x,y) = \exp ( - \frac{a^2}{2} \Vert x - y  \Vert^2) .}
-#'    \item \code{"euclidean"}: kernel \eqn{h_3} in McGonigle and Cho (2023), the Euclidean distance-based kernel:
+#'    \item \code{"euclidean"}: kernel \eqn{h_3} in McGonigle and cho (2025), the Euclidean distance-based kernel:
 #'    \deqn{h (x, y ) = \Vert x - y \Vert^a  .}
 #'    \item \code{"laplace"}: kernel 2 in Fan et al. (2017), based on a Laplace weight function:
 #'      \deqn{h (x, y ) = \prod_{i=1}^{2p} \left( 1+ a^2 (x_i - y_i)^2  \right)^{-1}. }
@@ -33,7 +33,7 @@
 #'  if bootstrapping is performed.
 #' @param boot.method A string indicating the method for creating bootstrap replications. It is not recommended to change this. Possible choices are
 #'  \itemize{
-#'    \item \code{"mean.subtract"}: the default choice, as described in McGonigle and Cho (2023).
+#'    \item \code{"mean.subtract"}: the default choice, as described in McGonigle and cho (2025).
 #'    Empirical mean subtraction is performed to the bootstrapped replicates, improving power.
 #'    \item \code{"no.mean.subtract"}: empirical mean subtraction is not performed, improving size control.
 #' }
@@ -61,7 +61,7 @@
 #'  \itemize{
 #'    \item \code{"sequential"}:  Starting from the left-most change point estimator and proceeding forward in time, estimators
 #'    are grouped into clusters based on mutual distance. The estimator yielding the smallest corresponding p-value is
-#'    chosen as the change point estimator for that cluster. See McGonigle and Cho (2023) for details.
+#'    chosen as the change point estimator for that cluster. See McGonigle and cho (2025) for details.
 #'        \item \code{"bottom-up"}: starting with the smallest p-value, the change points are merged using bottom-up merging (Messer
 #'        et al. (2014)).
 #' }
@@ -81,8 +81,8 @@
 #'    \item{cpts}{A matrix with rows corresponding to final change point estimators, with estimated change point location and associated lag and p-value given in columns.}
 #'    \item{cpt.clusters}{A \code{list} object of length given by the number of detected change points. Each field contains a matrix of all
 #'    change point estimators that are declared to be associated to the corresponding change point in the \code{cpts} field.}
-#' @references McGonigle, E.T., Cho, H. (2023). Nonparametric data segmentation in multivariate time series via joint characteristic functions.
-#' \emph{arXiv preprint arXiv:2305.07581}.
+#' @references McGonigle, E.T., Cho, H. (2025). Nonparametric data segmentation in multivariate time series via joint characteristic functions.
+#' \emph{Biometrika}.
 #' @references Fan, Y., de Micheaux, P.L., Penev, S. and Salopek, D. (2017). Multivariate nonparametric test of independence. \emph{Journal of Multivariate Analysis},
 #' 153, pp.189-210.
 #' @references Messer M., Kirchner M., Schiemann J., Roeper J., Neininger R., Schneider G. (2014). A Multiple Filter Test for
