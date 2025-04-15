@@ -53,6 +53,9 @@ multilag.cpts.merge <- function(x.c, eta.merge = 1, merge.type = c("sequential",
 
   for (l in 1:L) {
     lag.cpts <- x.c[[l]]
+    if(lag.cpts$threshold == "manual"){
+      lag.cpts$p.vals <- rep(NA, length(lag.cpts$cpts))
+    }
 
     if (length(lag.cpts$cpts) > 0) {
       new.cpts <- cbind(lag.cpts$cpts, rep(lag.cpts$lag, length(lag.cpts$cpts)), lag.cpts$p.vals)
