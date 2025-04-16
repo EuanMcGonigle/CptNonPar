@@ -57,17 +57,17 @@ x <- signal + noise
 x.c <- np.mojo.multilag(x, G = 166, lags = c(0, 1))
 
 x.c$cpts
-#>       cp lag score
-#> [1,] 295   0 0.000
-#> [2,] 648   1 0.005
+#>      cpt lag score
+#> [1,] 295   0  1.00
+#> [2,] 648   1  0.99
 
 x.c$cpt.clusters
 #> [[1]]
-#>       cp lag score
-#> [1,] 295   0     0
-#> [2,] 296   1     0
+#>      cpt lag score
+#> [1,] 295   0     1
+#> [2,] 296   1     1
 #> 
 #> [[2]]
-#>       cp lag score
-#> [1,] 648   1 0.005
+#>      cpt lag score
+#> [1,] 648   1  0.99
 ```
