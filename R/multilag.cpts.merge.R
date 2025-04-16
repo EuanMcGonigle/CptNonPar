@@ -1,6 +1,6 @@
 #' @title Merge Change Point Estimators from Multiple Lags
 #' @description Merges change point estimators from different lagged values into a final set of overall change point estimators.
-#' @details See McGonigle and cho (2025) for further details.
+#' @details See McGonigle and Cho (2025) for further details.
 #' @param x.c A \code{list} object, where each element of the list is the output of the \link{np.mojo} function computed at a
 #' different lag.
 #' @param eta.merge A positive numeric value for the minimal mutual distance of
@@ -9,7 +9,7 @@
 #'  \itemize{
 #'    \item \code{"sequential"}: starting from the left-most change point estimator and proceeding forward in time, estimators
 #'    are grouped into clusters based on mutual distance. The estimator yielding the largest corresponding importance score is
-#'    chosen as the change point estimator for that cluster. See McGonigle and cho (2025) for details.
+#'    chosen as the change point estimator for that cluster. See McGonigle and Cho (2025) for details.
 #'        \item \code{"bottom-up"}: starting with the largest importance score, the change points are merged using bottom-up merging (Messer
 #'        et al. (2014)).
 #' }

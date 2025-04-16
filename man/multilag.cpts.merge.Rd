@@ -21,7 +21,7 @@ changes, relative to bandwidth, used to merge change point estimators across dif
  \itemize{
    \item \code{"sequential"}: starting from the left-most change point estimator and proceeding forward in time, estimators
    are grouped into clusters based on mutual distance. The estimator yielding the largest corresponding importance score is
-   chosen as the change point estimator for that cluster. See McGonigle and cho (2025) for details.
+   chosen as the change point estimator for that cluster. See McGonigle and Cho (2025) for details.
        \item \code{"bottom-up"}: starting with the largest importance score, the change points are merged using bottom-up merging (Messer
        et al. (2014)).
 }}
@@ -36,7 +36,7 @@ A \code{list} object which contains the following fields
 Merges change point estimators from different lagged values into a final set of overall change point estimators.
 }
 \details{
-See McGonigle and cho (2025) for further details.
+See McGonigle and Cho (2025) for further details.
 }
 \examples{
 set.seed(1)
