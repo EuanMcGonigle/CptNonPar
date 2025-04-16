@@ -1,3 +1,5 @@
+# CptNonPar (development version)
+
 # Changes in version 0.3.0
 
 * The associated paper is now accepted for publication in Biometrika: see 
