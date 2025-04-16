@@ -8,14 +8,14 @@
 #' @param merge.type String indicating the method used to merge change point estimators from different lags. Possible choices are
 #'  \itemize{
 #'    \item \code{"sequential"}: starting from the left-most change point estimator and proceeding forward in time, estimators
-#'    are grouped into clusters based on mutual distance. The estimator yielding the smallest corresponding p-value is
+#'    are grouped into clusters based on mutual distance. The estimator yielding the largest corresponding importance score is
 #'    chosen as the change point estimator for that cluster. See McGonigle and cho (2025) for details.
-#'        \item \code{"bottom-up"}: starting with the smallest p-value, the change points are merged using bottom-up merging (Messer
+#'        \item \code{"bottom-up"}: starting with the largest importance score, the change points are merged using bottom-up merging (Messer
 #'        et al. (2014)).
 #' }
 #'
 #' @return A \code{list} object which contains the following fields
-#' \item{cpts}{A matrix with rows corresponding to final change point estimators, with estimated change point location and associated lag and p-value given in columns.}
+#' \item{cpts}{A matrix with rows corresponding to final change point estimators, with estimated change point location and associated lag and importance score given in columns.}
 #'    \item{cpt.clusters}{A \code{list} object of length given by the number of detected change points. Each field contains a matrix of all
 #'    change point estimators that are declared to be associated to the corresponding change point in the \code{cpts} field.}
 #' @references McGonigle, E.T., Cho, H. (2025). Nonparametric data segmentation in multivariate time series via joint characteristic functions.
@@ -42,8 +42,8 @@ multilag.cpts.merge <- function(x.c, eta.merge = 1, merge.type = c("sequential",
   )
 
   cpts <- init.cpts <- matrix(NA, nrow = 0, ncol = 3)
-  dimnames(init.cpts)[[2]] <- c("cp", "lag", "p.val")
-  dimnames(cpts)[[2]] <- c("cp", "lag", "p.val")
+  dimnames(init.cpts)[[2]] <- c("cpt", "lag", "score")
+  dimnames(cpts)[[2]] <- c("cpt", "lag", "score")
 
   cpt.clusters <- list()
 
@@ -54,11 +54,11 @@ multilag.cpts.merge <- function(x.c, eta.merge = 1, merge.type = c("sequential",
   for (l in 1:L) {
     lag.cpts <- x.c[[l]]
     if(lag.cpts$threshold == "manual"){
-      lag.cpts$p.vals <- rep(NA, length(lag.cpts$cpts))
+      lag.cpts$scores <- lag.cpts$test.stat[lag.cpts$cpts]
     }
 
     if (length(lag.cpts$cpts) > 0) {
-      new.cpts <- cbind(lag.cpts$cpts, rep(lag.cpts$lag, length(lag.cpts$cpts)), lag.cpts$p.vals)
+      new.cpts <- cbind(lag.cpts$cpts, rep(lag.cpts$lag, length(lag.cpts$cpts)), lag.cpts$scores)
       init.cpts <- rbind(init.cpts, new.cpts)
     }
   }
@@ -86,11 +86,11 @@ multilag.cpts.merge <- function(x.c, eta.merge = 1, merge.type = c("sequential",
         num.linked.cpts <- length(linked.cpts)
 
         linked.lags <- init.cpts[1:num.linked.cpts, 2]
-        linked.p.vals <- init.cpts[1:num.linked.cpts, 3]
+        linked.scores <- init.cpts[1:num.linked.cpts, 3]
 
-        final.cpt <- linked.cpts[which.min(linked.p.vals)]
-        final.lag <- linked.lags[which.min(linked.p.vals)]
-        final.pval <- linked.p.vals[which.min(linked.p.vals)]
+        final.cpt <- linked.cpts[which.min(linked.scores)]
+        final.lag <- linked.lags[which.min(linked.scores)]
+        final.pval <- linked.scores[which.min(linked.scores)]
 
         cpts <- rbind(cpts, c(final.cpt, final.lag, final.pval))
 
@@ -100,7 +100,7 @@ multilag.cpts.merge <- function(x.c, eta.merge = 1, merge.type = c("sequential",
       j <- j + 1
     }
   } else {
-    cpt.order <- order(init.cpts[, 3])
+    cpt.order <- order(-init.cpts[, 3]) #larger importance score is better
 
     init.cpts <- init.cpts[cpt.order, ]
 
@@ -123,7 +123,9 @@ multilag.cpts.merge <- function(x.c, eta.merge = 1, merge.type = c("sequential",
       j <- j + 1
     }
 
-    cpts <- cpts[order(cpts[, 1]), ]
+    final.cpt.order <- order(cpts[, 1])
+    cpts <- cpts[final.cpt.order, ]
+    cpt.clusters <- cpt.clusters[final.cpt.order]
   }
 
   return(list(cpts = cpts, cpt.clusters = cpt.clusters))

@@ -1,8 +1,8 @@
 #' @title Multiscale Nonparametric Multiple Lag Change Point Detection
 #' @description For a given set of bandwidths and lagged values of the time series, performs
 #' multiscale nonparametric change point detection of a possibly multivariate time series.
-#' @details The multi-lag NP-MOJO algorithm for nonparametric change point detection is described in McGonigle, E. T. and Cho, H. (2023)
-#' Nonparametric data segmentation in multivariate time series via joint characteristic functions.  \emph{arXiv preprint arXiv:2305.07581}.
+#' @details The multi-lag NP-MOJO algorithm for nonparametric change point detection is described in McGonigle, E. T. and Cho, H. (2025)
+#' Nonparametric data segmentation in multivariate time series via joint characteristic functions. \emph{Biometrika}.
 #' The multiscale version uses bottom-up merging to combine the results of the multi-lag NP-MOJO algorithm
 #' performed over a given set of bandwidths.
 #' @param x Input data (a \code{numeric} vector or an object of classes \code{ts} and \code{timeSeries},
@@ -62,9 +62,9 @@
 #' @param merge.type String indicating the method used to merge change point estimators from different lags. Possible choices are
 #'  \itemize{
 #'    \item \code{"sequential"}:  Starting from the left-most change point estimator and proceeding forward in time, estimators
-#'    are grouped into clusters based on mutual distance. The estimator yielding the smallest corresponding p-value is
+#'    are grouped into clusters based on mutual distance. The estimator yielding the largest corresponding importance score is
 #'    chosen as the change point estimator for that cluster. See McGonigle and Cho (2025) for details.
-#'        \item \code{"bottom-up"}: starting with the smallest p-value, the change points are merged using bottom-up merging (Messer
+#'        \item \code{"bottom-up"}: starting with the largest importance score, the change points are merged using bottom-up merging (Messer
 #'        et al. (2014)).
 #' }
 #' @param threshold String indicating how the threshold is computed. Possible values are
@@ -75,6 +75,10 @@
 #'        the \code{threshold.val} parameter.
 #' }
 #' @param threshold.val The value of the threshold used to declare change points, only to be used if \code{threshold = "manual"}.
+#' Can be either a single numeric value, in which case the same threshold is used for \emph{all} bandwidths and lags,
+#' or a list of vectors, with the length of the list equal to the number of bandwidths,
+#' that corresponds to the \code{G} argument, where the elements of each vector in the list corresponds
+#' to the threshold value for the corresponding element of the \code{lags} argument.
 #' @param eta.bottom.up A positive numeric value for the minimal mutual distance of
 #' changes, relative to bandwidth, for use in bottom-up merging of change point estimators across multiple bandwidths.
 #' @return A \code{list} object that contains the following fields:
@@ -84,7 +88,7 @@
 #'    \item{threshold, alpha, reps, boot.dep, boot.method, parallel}{Input parameters}
 #'    \item{criterion, eta, epsilon}{Input parameters}
 #'    \item{cpts}{A matrix with rows corresponding to final change point estimators,
-#'    with estimated change point location and associated detection bandwidth, lag and p-value given in columns.}
+#'    with estimated change point location and associated detection bandwidth, lag and importance score given in columns.}
 #' @references McGonigle, E.T., Cho, H. (2025). Nonparametric data segmentation
 #' in multivariate time series via joint characteristic functions.
 #' \emph{Biometrika}.
@@ -121,17 +125,27 @@ multiscale.np.mojo <- function(x, G, lags = c(0, 1), kernel.f = c("quad.exp", "g
     stop("The set of lags must be a numeric vector of positive integer values.")
   }
 
+  if(threshold == "manual"){
+    if(!is.list(threshold.val)){
+      if(!is.numeric(threshold.val) || length(threshold.val) != 1){
+        stop("With threshold = manual, threshold.val must be either a single numeric value, or list of vectors, with list length length(G), and each vector of length length(lags).")
+      }else{
+        threshold.val <- rep(threshold.val, length(G))
+      }
+    }
+  }
+
   G.cpts <- vector(mode = "list", length = length(G))
 
   cpts <- init.cpts <- matrix(NA, nrow = 0, ncol = 4)
-  dimnames(init.cpts)[[2]] <- c("cp", "lag", "p.val", "G")
+  dimnames(init.cpts)[[2]] <- c("cpt", "lag", "score", "G")
 
   for (bandwidth in seq_len(length(G))) {
     G.cpts[[bandwidth]] <- np.mojo.multilag(
       x = x, G = G[bandwidth], lags = lags, kernel.f = kernel.f, data.driven.kern.par = data.driven.kern.par,
       alpha = alpha, kern.par = kern.par, reps = reps, boot.dep = boot.dep, parallel = parallel,
       boot.method = boot.method, criterion = criterion, eta = eta, epsilon = epsilon, use.mean = use.mean, threshold = threshold,
-      threshold.val = threshold.val, eta.merge = eta.merge, merge.type = merge.type
+      threshold.val = threshold.val[[bandwidth]], eta.merge = eta.merge, merge.type = merge.type
     )
 
     if (nrow(G.cpts[[bandwidth]]$cpts) > 0) {
@@ -142,7 +156,7 @@ multiscale.np.mojo <- function(x, G, lags = c(0, 1), kernel.f = c("quad.exp", "g
 
   points <- numeric(0)
   bandwidths <- numeric(0)
-  p.vals <- numeric(0)
+  scores <- numeric(0)
   lag.vals <- numeric(0)
 
   cptsInOrder <- seq_len(nrow(init.cpts))
@@ -155,7 +169,7 @@ multiscale.np.mojo <- function(x, G, lags = c(0, 1), kernel.f = c("quad.exp", "g
     if (suppressWarnings(min(abs(p - points))) >= eta.bottom.up * G.val) {
       points <- c(points, p)
       bandwidths <- c(bandwidths, G.val)
-      p.vals <- c(p.vals, pVal)
+      scores <- c(scores, pVal)
       lag.vals <- c(lag.vals, l)
     }
   }
@@ -165,9 +179,9 @@ multiscale.np.mojo <- function(x, G, lags = c(0, 1), kernel.f = c("quad.exp", "g
   points <- points[cp_order]
   bandwidths <- bandwidths[cp_order]
   lag.vals <- lag.vals[cp_order]
-  p.vals <- p.vals[cp_order]
+  scores <- scores[cp_order]
 
-  cpts.merged <- data.frame(cp = points, G = bandwidths, lag = lag.vals, p.val = p.vals)
+  cpts.merged <- data.frame(cp = points, G = bandwidths, lag = lag.vals, score = scores)
 
   ret <- list(
     G = G,
@@ -175,6 +189,7 @@ multiscale.np.mojo <- function(x, G, lags = c(0, 1), kernel.f = c("quad.exp", "g
     kernel.f = kernel.f,
     data.driven.kern.par = data.driven.kern.par,
     threshold = threshold,
+    threshold.val = threshold.val,
     boot.dep = boot.dep,
     boot.method = boot.method,
     reps = reps,

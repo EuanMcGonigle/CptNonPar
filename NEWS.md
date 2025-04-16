@@ -3,8 +3,12 @@
 * The associated paper is now published in Biometrika: see 
 <doi:10.1093/biomet/asaf024> for full details.
 * Updated `multiscale.np.mojo()` function so that returned cpts are given in time order.
+* The p-values returned by `np.mojo()`, `np.mojo.multilag()`, and `mulsticale.np.mojo()` 
+have been replaced by importance scores: when the bootstrap is used, these are essentially one minus the p-value. 
 * Fixed error when using the manual threshold and the `np.mojo.multilag()` function, thanks to 
-Chuanynag Zhang for spotting this.
+Chuanyang Zhang for spotting this.
+* You can now use different manual thresholds for different lags: for use 
+in `np.mojo.multilag()`, you can supply a vector, whilst for `mulsticale.np.mojo()`, you can supply a list of vectors.
 * Added package level documentation: see `?CptNonPar`.
 
 # Changes in version 0.2.1

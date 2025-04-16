@@ -64,7 +64,11 @@ using the median heuristic, if \code{FALSE} it is given by \code{kern.par}.}
        the \code{threshold.val} parameter.
 }}
 
-\item{threshold.val}{The value of the threshold used to declare change points, only to be used if \code{threshold = "manual"}.}
+\item{threshold.val}{The value of the threshold used to declare change points, only to be used if \code{threshold = "manual"}.
+Can be either a single numeric value, in which case the same threshold is used for \emph{all} bandwidths and lags,
+or a list of vectors, with the length of the list equal to the number of bandwidths,
+that corresponds to the \code{G} argument, where the elements of each vector in the list corresponds
+to the threshold value for the corresponding element of the \code{lags} argument.}
 
 \item{alpha}{a numeric value for the significance level with
 \code{0 <= alpha <= 1}; use iff \code{threshold = "bootstrap"}.}
@@ -111,9 +115,9 @@ changes, relative to bandwidth, used to merge change point estimators across dif
 \item{merge.type}{String indicating the method used to merge change point estimators from different lags. Possible choices are
  \itemize{
    \item \code{"sequential"}:  Starting from the left-most change point estimator and proceeding forward in time, estimators
-   are grouped into clusters based on mutual distance. The estimator yielding the smallest corresponding p-value is
+   are grouped into clusters based on mutual distance. The estimator yielding the largest corresponding importance score is
    chosen as the change point estimator for that cluster. See McGonigle and Cho (2025) for details.
-       \item \code{"bottom-up"}: starting with the smallest p-value, the change points are merged using bottom-up merging (Messer
+       \item \code{"bottom-up"}: starting with the largest importance score, the change points are merged using bottom-up merging (Messer
        et al. (2014)).
 }}
 
@@ -128,15 +132,15 @@ A \code{list} object that contains the following fields:
    \item{threshold, alpha, reps, boot.dep, boot.method, parallel}{Input parameters}
    \item{criterion, eta, epsilon}{Input parameters}
    \item{cpts}{A matrix with rows corresponding to final change point estimators,
-   with estimated change point location and associated detection bandwidth, lag and p-value given in columns.}
+   with estimated change point location and associated detection bandwidth, lag and importance score given in columns.}
 }
 \description{
 For a given set of bandwidths and lagged values of the time series, performs
 multiscale nonparametric change point detection of a possibly multivariate time series.
 }
 \details{
-The multi-lag NP-MOJO algorithm for nonparametric change point detection is described in McGonigle, E. T. and Cho, H. (2023)
-Nonparametric data segmentation in multivariate time series via joint characteristic functions.  \emph{arXiv preprint arXiv:2305.07581}.
+The multi-lag NP-MOJO algorithm for nonparametric change point detection is described in McGonigle, E. T. and Cho, H. (2025)
+Nonparametric data segmentation in multivariate time series via joint characteristic functions. \emph{Biometrika}.
 The multiscale version uses bottom-up merging to combine the results of the multi-lag NP-MOJO algorithm
 performed over a given set of bandwidths.
 }

@@ -116,7 +116,10 @@ A \code{list} object that contains the following fields:
    \item{criterion, eta, epsilon}{Input parameters}
    \item{test.stat}{A vector containing the NP-MOJO detector statistics computed from the input data}
    \item{cpts}{A vector containing the estimated change point locations}
-   \item{p.vals}{The corresponding p values of the change points, if the bootstrap method was used}
+   \item{scores}{The corresponding importance scores of the estimated change points.
+   The larger the score is, the more likely that there exists a change point close to the estimated location.
+   If the bootstrap method is used, this a value between 0 and 1 corresponding to the proportion of times the observed detector statistic was larger than the bootstrapped detector statistics.
+   Otherwise, the importance score is simply the value of the detector statistic at the estimated change point location (which is not necessarily less than 1).}
 }
 \description{
 For a given lagged value of the time series, performs nonparametric change point detection of a possibly multivariate
@@ -124,8 +127,8 @@ time series. If \code{lag} \eqn{\ell = 0}, then only marginal changes are detect
 If \code{lag} \eqn{\ell \neq 0}, then changes in the pairwise distribution of \eqn{(X_t , X_{t+\ell})} are detected.
 }
 \details{
-The single-lag NP-MOJO algorithm for nonparametric change point detection is described in McGonigle, E. T. and Cho, H. (2023)
-Nonparametric data segmentation in multivariate time series via joint characteristic functions.  \emph{arXiv preprint arXiv:2305.07581}.
+The single-lag NP-MOJO algorithm for nonparametric change point detection is described in McGonigle, E. T. and Cho, H. (2025)
+Nonparametric data segmentation in multivariate time series via joint characteristic functions.  \emph{Biometrika}.
 }
 \examples{
 set.seed(1)
@@ -135,7 +138,7 @@ signal <- c(rep(0, 100), rep(2, 400))
 x <- signal + noise
 x.c <- np.mojo(x, G = 83, lag = 0)
 x.c$cpts
-x.c$p.vals
+x.c$scores
 }
 \references{
 McGonigle, E.T., Cho, H. (2025). Nonparametric data segmentation in multivariate time series via joint characteristic functions. \emph{Biometrika}.
