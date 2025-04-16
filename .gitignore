@@ -7,3 +7,4 @@ src/*.so
 src/*.dll
 cran-comments.md
 codecov.yml
+/revdep
