@@ -1,6 +1,6 @@
 # Changes in version 0.3.0
 
-* The associated paper is now published in Biometrika: see 
+* The associated paper is now accepted for publication in Biometrika: see 
 <doi:10.1093/biomet/asaf024> for full details.
 * Updated `multiscale.np.mojo()` function so that returned cpts are given in time order.
 * The p-values returned by `np.mojo()`, `np.mojo.multilag()`, and `mulsticale.np.mojo()` 
