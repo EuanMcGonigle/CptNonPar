@@ -128,7 +128,7 @@ If \code{lag} \eqn{\ell \neq 0}, then changes in the pairwise distribution of \e
 }
 \details{
 The single-lag NP-MOJO algorithm for nonparametric change point detection is described in McGonigle, E. T. and Cho, H. (2025)
-Nonparametric data segmentation in multivariate time series via joint characteristic functions.  \emph{Biometrika}.
+Nonparametric data segmentation in multivariate time series via joint characteristic functions.  \emph{Biometrika} (to appear).
 }
 \examples{
 set.seed(1)
@@ -141,7 +141,7 @@ x.c$cpts
 x.c$scores
 }
 \references{
-McGonigle, E.T., Cho, H. (2025). Nonparametric data segmentation in multivariate time series via joint characteristic functions. \emph{Biometrika}.
+McGonigle, E.T., Cho, H. (2025). Nonparametric data segmentation in multivariate time series via joint characteristic functions. \emph{Biometrika} (to appear).
 
 Fan, Y., de Micheaux, P.L., Penev, S. and Salopek, D. (2017). Multivariate nonparametric test of independence. \emph{Journal of Multivariate Analysis},
 153, pp.189-210.

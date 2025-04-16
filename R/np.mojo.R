@@ -3,7 +3,7 @@
 #' time series. If \code{lag} \eqn{\ell = 0}, then only marginal changes are detected.
 #' If \code{lag} \eqn{\ell \neq 0}, then changes in the pairwise distribution of \eqn{(X_t , X_{t+\ell})} are detected.
 #' @details The single-lag NP-MOJO algorithm for nonparametric change point detection is described in McGonigle, E. T. and Cho, H. (2025)
-#' Nonparametric data segmentation in multivariate time series via joint characteristic functions.  \emph{Biometrika}.
+#' Nonparametric data segmentation in multivariate time series via joint characteristic functions.  \emph{Biometrika} (to appear).
 #' @param x Input data (a \code{numeric} vector or an object of classes \code{ts} and \code{timeSeries},
 #' or a \code{numeric} matrix with rows representing observations and columns representing variables).
 #' @param G An integer value for the moving sum bandwidth;
@@ -82,7 +82,7 @@
 #'    The larger the score is, the more likely that there exists a change point close to the estimated location.
 #'    If the bootstrap method is used, this a value between 0 and 1 corresponding to the proportion of times the observed detector statistic was larger than the bootstrapped detector statistics.
 #'    Otherwise, the importance score is simply the value of the detector statistic at the estimated change point location (which is not necessarily less than 1).}
-#' @references McGonigle, E.T., Cho, H. (2025). Nonparametric data segmentation in multivariate time series via joint characteristic functions. \emph{Biometrika}.
+#' @references McGonigle, E.T., Cho, H. (2025). Nonparametric data segmentation in multivariate time series via joint characteristic functions. \emph{Biometrika} (to appear).
 #' @references Fan, Y., de Micheaux, P.L., Penev, S. and Salopek, D. (2017). Multivariate nonparametric test of independence. \emph{Journal of Multivariate Analysis},
 #' 153, pp.189-210.
 #'

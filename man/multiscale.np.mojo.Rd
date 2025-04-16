@@ -140,7 +140,7 @@ multiscale nonparametric change point detection of a possibly multivariate time 
 }
 \details{
 The multi-lag NP-MOJO algorithm for nonparametric change point detection is described in McGonigle, E. T. and Cho, H. (2025)
-Nonparametric data segmentation in multivariate time series via joint characteristic functions. \emph{Biometrika}.
+Nonparametric data segmentation in multivariate time series via joint characteristic functions. \emph{Biometrika} (to appear).
 The multiscale version uses bottom-up merging to combine the results of the multi-lag NP-MOJO algorithm
 performed over a given set of bandwidths.
 }
@@ -156,7 +156,7 @@ x.c$cpts
 \references{
 McGonigle, E.T., Cho, H. (2025). Nonparametric data segmentation
 in multivariate time series via joint characteristic functions.
-\emph{Biometrika}.
+\emph{Biometrika} (to appear).
 
 Fan, Y., de Micheaux, P.L., Penev, S. and Salopek, D. (2017). Multivariate nonparametric test of independence. \emph{Journal of Multivariate Analysis},
 153, pp.189-210.
