@@ -57,6 +57,8 @@
 #' @param use.mean \code{Logical variable}, only to be used if \code{data.drive.kern.par=TRUE}. If set to \code{TRUE}, the mean
 #' of pairwise distances is used to set the kernel function tuning parameter, instead of the median. May be useful for binary data,
 #' not recommended to be used otherwise.
+#' @param scale.data \code{Logical variable}, whether to scale the data in each dimension before performing change point detection.
+#' Performance is generally improved by scaling the data.
 #' @param eta.merge A positive numeric value for the minimal mutual distance of
 #' changes, relative to bandwidth, used to merge change point estimators across different lags.
 #' @param merge.type String indicating the method used to merge change point estimators from different lags. Possible choices are
@@ -111,7 +113,8 @@ multiscale.np.mojo <- function(x, G, lags = c(0, 1), kernel.f = c("quad.exp", "g
                                kern.par = 1, data.driven.kern.par = TRUE, threshold = c("bootstrap", "manual")[1], threshold.val = NULL,
                                alpha = 0.1, reps = 200, boot.dep = 1.5 * (nrow(as.matrix(x))^(1 / 3)), parallel = FALSE,
                                boot.method = c("mean.subtract", "no.mean.subtract")[1], criterion = c("eta", "epsilon", "eta.and.epsilon")[3],
-                               eta = 0.4, epsilon = 0.02, use.mean = FALSE, eta.merge = 1, merge.type = c("sequential", "bottom-up")[1],
+                               eta = 0.4, epsilon = 0.02, use.mean = FALSE, scale.data = TRUE,
+                               eta.merge = 1, merge.type = c("sequential", "bottom-up")[1],
                                eta.bottom.up = 0.8) {
   stopifnot(
     "Error: change point merging type must be either 'sequential' or 'bottom-up'." =
@@ -140,12 +143,20 @@ multiscale.np.mojo <- function(x, G, lags = c(0, 1), kernel.f = c("quad.exp", "g
   cpts <- init.cpts <- matrix(NA, nrow = 0, ncol = 4)
   dimnames(init.cpts)[[2]] <- c("cpt", "lag", "score", "G")
 
+  if (is.null(dim(x))) {
+    x <- matrix(x)
+  }
+  if (scale.data == TRUE) {
+    x <- scale(x)
+    scale.data <- FALSE
+  }
+
   for (bandwidth in seq_len(length(G))) {
     G.cpts[[bandwidth]] <- np.mojo.multilag(
       x = x, G = G[bandwidth], lags = lags, kernel.f = kernel.f, data.driven.kern.par = data.driven.kern.par,
       alpha = alpha, kern.par = kern.par, reps = reps, boot.dep = boot.dep, parallel = parallel,
       boot.method = boot.method, criterion = criterion, eta = eta, epsilon = epsilon, use.mean = use.mean, threshold = threshold,
-      threshold.val = threshold.val[[bandwidth]], eta.merge = eta.merge, merge.type = merge.type
+      threshold.val = threshold.val[[bandwidth]], eta.merge = eta.merge, merge.type = merge.type, scale.data = FALSE
     )
 
     if (nrow(G.cpts[[bandwidth]]$cpts) > 0) {

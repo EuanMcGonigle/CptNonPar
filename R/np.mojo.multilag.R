@@ -3,6 +3,7 @@
 #' time series.
 #' @details The multi-lag NP-MOJO algorithm for nonparametric change point detection is described in McGonigle, E. T. and Cho, H. (2025)
 #' Nonparametric data segmentation in multivariate time series via joint characteristic functions.  \emph{Biometrika} (to appear).
+#'
 #' @param x Input data (a \code{numeric} vector or an object of classes \code{ts} and \code{timeSeries},
 #' or a \code{numeric} matrix with rows representing observations and columns representing variables).
 #' @param G An integer value for the moving sum bandwidth;
@@ -54,6 +55,8 @@
 #' @param use.mean \code{Logical variable}, only to be used if \code{data.drive.kern.par=TRUE}. If set to \code{TRUE}, the mean
 #' of pairwise distances is used to set the kernel function tuning parameter, instead of the median. May be useful for binary data,
 #' not recommended to be used otherwise.
+#' @param scale.data \code{Logical variable}, whether to scale the data in each dimension before performing change point detection.
+#' Performance is generally improved by scaling the data.
 #' @param threshold String indicating how th
 #' @param eta.merge A positive numeric value for the minimal mutual distance of
 #' changes, relative to bandwidth, used to merge change point estimators across different lags.
@@ -73,7 +76,6 @@
 #' @param threshold.val The value of the threshold used to declare change points, only to be used if \code{threshold = "manual"}.
 #' Can be either a single numeric value, in which case the same threshold is used for all lags, or a vector with length equal to the number of lags,
 #' where each elements in the vector gives the threshold value of the corresponding lag from the \code{lags} argument.
-#'
 #' @return A \code{list} object that contains the following fields:
 #'    \item{G}{Moving window bandwidth}
 #'    \item{lags}{Lags used to detect changes}
@@ -105,7 +107,8 @@ np.mojo.multilag <- function(x, G, lags = c(0, 1), kernel.f = c("quad.exp", "gau
                              kern.par = 1, data.driven.kern.par = TRUE, threshold = c("bootstrap", "manual")[1], threshold.val = NULL,
                              alpha = 0.1, reps = 200, boot.dep = 1.5 * (nrow(as.matrix(x))^(1 / 3)), parallel = FALSE,
                              boot.method = c("mean.subtract", "no.mean.subtract")[1], criterion = c("eta", "epsilon", "eta.and.epsilon")[3],
-                             eta = 0.4, epsilon = 0.02, use.mean = FALSE, eta.merge = 1, merge.type = c("sequential", "bottom-up")[1]) {
+                             eta = 0.4, epsilon = 0.02, use.mean = FALSE, scale.data = TRUE,
+                             eta.merge = 1, merge.type = c("sequential", "bottom-up")[1]) {
   stopifnot(
     "Error: change point merging type must be either 'sequential' or 'bottom-up'." =
       merge.type == "sequential" || merge.type == "bottom-up"
@@ -124,12 +127,20 @@ np.mojo.multilag <- function(x, G, lags = c(0, 1), kernel.f = c("quad.exp", "gau
     threshold.val <- rep(threshold.val, length(lags))
   }
 
+  if (is.null(dim(x))) {
+    x <- matrix(x)
+  }
+  if (scale.data == TRUE) {
+    x <- scale(x)
+    scale.data <- FALSE
+  }
+
   for (l in seq_len(length(lag.cpts))) {
     lag.cpts[[l]] <- np.mojo(
       x = x, G = G, lag = lags[l], kernel.f = kernel.f, data.driven.kern.par = data.driven.kern.par,
       alpha = alpha, kern.par = kern.par, reps = reps, boot.dep = boot.dep, parallel = parallel,
       boot.method = boot.method, criterion = criterion, eta = eta, epsilon = epsilon, use.mean = use.mean, threshold = threshold,
-      threshold.val = threshold.val[l]
+      threshold.val = threshold.val[l], scale.data = FALSE
     )
 
   }

@@ -58,6 +58,8 @@
 #' @param use.mean \code{Logical} variable, only to be used if \code{data.drive.kern.par=TRUE}. If set to \code{TRUE}, the mean
 #' of pairwise distances is used to set the kernel function tuning parameter, instead of the median. May be useful for binary data,
 #' not recommended to be used otherwise.
+#' @param scale.data \code{Logical variable}, whether to scale the data in each dimension before performing change point detection.
+#' Performance is generally improved by scaling the data.
 #' @param threshold String indicating how the threshold is computed. Possible values are
 #'  \itemize{
 #'    \item \code{"bootstrap"}: the threshold is calculated using the bootstrap method
@@ -105,12 +107,13 @@ np.mojo <- function(x, G, lag = 0, kernel.f = c("quad.exp", "gauss", "euclidean"
                     kern.par = 1, data.driven.kern.par = TRUE, alpha = 0.1, threshold = c("bootstrap", "manual")[1],
                     threshold.val = NULL, reps = 200, boot.dep = 1.5 * (nrow(as.matrix(x))^(1 / 3)), parallel = FALSE,
                     boot.method = c("mean.subtract", "no.mean.subtract")[1],
-                    criterion = c("eta", "epsilon", "eta.and.epsilon")[3], eta = 0.4, epsilon = 0.02, use.mean = FALSE) {
+                    criterion = c("eta", "epsilon", "eta.and.epsilon")[3], eta = 0.4,
+                    epsilon = 0.02, use.mean = FALSE, scale.data = TRUE) {
   mojo.error.checks(
     x = x, G = G, lag = lag, kernel.f = kernel.f, kern.par = kern.par, data.driven.kern.par = data.driven.kern.par,
     alpha = alpha, threshold = threshold, threshold.val = threshold.val, reps = reps, boot.dep = boot.dep,
     parallel = parallel, boot.method = boot.method, criterion = criterion, eta = eta, epsilon = epsilon,
-    use.mean = use.mean
+    use.mean = use.mean, scale.data = scale.data
   )
 
   if (is.null(dim(x))) {
@@ -118,6 +121,10 @@ np.mojo <- function(x, G, lag = 0, kernel.f = c("quad.exp", "gauss", "euclidean"
     x <- matrix(x)
   } else {
     data.len <- nrow(x)
+  }
+
+  if (scale.data == TRUE) {
+    x <- scale(x)
   }
 
   if (G > data.len / 2) {

@@ -112,7 +112,7 @@ bootstrap.char <- function(h.mat, test.stat, G, lag, reps, boot.dep, parallel, b
 
 mojo.error.checks <- function(x, G, lag, kernel.f, kern.par, data.driven.kern.par, alpha, threshold,
                               threshold.val, reps, boot.dep, parallel, boot.method, criterion, eta, epsilon,
-                              use.mean) {
+                              use.mean, scale.data) {
   stopifnot("Error: alpha must be a number between 0 and 1." = alpha >= 0 && alpha <= 1)
 
   stopifnot("Error: change point detection criterion must be one of 'eta', 'epsilon', or 'eta.and.epsilon'." = criterion == "epsilon" || criterion == "eta" || criterion == "eta.and.epsilon")
@@ -125,6 +125,7 @@ mojo.error.checks <- function(x, G, lag, kernel.f, kern.par, data.driven.kern.pa
   stopifnot("Error: 'parallel' argument must be logical variable." = is.logical(parallel))
   stopifnot("Error: 'data.driven.kern.par' argument must be logical variable." = is.logical(data.driven.kern.par))
   stopifnot("Error: 'use.mean' argument must be logical variable." = is.logical(use.mean))
+  stopifnot("Error: 'scale.data' argument must be logical variable." = is.logical(scale.data))
 
   if (!is.numeric(lag)) {
     stop("The lag parameter should be a single positive integer.")

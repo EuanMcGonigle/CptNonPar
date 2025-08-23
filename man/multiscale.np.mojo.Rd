@@ -22,6 +22,7 @@ multiscale.np.mojo(
   eta = 0.4,
   epsilon = 0.02,
   use.mean = FALSE,
+  scale.data = TRUE,
   eta.merge = 1,
   merge.type = c("sequential", "bottom-up")[1],
   eta.bottom.up = 0.8
@@ -108,6 +109,9 @@ environments, relative to moving sum bandwidth (if \code{criterion = "epsilon"} 
 \item{use.mean}{\code{Logical variable}, only to be used if \code{data.drive.kern.par=TRUE}. If set to \code{TRUE}, the mean
 of pairwise distances is used to set the kernel function tuning parameter, instead of the median. May be useful for binary data,
 not recommended to be used otherwise.}
+
+\item{scale.data}{\code{Logical variable}, whether to scale the data in each dimension before performing change point detection.
+Performance is generally improved by scaling the data.}
 
 \item{eta.merge}{A positive numeric value for the minimal mutual distance of
 changes, relative to bandwidth, used to merge change point estimators across different lags.}
