@@ -1,6 +1,4 @@
-# CptNonPar 0.3.1
-
-# Changes in version 0.4.0
+# Changes in version 0.3.1
 
 * By default, the data is now centered and scaled before change point detection is applied, which improves empirical performance. This can be turned off by setting the new argument `scale.data = FALSE` in the functions `np.mojo()`, `np.mojo.multilag()`, and `multiscale.np.mojo()`.
 
