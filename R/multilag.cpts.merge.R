@@ -88,9 +88,9 @@ multilag.cpts.merge <- function(x.c, eta.merge = 1, merge.type = c("sequential",
         linked.lags <- init.cpts[1:num.linked.cpts, 2]
         linked.scores <- init.cpts[1:num.linked.cpts, 3]
 
-        final.cpt <- linked.cpts[which.min(linked.scores)]
-        final.lag <- linked.lags[which.min(linked.scores)]
-        final.pval <- linked.scores[which.min(linked.scores)]
+        final.cpt <- linked.cpts[which.max(linked.scores)]
+        final.lag <- linked.lags[which.max(linked.scores)]
+        final.pval <- linked.scores[which.max(linked.scores)]
 
         cpts <- rbind(cpts, c(final.cpt, final.lag, final.pval))
 
