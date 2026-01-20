@@ -1,3 +1,5 @@
+# CptNonPar 0.3.2
+
 # Changes in version 0.3.2
 
 * Fixed a bug introduced in 0.3.0 where the largest importance scores were not being used in the multi-lag sequential mergin procedure.
